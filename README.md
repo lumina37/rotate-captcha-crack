@@ -2,9 +2,9 @@
 
 CNN预测图片旋转角度，可用于破解图像旋转验证码
 
-搞这个项目的主要目的是练手[`torchdata`](https://pytorch.org/data/beta/index.html)，数据集的预处理与构建也是本项目的精髓所在
+搞这个项目的主要目的是练手[`torchdata`](https://pytorch.org/data/beta/index.html)，数据集的预处理与构建流程是本项目的精髓所在
 
-因为现有的旋图验证码破解方法大多基于[`RotNet (ICLR 2018)`](https://arxiv.org/abs/1803.07728)，我就做了这个Up-to-Date的方案：用[`regnet (CVPR 2020)`](https://arxiv.org/abs/2003.13678)做backbone；设计了一个损失函数`RotationLoss`，和RotNet的那个[`angle_error_regression`](https://github.com/d4nst/RotNet/blob/a56ea59818bbdd76d4dd8d83b8bbbaae6a802310/utils.py#L30-L36)的思路差不多，就是预测出一个角度然后和`ground-truth label`作差，具体点就是在`MSELoss`的基础上加了个余弦系数来缩小真实值的`± n * 360°`与真实值之间的度量距离
+因为现有的旋图验证码破解方法大多基于[`RotNet (ICLR 2018)`](https://arxiv.org/abs/1803.07728)，我就做了这个Up-to-Date的方案：用[`regnet (CVPR 2020)`](https://arxiv.org/abs/2003.13678)的`RegNetX 1.6GFLOPs`做backbone；设计了一个损失函数`RotationLoss`，和RotNet的那个[`angle_error_regression`](https://github.com/d4nst/RotNet/blob/a56ea59818bbdd76d4dd8d83b8bbbaae6a802310/utils.py#L30-L36)的思路差不多，就是全连接预测出一个角度然后和`ground-truth label`作差，具体点就是在`MSELoss`的基础上加了个余弦因子来缩小真实值的`± n * 360°`与真实值之间的度量距离
 
 ## 准备环境
 
