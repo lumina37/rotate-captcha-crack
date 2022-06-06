@@ -1,0 +1,15 @@
+dataset:
+  root: ./datasets/Landscape-Dataset
+  img_size: 224
+  train_ratio: 0.9
+  val_ratio: 0.05
+  test_ratio: 0.05
+
+train:
+  lr: 0.001
+  epoches: 30
+  batch_size: 48
+  steps: 135
+
+evaluate:
+  batch_size: 64
