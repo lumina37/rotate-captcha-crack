@@ -5,8 +5,11 @@ _*
 /figures
 /models
 
+*.txt
 *.jpg
 *.code-workspace
 
 _draw_sth.py
 traditional_method.py
+
+!requirements.txt
