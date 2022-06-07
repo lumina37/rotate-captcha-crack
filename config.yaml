@@ -12,7 +12,7 @@ train:
     T_mult: 2
   loss:
     lambda_cos: 0.24
-    exponent: 1.5
+    exponent: 2
   epoches: 35
   batch_size: 48
   steps: 135
