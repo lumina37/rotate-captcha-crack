@@ -2,14 +2,19 @@ __*
 _*
 
 /datasets
-/figures
-/models
+/models/*
 
 *.txt
 *.jpg
+*.png
 *.code-workspace
 
 _draw_sth.py
 traditional_method.py
 
 !requirements.txt
+!/figures/*
+
+!/models/1
+!/models/1/eval_loss.png
+!/models/1/train_loss.png

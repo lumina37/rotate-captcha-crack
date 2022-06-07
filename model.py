@@ -14,7 +14,7 @@ class RotationNet(nn.Module):
 
         super(RotationNet, self).__init__()
 
-        self.backbone = models.regnet_x_1_6gf(pretrained=True)
+        self.backbone = models.regnet_y_1_6gf(pretrained=True)
 
         fc_channels = self.backbone.fc.in_features
         self.backbone.fc = nn.Linear(fc_channels, 1)
