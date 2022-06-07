@@ -33,7 +33,7 @@ if __name__ == "__main__":
         model.load_state_dict(torch.load(str(model_path), map_location=device))
         model = model.to(device)
         model.eval()
-        img = Image.open("datasets/Landscape-Dataset/pytorch/test/724.jpg")
+        img = Image.open("test.jpg")
 
         img_tensor: torch.Tensor = trans(img).unsqueeze_(0).to(device)
         predict: torch.Tensor = model(img_tensor)

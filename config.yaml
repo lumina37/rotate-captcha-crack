@@ -6,10 +6,16 @@ dataset:
   test_ratio: 0.05
 
 train:
-  lr: 0.001
-  epoches: 28
+  lr: 0.0008
+  lr_scheduler:
+    T_0: 5
+    T_mult: 2
+  epoches: 35
   batch_size: 48
   steps: 135
+  loss:
+    lambda_cos: 0.24
+    exponent: 1.5
 
 evaluate:
   batch_size: 64

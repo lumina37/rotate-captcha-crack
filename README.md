@@ -58,7 +58,7 @@ python test.py
 
 + 现有的旋图验证码破解方法大多基于[`RotNet (ICLR2018)`](https://arxiv.org/abs/1803.07728)，其backbone为`ResNet50`，将角度预测视作360分类问题，并计算交叉熵损失，本项目的`RotationNet`是对`RotNet`的简单改进
 
-+ backbone为[`regnet (CVPR2020)`](https://arxiv.org/abs/2003.13678)的`RegNetY 1.6GFLOPs`
++ backbone为[`regnet (CVPR2020)`](https://arxiv.org/abs/2003.13678)的`RegNetX 1.6GFLOPs`
 
 + `RotNet`中使用的交叉熵损失会令`1°`和`359°`之间的度量距离接近一个类似`358°`的较大值，这显然是一个违背常识的结果，它们之间的度量距离应当是一个类似`2°`的极小值。而`RotNet`仓库（并未写入论文）给出的[`angle_error_regression`](https://github.com/d4nst/RotNet/blob/a56ea59818bbdd76d4dd8d83b8bbbaae6a802310/utils.py#L30-L36)损失函数效果较差，因为该损失函数在应对离群值时梯度方向存在明显问题，你可以在后续的损失函数图像比对中轻松看出这一点
 
@@ -72,8 +72,8 @@ python test.py
 
 - angle_error_regression
 
-![RotNet-angle_error_regression](https://user-images.githubusercontent.com/48282276/172344856-e3904a62-a099-40af-86cd-6174a6bf5e3f.png)
+![RotNet-angle_error_regression](https://github.com/Starry-OvO/Rotate-Captcha-Crack/blob/master/figures/RotNet-angle_error_regression.png)
 
 - RotationLoss
 
-![This-RotationLoss](https://user-images.githubusercontent.com/48282276/172344938-fd2f5991-152a-49b0-a0bd-5a7f6402c947.png)
+![This-RotationLoss](https://github.com/Starry-OvO/Rotate-Captcha-Crack/blob/master/figures/This-RotationLoss.png)

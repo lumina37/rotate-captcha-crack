@@ -28,13 +28,14 @@ class RotationLoss(nn.Module):
     MSELoss的优化版本 加入余弦修正来缩小旋转系数0和1之间的距离
     """
 
-    def __init__(self, lambda_cos: float = 0.25) -> None:
+    def __init__(self, lambda_cos: float = 0.24, exponent: float = 2.0) -> None:
         super(RotationLoss, self).__init__()
         self.lambda_cos = lambda_cos
+        self.exponent = exponent
 
     def forward(self, predict: torch.Tensor, target: torch.Tensor) -> torch.Tensor:
         diff = predict - target
-        loss_tensor = ((diff * (torch.pi * 2)).cos_() - 1) * (-self.lambda_cos) + diff.square_()
+        loss_tensor = ((diff * (torch.pi * 2)).cos_() - 1) * (-self.lambda_cos) + diff.pow_(self.exponent)
         loss = loss_tensor.mean()
         return loss
 

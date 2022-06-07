@@ -16,6 +16,10 @@ batch_size: int = CONFIG['train']['batch_size']
 epoches: int = CONFIG['train']['epoches']
 steps: int = CONFIG['train']['steps']
 lr: float = CONFIG['train']['lr']
+lambda_cos: float = CONFIG['train']['loss']['lambda_cos']
+exponent: float = CONFIG['train']['loss']['exponent']
+t_0: float = CONFIG['train']['lr_scheduler']['T_0']
+t_mult: float = CONFIG['train']['lr_scheduler']['T_mult']
 root = Path(CONFIG['dataset']['root'])
 
 start_time = time.time()
@@ -33,8 +37,8 @@ val_dataloader = get_dataloader("val", batch_size=batch_size, trans=trans)
 model = RotationNet()
 model = model.to(device)
 optmizer = torch.optim.Adam(model.parameters(), lr=lr)
-scheduler = torch.optim.lr_scheduler.CosineAnnealingWarmRestarts(optmizer, T_0=4, T_mult=2, eta_min=lr / 10e3)
-criterion = RotationLoss(lambda_cos=0.25)
+scheduler = torch.optim.lr_scheduler.CosineAnnealingWarmRestarts(optmizer, T_0=t_0, T_mult=t_mult, eta_min=lr / 10e3)
+criterion = RotationLoss()
 eval_criterion = DistanceBetweenAngles()
 
 train_loss_vec = np.empty(epoches, dtype=np.float64)
