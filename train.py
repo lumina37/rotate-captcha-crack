@@ -1,7 +1,9 @@
 import time
 from pathlib import Path
 
+import numpy as np
 import torch
+from matplotlib import pyplot as plt
 from torchvision import transforms
 
 from config import CONFIG, device
@@ -31,13 +33,16 @@ val_dataloader = get_dataloader("val", batch_size=batch_size, trans=trans)
 model = RotationNet()
 model = model.to(device)
 optmizer = torch.optim.Adam(model.parameters(), lr=lr)
-scheduler = torch.optim.lr_scheduler.CosineAnnealingWarmRestarts(optmizer, T_0=4, T_mult=2)
+scheduler = torch.optim.lr_scheduler.CosineAnnealingWarmRestarts(optmizer, T_0=4, T_mult=2, eta_min=lr / 10e3)
 criterion = RotationLoss(lambda_cos=0.25)
 eval_criterion = DistanceBetweenAngles()
 
+train_loss_vec = np.empty(epoches, dtype=np.float64)
+eval_loss_vec = np.empty(epoches, dtype=np.float64)
+
 for epoch_idx in range(epoches):
     model.train()
-
+    total_train_loss: float = 0
     for i_step, (source, target) in enumerate(train_dataloader):
         source: torch.Tensor = source.to(device)
         target: torch.Tensor = target.to(device)
@@ -48,14 +53,17 @@ for epoch_idx in range(epoches):
         loss.backward()
         optmizer.step()
         scheduler.step()
+        total_train_loss += loss.cpu().item()
 
         if i_step + 1 == steps:
             break
 
-    LOG.info(f"Epoch#{epoch_idx} time_cost: {time.time()-start_time:.2f} s")
+    train_loss = total_train_loss / steps
+    train_loss_vec[epoch_idx] = train_loss
+    LOG.info(f"Epoch#{epoch_idx}. time_cost: {time.time()-start_time:.2f} s. train_loss: {train_loss:.8f}")
 
     model.eval()
-    total_degree_diff: float = 0
+    total_eval_loss: float = 0
     batch_count: int = 0
     with torch.no_grad():
         for source, target in val_dataloader:
@@ -63,10 +71,20 @@ for epoch_idx in range(epoches):
             target: torch.Tensor = target.to(device)
             predict: torch.Tensor = model(source)
 
-            total_degree_diff += eval_criterion(predict, target).cpu().item() * 360
+            total_eval_loss += eval_criterion(predict, target).cpu().item() * 360
             batch_count += 1
 
-    LOG.info(f"Epoch#{epoch_idx} eval_loss: {total_degree_diff/batch_count:.4f} degrees")
+    eval_loss = total_eval_loss / batch_count
+    eval_loss_vec[epoch_idx] = eval_loss
+    LOG.info(f"Epoch#{epoch_idx}. eval_loss: {eval_loss:.4f} degrees")
 
     if epoch_idx >= epoches / 2:
         torch.save(model.state_dict(), str(model_dir / f"{epoch_idx}.pth"))
+
+x = np.arange(epoches, dtype=np.int16)
+fig, ax = plt.subplots(figsize=(12, 12))
+ax.plot(x, eval_loss_vec)
+fig.savefig(str(model_dir / "eval_loss.png"))
+fig, ax = plt.subplots(figsize=(12, 12))
+ax.plot(x, train_loss_vec)
+fig.savefig(str(model_dir / "train_loss.png"))

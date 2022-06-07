@@ -23,7 +23,9 @@ with torch.no_grad():
     test_dataloader = get_dataloader("test", batch_size=batch_size, trans=trans)
 
     model = RotationNet()
-    model.load_state_dict(torch.load(str(find_out_model_path(opts.timestamp, opts.epoch)), map_location=device))
+    model_path = find_out_model_path(opts.timestamp, opts.epoch)
+    print(f"Use model: {model_path}")
+    model.load_state_dict(torch.load(str(model_path), map_location=device))
     model = model.to(device)
     model.eval()
 

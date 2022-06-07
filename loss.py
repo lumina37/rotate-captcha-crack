@@ -34,7 +34,7 @@ class RotationLoss(nn.Module):
 
     def forward(self, predict: torch.Tensor, target: torch.Tensor) -> torch.Tensor:
         diff = predict - target
-        loss_tensor = (diff * (torch.pi * 2)).cos_() * (-self.lambda_cos) + diff.square_()
+        loss_tensor = ((diff * (torch.pi * 2)).cos_() - 1) * (-self.lambda_cos) + diff.square_()
         loss = loss_tensor.mean()
         return loss
 

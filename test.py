@@ -28,7 +28,9 @@ if __name__ == "__main__":
     with torch.no_grad():
         model_dir = Path("models")
         model = RotationNet()
-        model.load_state_dict(torch.load(str(find_out_model_path(opts.timestamp, opts.epoch)), map_location=device))
+        model_path = find_out_model_path(opts.timestamp, opts.epoch)
+        print(f"Use model: {model_path}")
+        model.load_state_dict(torch.load(str(model_path), map_location=device))
         model = model.to(device)
         model.eval()
         img = Image.open("datasets/Landscape-Dataset/pytorch/test/724.jpg")
