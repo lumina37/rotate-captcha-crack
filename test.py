@@ -31,12 +31,12 @@ if __name__ == "__main__":
         model.load_state_dict(torch.load(str(find_out_model_path(opts.timestamp, opts.epoch)), map_location=device))
         model = model.to(device)
         model.eval()
-        img = Image.open("datasets/Landscape-Dataset/pytorch/test/7241.jpg")
+        img = Image.open("datasets/Landscape-Dataset/pytorch/test/724.jpg")
 
         img_tensor: torch.Tensor = trans(img).unsqueeze_(0).to(device)
         predict: torch.Tensor = model(img_tensor)
         degree: float = predict.cpu().item() * 360
-        print(degree)
+        print(f"Predict degree: {degree:.4f}")
 
     img = img.rotate(-degree, resample=Image.Resampling.BILINEAR, fillcolor=(255, 255, 255))  # 因为是复原，这里需要-degree
     plt.figure("debug")

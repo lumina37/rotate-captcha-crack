@@ -2,3 +2,4 @@ torch
 torchvision
 torchdata>=0.3.0
 matplotlib
+pyyaml
