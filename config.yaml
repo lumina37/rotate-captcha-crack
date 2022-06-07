@@ -6,8 +6,8 @@ dataset:
   test_ratio: 0.05
 
 train:
-  lr: 0.0015
-  epoches: 30
+  lr: 0.001
+  epoches: 28
   batch_size: 48
   steps: 135
 

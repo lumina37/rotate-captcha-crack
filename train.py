@@ -33,16 +33,7 @@ val_dataloader = get_dataloader("val", batch_size=batch_size, trans=trans)
 model = RotationNet()
 model = model.to(device)
 optmizer = torch.optim.Adam(model.parameters(), lr=lr)
-size_up_ratio: float = 0.35
-scheduler = torch.optim.lr_scheduler.CyclicLR(
-    optmizer,
-    base_lr=lr / 10e2,
-    max_lr=lr,
-    step_size_up=int(steps * size_up_ratio),
-    step_size_down=int(steps * (1 - size_up_ratio)),
-    mode='triangular2',
-    cycle_momentum=False,
-)
+scheduler = torch.optim.lr_scheduler.CosineAnnealingWarmRestarts(optmizer, T_0=4, T_mult=2, eta_min=lr / 10e3)
 criterion = RotationLoss(lambda_cos=0.25)
 eval_criterion = DistanceBetweenAngles()
 
@@ -52,7 +43,7 @@ eval_loss_vec = np.empty(epoches, dtype=np.float64)
 for epoch_idx in range(epoches):
     model.train()
     total_train_loss: float = 0
-    for i_step, (source, target) in enumerate(train_dataloader):
+    for step_idx, (source, target) in enumerate(train_dataloader):
         source: torch.Tensor = source.to(device)
         target: torch.Tensor = target.to(device)
 
@@ -60,16 +51,16 @@ for epoch_idx in range(epoches):
         predict: torch.Tensor = model(source)
         loss: torch.Tensor = criterion(predict, target)
         loss.backward()
-        optmizer.step()
-        scheduler.step()
         total_train_loss += loss.cpu().item()
+        optmizer.step()
 
-        if i_step + 1 == steps:
+        if step_idx + 1 == steps:
             break
+
+    scheduler.step()
 
     train_loss = total_train_loss / steps
     train_loss_vec[epoch_idx] = train_loss
-    LOG.info(f"Epoch#{epoch_idx}. time_cost: {time.time()-start_time:.2f} s. train_loss: {train_loss:.8f}")
 
     model.eval()
     total_eval_loss: float = 0
@@ -85,7 +76,10 @@ for epoch_idx in range(epoches):
 
     eval_loss = total_eval_loss / batch_count
     eval_loss_vec[epoch_idx] = eval_loss
-    LOG.info(f"Epoch#{epoch_idx}. eval_loss: {eval_loss:.4f} degrees")
+
+    LOG.info(
+        f"Epoch#{epoch_idx}. time_cost: {time.time()-start_time:.2f} s. train_loss: {train_loss:.8f}. eval_loss: {eval_loss:.4f} degrees"
+    )
 
     if epoch_idx >= epoches / 2:
         torch.save(model.state_dict(), str(model_dir / f"{epoch_idx}.pth"))
