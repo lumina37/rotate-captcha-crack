@@ -10,12 +10,12 @@ train:
   lr_scheduler:
     T_0: 5
     T_mult: 2
-  epoches: 35
-  batch_size: 48
-  steps: 135
   loss:
     lambda_cos: 0.24
     exponent: 1.5
+  epoches: 35
+  batch_size: 48
+  steps: 135
 
 evaluate:
   batch_size: 64

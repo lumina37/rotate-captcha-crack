@@ -22,8 +22,9 @@ class RotationNet(nn.Module):
         fc_channels = self.backbone.fc.in_features
         self.backbone.fc = nn.Linear(fc_channels, 1)
 
-        nn.init.normal_(self.backbone.fc.weight, mean=0.0, std=0.01)
-        nn.init.zeros_(self.backbone.fc.bias)
+        if train:
+            nn.init.normal_(self.backbone.fc.weight, mean=0.0, std=0.01)
+            nn.init.zeros_(self.backbone.fc.bias)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         x = self.backbone.stem(x)

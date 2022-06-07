@@ -41,6 +41,7 @@ scheduler = torch.optim.lr_scheduler.CosineAnnealingWarmRestarts(optmizer, T_0=t
 criterion = RotationLoss()
 eval_criterion = DistanceBetweenAngles()
 
+lr_vec = np.empty(epoches, dtype=np.float64)
 train_loss_vec = np.empty(epoches, dtype=np.float64)
 eval_loss_vec = np.empty(epoches, dtype=np.float64)
 
@@ -62,6 +63,7 @@ for epoch_idx in range(epoches):
             break
 
     scheduler.step()
+    lr_vec[epoch_idx] = scheduler.get_last_lr()[0]
 
     train_loss = total_train_loss / steps
     train_loss_vec[epoch_idx] = train_loss
@@ -89,9 +91,15 @@ for epoch_idx in range(epoches):
         torch.save(model.state_dict(), str(model_dir / f"{epoch_idx}.pth"))
 
 x = np.arange(epoches, dtype=np.int16)
-fig, ax = plt.subplots(figsize=(12, 12))
+
+fig, ax = plt.subplots(figsize=(8, 8))
 ax.plot(x, eval_loss_vec)
 fig.savefig(str(model_dir / "eval_loss.png"))
-fig, ax = plt.subplots(figsize=(12, 12))
+
+fig, ax = plt.subplots(figsize=(8, 8))
 ax.plot(x, train_loss_vec)
 fig.savefig(str(model_dir / "train_loss.png"))
+
+fig, ax = plt.subplots(figsize=(8, 8))
+ax.plot(x, lr_vec)
+fig.savefig(str(model_dir / "lr.png"))

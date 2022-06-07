@@ -16,5 +16,6 @@ traditional_method.py
 !/figures/*
 
 !/models/1
+!/models/1/lr.png
 !/models/1/eval_loss.png
 !/models/1/train_loss.png
