@@ -33,7 +33,16 @@ val_dataloader = get_dataloader("val", batch_size=batch_size, trans=trans)
 model = RotationNet()
 model = model.to(device)
 optmizer = torch.optim.Adam(model.parameters(), lr=lr)
-scheduler = torch.optim.lr_scheduler.CosineAnnealingWarmRestarts(optmizer, T_0=4, T_mult=2, eta_min=lr / 10e3)
+size_up_ratio: float = 0.35
+scheduler = torch.optim.lr_scheduler.CyclicLR(
+    optmizer,
+    base_lr=lr / 10e2,
+    max_lr=lr,
+    step_size_up=int(steps * size_up_ratio),
+    step_size_down=int(steps * (1 - size_up_ratio)),
+    mode='triangular2',
+    cycle_momentum=False,
+)
 criterion = RotationLoss(lambda_cos=0.25)
 eval_criterion = DistanceBetweenAngles()
 

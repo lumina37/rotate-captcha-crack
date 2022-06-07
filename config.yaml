@@ -6,7 +6,7 @@ dataset:
   test_ratio: 0.05
 
 train:
-  lr: 0.001
+  lr: 0.0015
   epoches: 30
   batch_size: 48
   steps: 135
