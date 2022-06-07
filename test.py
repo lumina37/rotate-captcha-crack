@@ -27,7 +27,7 @@ if __name__ == "__main__":
 
     with torch.no_grad():
         model_dir = Path("models")
-        model = RotationNet()
+        model = RotationNet(train=False)
         model_path = find_out_model_path(opts.timestamp, opts.epoch)
         print(f"Use model: {model_path}")
         model.load_state_dict(torch.load(str(model_path), map_location=device))

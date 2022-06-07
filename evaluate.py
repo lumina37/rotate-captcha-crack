@@ -22,7 +22,7 @@ with torch.no_grad():
     batch_size = CONFIG['evaluate']['batch_size']
     test_dataloader = get_dataloader("test", batch_size=batch_size, trans=trans)
 
-    model = RotationNet()
+    model = RotationNet(train=False)
     model_path = find_out_model_path(opts.timestamp, opts.epoch)
     print(f"Use model: {model_path}")
     model.load_state_dict(torch.load(str(model_path), map_location=device))

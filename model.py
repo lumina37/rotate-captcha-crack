@@ -8,13 +8,16 @@ class RotationNet(nn.Module):
     旋转角度预测网络
     输出为[0,1]的旋转系数
     将该系数乘以2 * pi则映射为图像被旋转的弧度，乘以360则映射为图像被旋转的角度
+
+    Args:
+        train (bool, optional): 是否使用训练模式 若为True则会自动下载预训练模型. Default to True.
     """
 
-    def __init__(self) -> None:
+    def __init__(self, train: bool = True) -> None:
 
         super(RotationNet, self).__init__()
 
-        self.backbone = models.regnet_y_1_6gf(pretrained=True)
+        self.backbone = models.regnet_y_1_6gf(pretrained=train)
 
         fc_channels = self.backbone.fc.in_features
         self.backbone.fc = nn.Linear(fc_channels, 1)
