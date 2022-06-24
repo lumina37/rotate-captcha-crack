@@ -33,7 +33,7 @@ if __name__ == "__main__":
         model.load_state_dict(torch.load(str(model_path), map_location=device))
         model = model.to(device)
         model.eval()
-        img = Image.open("datasets/tieba/1615096446.jpg")
+        img = Image.open("datasets/tieba/1615096444.jpg")
 
         img_tensor: torch.Tensor = trans(img).unsqueeze_(0).to(device)
         predict: torch.Tensor = model(img_tensor)
