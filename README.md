@@ -2,7 +2,13 @@
 
 CNN预测图片旋转角度
 
-在下文提到的数据集上训练35个epoch（耗时30min）得到的平均预测误差为`19.98°`，模型文件大小`3.8MB`，可以轻松破解某度的旋图验证码
+在下文提到的数据集上训练35个epoch（耗时30min）得到的平均预测误差为`19.98°`，模型文件大小`3.8MB`，可以轻松破解百度旋图验证码
+
+测试效果如下
+
+![test_result](https://github.com/Starry-OvO/Rotate-Captcha-Crack/blob/master/figures/test_result.png)
+
+其中百度验证码图片来自[RotateCaptchaBreak](https://github.com/chencchen/RotateCaptchaBreak/tree/master/data/baiduCaptcha)
 
 ## 准备环境
 
@@ -20,11 +26,11 @@ cd ./Rotate-Captcha-Crack
 pip install -r requirements.txt
 ```
 
-## 偷数据集
+## 准备数据集
 
-+ 我这里直接偷的[`Landscape-Dataset`](https://github.com/yuweiming70/Landscape-Dataset)，你也可以自己扒拉一些风景照放到任意一个文件夹里，因为是自监督学习，所以不限制图像尺寸也不需要标注
++ 我这里直接扒的[`Landscape-Dataset`](https://github.com/yuweiming70/Landscape-Dataset)，你也可以自己收集一些风景照放到任意一个文件夹里，因为是自监督学习，所以不限制图像尺寸也不需要标注
 
-+ 在`config.yaml`里配置`dataset:root`字段指向装有图片的文件夹
++ 在`config.yaml`里配置`dataset.root`字段指向装有图片的文件夹
 
 + 运行`prepare.py`准备数据集
 
