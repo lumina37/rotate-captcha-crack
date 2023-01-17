@@ -1,5 +1,0 @@
-torch>=1.11
-torchvision
-torchdata>=0.3.0
-matplotlib
-pyyaml

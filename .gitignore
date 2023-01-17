@@ -1,21 +1,20 @@
 __*
-_*
 
-/datasets
-/models/*
+datasets
+models
 
 *.txt
 *.jpg
 *.png
 *.code-workspace
+*.egg-info
 
-_draw_sth.py
 traditional_method.py
 
-!requirements.txt
-!/figures/*
+!figures
+!figures/**
+!rotate_captcha_crack
+!rotate_captcha_crack/**
 
-!/models/1
-!/models/1/lr.png
-!/models/1/eval_loss.png
-!/models/1/train_loss.png
+!models/1
+!models/1/**

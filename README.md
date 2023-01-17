@@ -14,16 +14,16 @@ CNN预测图片旋转角度
 
 + 一张显存4G以上的GPU
 
-+ 确保你的`Python`版本`>=3.7`
++ 确保你的`Python`版本`>=3.8`
 
 + 确保你的`PyTorch`版本`>=1.11`
 
 + 拉取代码并安装依赖库
 
-```bash
-git clone https://github.com/Starry-OvO/Rotate-Captcha-Crack.git
-cd ./Rotate-Captcha-Crack
-pip install -r requirements.txt
+```shell
+git clone https://github.com/Starry-OvO/rotate-captcha-crack.git
+cd ./rotate-captcha-crack
+pip install -e .
 ```
 
 ## 准备数据集

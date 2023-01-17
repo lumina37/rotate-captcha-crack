@@ -3,11 +3,7 @@ import argparse
 import torch
 from torchvision import transforms
 
-from config import CONFIG, device
-from dataset import get_dataloader
-from loss import DistanceBetweenAngles
-from model import RotationNet
-from utils import find_out_model_path
+from rotate_captcha_crack import CONFIG, DistanceBetweenAngles, RotationNet, device, find_out_model_path, get_dataloader
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--timestamp", "-ts", type=int, default=0, help="Use which timestamp")

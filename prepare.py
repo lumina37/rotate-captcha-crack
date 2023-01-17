@@ -9,7 +9,7 @@ from torch.utils.data.datapipes.utils.decoder import imagehandler
 from torchdata.datapipes.iter import FileLister, FileOpener, IterableWrapper, IterDataPipe, RoutedDecoder, Saver, Zipper
 from torchvision import transforms
 
-from config import CONFIG, root
+from rotate_captcha_crack import CONFIG, root
 
 filelist_datapipe = FileLister(root=str(root), masks='*.jpg')
 filelist_datapipe = list(filelist_datapipe)

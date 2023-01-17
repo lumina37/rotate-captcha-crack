@@ -1,0 +1,33 @@
+[project]
+urls = { Repository = "https://github.com/Starry-OvO/rotate-captcha-crack" }
+name = "rotate-captcha-crack"
+description = "Asynchronous I/O Client for Baidu Tieba"
+readme = "README.md"
+requires-python = ">=3.8"
+authors = [{ name = "Starry-OvO", email = "starry.qvq@gmail.com" }]
+dependencies = ["torch>=1.11.0", "torchvision>=0.12.0", "torchdata<0.6,>=0.5.0", "matplotlib", "pyyaml<7.0,>=6.0"]
+dynamic = ["version"]
+
+[tool.setuptools.packages.find]
+include = ["rotate_captcha_crack*"]
+
+[tool.setuptools.dynamic]
+version = { attr = "rotate_captcha_crack.__version__.__version__" }
+
+[tool.black]
+line-length = 120
+skip-string-normalization = true
+extend-exclude = ["*_pb2.py"]
+target-version = ["py38"]
+
+[tool.isort]
+profile = "black"
+line_length = 120
+py_version = "38"
+known_third_party = ["rotate_captcha_crack"]
+
+[tool.ruff]
+line-length = 120
+select = ["W", "E", "F", "I"]
+ignore = ["E402", "E501"]
+target-version = "py38"

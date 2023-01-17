@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-from config import CONFIG
+from rotate_captcha_crack import CONFIG
 
 xx = np.linspace(-4, 4, 500, dtype=np.float32)
 yy = np.linspace(0, 1, 500, dtype=np.float32)

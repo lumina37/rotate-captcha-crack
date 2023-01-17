@@ -6,9 +6,7 @@ import torch
 from PIL import Image
 from torchvision import transforms
 
-from config import CONFIG, device
-from model import RotationNet
-from utils import find_out_model_path
+from rotate_captcha_crack import CONFIG, RotationNet, device, find_out_model_path
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--timestamp", "-ts", type=int, default=0, help="Use which timestamp")
