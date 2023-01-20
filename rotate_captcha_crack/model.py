@@ -20,11 +20,16 @@ class RotationNet(nn.Module):
         self.backbone = models.regnet_x_1_6gf(pretrained=train)
 
         fc_channels = self.backbone.fc.in_features
-        self.backbone.fc = nn.Linear(fc_channels, 1)
+        self.fc0 = nn.Linear(fc_channels, fc_channels)
+        self.act = nn.LeakyReLU()
+        self.fc1 = nn.Linear(fc_channels, 1)
+        del self.backbone.fc
 
         if train:
-            nn.init.normal_(self.backbone.fc.weight, mean=0.0, std=0.01)
-            nn.init.zeros_(self.backbone.fc.bias)
+            nn.init.normal_(self.fc0.weight, mean=0.0, std=0.01)
+            nn.init.normal_(self.fc1.weight, mean=0.0, std=0.01)
+            nn.init.zeros_(self.fc0.bias)
+            nn.init.zeros_(self.fc1.bias)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         x = self.backbone.stem(x)
@@ -32,7 +37,10 @@ class RotationNet(nn.Module):
 
         x = self.backbone.avgpool(x)
         x = x.flatten(start_dim=1)
-        x = self.backbone.fc(x)
+        
+        x = self.fc0(x)
+        x = self.act(x)
+        x = self.fc1(x)
 
         x.squeeze_(dim=1)
         return x

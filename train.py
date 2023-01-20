@@ -1,4 +1,5 @@
 import time
+import os
 from pathlib import Path
 
 import numpy as np
@@ -10,7 +11,6 @@ from rotate_captcha_crack import CONFIG, LOG, DistanceBetweenAngles, RotationLos
 
 batch_size: int = CONFIG['train']['batch_size']
 epoches: int = CONFIG['train']['epoches']
-steps: int = CONFIG['train']['steps']
 lr: float = CONFIG['train']['lr']
 lambda_cos: float = CONFIG['train']['loss']['lambda_cos']
 exponent: float = CONFIG['train']['loss']['exponent']
@@ -39,10 +39,14 @@ eval_criterion = DistanceBetweenAngles()
 lr_vec = np.empty(epoches, dtype=np.float64)
 train_loss_vec = np.empty(epoches, dtype=np.float64)
 eval_loss_vec = np.empty(epoches, dtype=np.float64)
+best_eval_loss = 10000000.0
+previous_checkpoint_path = None
 
 for epoch_idx in range(epoches):
     model.train()
     total_train_loss: float = 0
+    steps = 0
+    
     for step_idx, (source, target) in enumerate(train_dataloader):
         source: torch.Tensor = source.to(device)
         target: torch.Tensor = target.to(device)
@@ -53,13 +57,11 @@ for epoch_idx in range(epoches):
         loss.backward()
         total_train_loss += loss.cpu().item()
         optmizer.step()
-
-        if step_idx + 1 == steps:
-            break
+        steps += 1
 
     scheduler.step()
     lr_vec[epoch_idx] = scheduler.get_last_lr()[0]
-
+    
     train_loss = total_train_loss / steps
     train_loss_vec[epoch_idx] = train_loss
 
@@ -81,9 +83,16 @@ for epoch_idx in range(epoches):
     LOG.info(
         f"Epoch#{epoch_idx}. time_cost: {time.time()-start_time:.2f} s. train_loss: {train_loss:.8f}. eval_loss: {eval_loss:.4f} degrees"
     )
-
-    if epoch_idx >= epoches / 2:
-        torch.save(model.state_dict(), str(model_dir / f"{epoch_idx}.pth"))
+    
+    torch.save(model.state_dict(), str(model_dir / "last.pth"))
+    if eval_loss < best_eval_loss:
+        best_eval_loss = eval_loss
+        new_checkpoint_path = str(model_dir / f"{epoch_idx}_{eval_loss:.4f}.pth")
+        torch.save(model.state_dict(), new_checkpoint_path)
+        if previous_checkpoint_path is not None:
+            os.remove(previous_checkpoint_path)
+        
+        previous_checkpoint_path = new_checkpoint_path
 
 x = np.arange(epoches, dtype=np.int16)
 
