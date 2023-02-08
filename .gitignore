@@ -2,12 +2,14 @@ __*
 
 datasets
 models
+papers
 
 *.txt
 *.jpg
 *.png
 *.code-workspace
 *.egg-info
+*.ipynb_checkpoints
 
 traditional_method.py
 
@@ -16,8 +18,3 @@ traditional_method.py
 !rotate_captcha_crack
 !rotate_captcha_crack/**
 
-!models/1
-!models/1/**
-
-__pycache__
-.ipynb_checkpoints

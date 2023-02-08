@@ -30,7 +30,7 @@ pip install -e .
 
 + 我这里直接扒的[`Landscape-Dataset`](https://github.com/yuweiming70/Landscape-Dataset)，你也可以自己收集一些风景照放到任意一个文件夹里，因为是自监督学习，所以不限制图像尺寸也不需要标注
 
-+ 在`config.yaml`里配置`dataset.root`字段指向装有图片的文件夹
++ 在`config.toml`里配置`dataset.root`字段指向装有图片的文件夹
 
 + 运行`prepare.py`准备数据集
 

@@ -1,13 +1,20 @@
 import os
 import random
+import sys
 from pathlib import Path
 
 import numpy as np
 import torch
-import yaml
 
-with open("config.yaml", 'r', encoding='utf-8') as file:
-    CONFIG = yaml.load(file, yaml.SafeLoader)
+if sys.version_info >= (3, 11):
+    import tomllib
+else:
+    import tomli as tomllib
+
+
+with open("config.toml", "rb") as f:
+    CONFIG = tomllib.load(f)
+
 
 root = Path(CONFIG['dataset']['root'])
 
