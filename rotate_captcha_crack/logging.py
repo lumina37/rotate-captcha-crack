@@ -1,6 +1,5 @@
 import logging
 import sys
-import time
 from pathlib import Path
 
 logging._srcfile = None
@@ -41,6 +40,3 @@ class RCCLogger(logging.Logger):
 
         self.addHandler(file_handler)
         self.addHandler(stream_handler)
-
-
-LOG = RCCLogger(int(time.time()))

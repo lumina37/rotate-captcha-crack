@@ -7,7 +7,15 @@ import torch
 from matplotlib import pyplot as plt
 from torchvision import transforms
 
-from rotate_captcha_crack import CONFIG, LOG, DistanceBetweenAngles, RotationLoss, RotationNet, device, get_dataloader
+from rotate_captcha_crack import (
+    CONFIG,
+    DistanceBetweenAngles,
+    RCCLogger,
+    RotationLoss,
+    RotationNet,
+    device,
+    get_dataloader,
+)
 
 batch_size: int = CONFIG['train']['batch_size']
 epoches: int = CONFIG['train']['epoches']
@@ -20,6 +28,8 @@ root = Path(CONFIG['dataset']['root'])
 
 start_time = time.time()
 start_time_int = int(start_time)
+
+LOG = RCCLogger(start_time_int)
 
 model_dir = Path(f"models/{start_time_int}")
 if not model_dir.exists():

@@ -26,7 +26,7 @@ def find_out_model_path(timestamp: int = 0, epoch: int = 0) -> Path:
     if not epoch:
         model_paths = list(ts_dir.glob("*.pth"))
         if not model_paths:
-            raise FileNotFoundError(f"cant find any .pth in {ts_dir}")
+            raise FileNotFoundError(f"cannot find any .pth in {ts_dir}")
         model_path = model_paths[-1]
         model_name = model_path.name
     else:
