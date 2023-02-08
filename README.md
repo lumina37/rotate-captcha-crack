@@ -6,7 +6,7 @@ CNN预测图片旋转角度
 
 测试效果如下
 
-![test_result](https://github.com/Starry-OvO/Rotate-Captcha-Crack/blob/master/figures/test_result.png)
+![test_result](https://user-images.githubusercontent.com/48282276/217518434-b9385fa5-60b1-4bf2-b17b-d4bd8a118f56.png)
 
 其中百度验证码图片来自[RotateCaptchaBreak](https://github.com/chencchen/RotateCaptchaBreak/tree/master/data/baiduCaptcha)
 
@@ -78,8 +78,8 @@ python test.py
 
 - angle_error_regression
 
-![RotNet-angle_error_regression](https://github.com/Starry-OvO/Rotate-Captcha-Crack/blob/master/figures/RotNet-angle_error_regression.png)
+![RotNet-angle_error_regression](https://user-images.githubusercontent.com/48282276/217518614-6ff5a46d-053c-4e8b-aec5-04695b6ec5f2.png)
 
 - RotationLoss
 
-![This-RotationLoss](https://github.com/Starry-OvO/Rotate-Captcha-Crack/blob/master/figures/This-RotationLoss.png)
+![This-RotationLoss](https://user-images.githubusercontent.com/48282276/217518688-d9085be4-5192-44e7-b416-3ebd4f6dc2a4.png)

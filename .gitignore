@@ -2,8 +2,6 @@ datasets
 models
 papers
 
-!figures
-!figures/**
 !rotate_captcha_crack
 !rotate_captcha_crack/**
 
