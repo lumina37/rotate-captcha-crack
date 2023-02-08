@@ -14,10 +14,10 @@ class RotationNet(nn.Module):
     """
 
     def __init__(self, train: bool = True) -> None:
-
         super(RotationNet, self).__init__()
 
-        self.backbone = models.regnet_x_1_6gf(pretrained=train)
+        weights = models.RegNet_X_1_6GF_Weights.DEFAULT if train else None
+        self.backbone = models.regnet_x_1_6gf(weights=weights)
 
         fc_channels = self.backbone.fc.in_features
         self.fc0 = nn.Linear(fc_channels, fc_channels)
@@ -37,7 +37,7 @@ class RotationNet(nn.Module):
 
         x = self.backbone.avgpool(x)
         x = x.flatten(start_dim=1)
-        
+
         x = self.fc0(x)
         x = self.act(x)
         x = self.fc1(x)

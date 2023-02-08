@@ -1,9 +1,13 @@
-__*
-
 datasets
 models
 papers
 
+!figures
+!figures/**
+!rotate_captcha_crack
+!rotate_captcha_crack/**
+
+__pycache__
 *.txt
 *.jpg
 *.png
@@ -12,9 +16,3 @@ papers
 *.ipynb_checkpoints
 
 traditional_method.py
-
-!figures
-!figures/**
-!rotate_captcha_crack
-!rotate_captcha_crack/**
-

@@ -29,7 +29,6 @@ target-version = ["py38"]
 profile = "black"
 line_length = 120
 py_version = "38"
-known_third_party = ["rotate_captcha_crack"]
 
 [tool.ruff]
 line-length = 120

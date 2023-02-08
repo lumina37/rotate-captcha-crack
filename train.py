@@ -1,5 +1,5 @@
-import time
 import os
+import time
 from pathlib import Path
 
 import numpy as np
@@ -46,7 +46,7 @@ for epoch_idx in range(epoches):
     model.train()
     total_train_loss: float = 0
     steps = 0
-    
+
     for step_idx, (source, target) in enumerate(train_dataloader):
         source: torch.Tensor = source.to(device)
         target: torch.Tensor = target.to(device)
@@ -61,7 +61,7 @@ for epoch_idx in range(epoches):
 
     scheduler.step()
     lr_vec[epoch_idx] = scheduler.get_last_lr()[0]
-    
+
     train_loss = total_train_loss / steps
     train_loss_vec[epoch_idx] = train_loss
 
@@ -83,7 +83,7 @@ for epoch_idx in range(epoches):
     LOG.info(
         f"Epoch#{epoch_idx}. time_cost: {time.time()-start_time:.2f} s. train_loss: {train_loss:.8f}. eval_loss: {eval_loss:.4f} degrees"
     )
-    
+
     torch.save(model.state_dict(), str(model_dir / "last.pth"))
     if eval_loss < best_eval_loss:
         best_eval_loss = eval_loss
@@ -91,7 +91,7 @@ for epoch_idx in range(epoches):
         torch.save(model.state_dict(), new_checkpoint_path)
         if previous_checkpoint_path is not None:
             os.remove(previous_checkpoint_path)
-        
+
         previous_checkpoint_path = new_checkpoint_path
 
 x = np.arange(epoches, dtype=np.int16)
