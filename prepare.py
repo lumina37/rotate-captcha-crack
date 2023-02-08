@@ -14,7 +14,6 @@ from rotate_captcha_crack import CONFIG
 filelist_datapipe = FileLister(root=str(CONFIG.dataset.root), masks='*.jpg')
 filelist_datapipe = list(filelist_datapipe)
 
-# 划分训练集验证集测试集的数量
 total_num = len(list(filelist_datapipe))
 train_ratio = CONFIG.dataset.train_ratio
 val_ratio = CONFIG.dataset.val_ratio
@@ -49,19 +48,19 @@ def process_datapipe(datapipe: List[str], save_type: Literal["train", "val", "te
     save_dir.mkdir(mode=0o755, parents=True)
 
     dp_size = len(datapipe)
-    datapipe: IterDataPipe = FileOpener(datapipe, mode='b')  # 打开文件
-    datapipe = RoutedDecoder(datapipe, imagehandler("pil"))  # 解码图像
+    datapipe: IterDataPipe = FileOpener(datapipe, mode='b')
+    datapipe = RoutedDecoder(datapipe, imagehandler("pil"))
 
-    rand_rot_factors = np.random.random_sample(size=dp_size)  # 生成[0, 1)的旋转系数
-    label_datapipe = IterableWrapper(rand_rot_factors, deepcopy=False)  # 包装为datapipe
-    datapipe = Zipper(datapipe, label_datapipe)  # 组合datapipe
+    rand_rot_factors = np.random.random_sample(size=dp_size)
+    label_datapipe = IterableWrapper(rand_rot_factors, deepcopy=False)
+    datapipe = Zipper(datapipe, label_datapipe)
 
     def img_process_fn(tup: Tuple[Tuple[str, Image.Image], float]) -> Tuple[str, bytes]:
         (filepath, img), rot_factor = tup
 
-        square_img: Image.Image = trans(img)  # 放缩和随机crop
-        square_img = square_img.rotate(rot_factor * 360, resample=Image.Resampling.BILINEAR)  # 旋图
-        square_img.paste(circle_mask, mask=circle_mask)  # 加遮罩
+        square_img: Image.Image = trans(img)
+        square_img = square_img.rotate(rot_factor * 360, resample=Image.Resampling.BILINEAR)
+        square_img.paste(circle_mask, mask=circle_mask)
 
         img_bytesio = BytesIO()
         square_img.save(img_bytesio, format='JPEG', quality=95)
