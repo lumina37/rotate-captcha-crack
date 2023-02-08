@@ -9,16 +9,16 @@ from torch.utils.data.datapipes.utils.decoder import imagehandler
 from torchdata.datapipes.iter import FileLister, FileOpener, IterableWrapper, IterDataPipe, RoutedDecoder, Saver, Zipper
 from torchvision import transforms
 
-from rotate_captcha_crack import CONFIG, root
+from rotate_captcha_crack import CONFIG
 
-filelist_datapipe = FileLister(root=str(root), masks='*.jpg')
+filelist_datapipe = FileLister(root=str(CONFIG.dataset.root), masks='*.jpg')
 filelist_datapipe = list(filelist_datapipe)
 
 # 划分训练集验证集测试集的数量
 total_num = len(list(filelist_datapipe))
-train_ratio: float = CONFIG['dataset']['train_ratio']
-val_ratio: float = CONFIG['dataset']['val_ratio']
-test_ratio: float = CONFIG['dataset']['test_ratio']
+train_ratio = CONFIG.dataset.train_ratio
+val_ratio = CONFIG.dataset.val_ratio
+test_ratio = CONFIG.dataset.test_ratio
 sum_ratio = train_ratio + val_ratio + test_ratio
 train_num = int(total_num * (train_ratio / sum_ratio))
 val_num = int(total_num * (val_ratio / sum_ratio))
@@ -27,7 +27,7 @@ val_datapipe = filelist_datapipe[train_num : train_num + val_num]
 test_datapipe = filelist_datapipe[train_num + val_num :]
 
 # create mask
-img_size: int = CONFIG['dataset']['img_size']
+img_size = CONFIG.dataset.img_size
 circle_mask = Image.new('L', (img_size, img_size), color=255)  # white background
 circle_draw = ImageDraw.Draw(circle_mask)
 circle_draw.ellipse((0, 0, img_size, img_size), fill=0)  # black circle in center
@@ -43,7 +43,7 @@ trans = transforms.Compose(
 
 def process_datapipe(datapipe: List[str], save_type: Literal["train", "val", "test"]) -> None:
 
-    save_dir = root / "pytorch" / save_type
+    save_dir = CONFIG.dataset.root / "pytorch" / save_type
     if save_dir.exists():
         shutil.rmtree(str(save_dir))
     save_dir.mkdir(mode=0o755, parents=True)

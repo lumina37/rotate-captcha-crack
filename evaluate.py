@@ -11,11 +11,11 @@ parser.add_argument("--epoch", type=int, default=0, help="Use which epoch")
 opts = parser.parse_args()
 
 with torch.no_grad():
-    img_size: int = CONFIG['dataset']['img_size']
+    img_size = CONFIG.dataset.img_size
     trans = transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
     eval_criterion = DistanceBetweenAngles()
 
-    batch_size = CONFIG['evaluate']['batch_size']
+    batch_size = CONFIG.eval.batch_size
     test_dataloader = get_dataloader("test", batch_size=batch_size, trans=trans)
 
     model = RotationNet(train=False)

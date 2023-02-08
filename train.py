@@ -17,14 +17,13 @@ from rotate_captcha_crack import (
     get_dataloader,
 )
 
-batch_size: int = CONFIG['train']['batch_size']
-epoches: int = CONFIG['train']['epoches']
-lr: float = CONFIG['train']['lr']
-lambda_cos: float = CONFIG['train']['loss']['lambda_cos']
-exponent: float = CONFIG['train']['loss']['exponent']
-t_0: float = CONFIG['train']['lr_scheduler']['T_0']
-t_mult: float = CONFIG['train']['lr_scheduler']['T_mult']
-root = Path(CONFIG['dataset']['root'])
+batch_size = CONFIG.train.batch_size
+epoches = CONFIG.train.epoches
+lr = CONFIG.train.lr
+lambda_cos = CONFIG.train.loss['lambda_cos']
+exponent = CONFIG.train.loss['exponent']
+t_0: float = CONFIG.train.lr_scheduler['T_0']
+t_mult: float = CONFIG.train.lr_scheduler['T_mult']
 
 start_time = time.time()
 start_time_int = int(start_time)

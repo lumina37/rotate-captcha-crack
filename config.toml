@@ -9,7 +9,7 @@ test_ratio = 0.05
 lr = 0.0004
 lr_scheduler = { T_0 = 5, T_mult = 2 }
 loss = { lambda_cos = 0.24, exponent = 2 }
-epoches = 3000
+epoches = 64
 batch_size = 64
 
 [evaluate]

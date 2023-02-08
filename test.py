@@ -14,7 +14,7 @@ parser.add_argument("--epoch", type=int, default=0, help="Use which epoch")
 opts = parser.parse_args()
 
 if __name__ == "__main__":
-    img_size: int = CONFIG['dataset']['img_size']
+    img_size = CONFIG.dataset.img_size
     trans = transforms.Compose(
         [
             transforms.Resize(img_size),

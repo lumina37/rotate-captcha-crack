@@ -7,7 +7,7 @@ from torch.utils.data.datapipes.utils.decoder import imagehandler
 from torchdata.datapipes.iter import FileLister, FileOpener, IterableWrapper, RoutedDecoder, Zipper
 from torchvision import transforms
 
-from rotate_captcha_crack.config import root
+from rotate_captcha_crack.config import CONFIG
 
 
 def get_dataloader(
@@ -20,7 +20,7 @@ def get_dataloader(
 ) -> DataLoader:
 
     # 例如从./datasets/Landscape-Dataset/pytorch/train文件夹读取图像
-    load_dir = root / "pytorch" / load_type
+    load_dir = CONFIG.dataset.root / "pytorch" / load_type
     img_datapipe = FileLister(root=str(load_dir), masks='*.jpg')
     img_datapipe = FileOpener(img_datapipe, mode='b')
     img_datapipe = RoutedDecoder(img_datapipe, imagehandler("torch"))
