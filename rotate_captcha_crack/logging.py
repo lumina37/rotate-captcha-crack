@@ -2,9 +2,7 @@ import logging
 import sys
 from pathlib import Path
 
-logging._srcfile = None
 logging.logThreads = False
-logging.logProcesses = False
 logging.logMultiprocessing = False
 logging.raiseExceptions = False
 logging.Formatter.default_msec_format = '%s.%03d'

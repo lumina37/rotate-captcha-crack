@@ -1,5 +1,5 @@
-import torch
 import torch.nn as nn
+from torch import Tensor
 from torchvision import models
 
 
@@ -31,7 +31,7 @@ class RotationNet(nn.Module):
             nn.init.zeros_(self.fc0.bias)
             nn.init.zeros_(self.fc1.bias)
 
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
+    def forward(self, x: Tensor) -> Tensor:
         x = self.backbone.stem(x)
         x = self.backbone.trunk_output(x)
 

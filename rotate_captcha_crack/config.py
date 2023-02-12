@@ -18,19 +18,21 @@ np.random.seed(seed)
 random.seed(seed)
 os.environ['PYTHONHASHSEED'] = str(seed)
 
-if torch.cuda.is_available():
-    device = torch.device('cuda')
-    torch.backends.cudnn.benchmark = True
-    torch.cuda.manual_seed(seed)
-    torch.cuda.manual_seed_all(seed)
-else:
-    device = torch.device('cpu')
+if not torch.cuda.is_available():
+    raise NotImplementedError("cuda is not available")
+
+device = torch.device('cuda')
+torch.backends.cudnn.benchmark = True
+torch.cuda.manual_seed(seed)
+torch.cuda.manual_seed_all(seed)
 
 
 class DatasetConfig(object):
     __slots__ = [
         '_root',
+        '_glob_suffix',
         '_img_size',
+        '_angle_num',
         '_train_ratio',
         '_val_ratio',
         '_test_ratio',
@@ -38,7 +40,9 @@ class DatasetConfig(object):
 
     def __init__(self, dataset_cfg: dict) -> None:
         self._root: Path = Path(dataset_cfg['root'])
+        self._glob_suffix: str = f"*.{dataset_cfg['img_suffix']}"
         self._img_size: int = dataset_cfg['img_size']
+        self._angle_num: int = dataset_cfg['angle_num']
         self._train_ratio: float = dataset_cfg['train_ratio']
         self._val_ratio: float = dataset_cfg['val_ratio']
         self._test_ratio: float = dataset_cfg['test_ratio']
@@ -48,9 +52,6 @@ class DatasetConfig(object):
         """
         `Path` points to the directory containing pics
 
-        Returns:
-            Path
-
         Note:
             the processed dataset will be placed in {$root}/pytorch/(train or val or test)
         """
@@ -58,12 +59,20 @@ class DatasetConfig(object):
         return self._root
 
     @property
+    def glob_suffix(self) -> str:
+        """
+        used to glob imgs
+
+        Note:
+            '*.jpg' or '*.png' etc.
+        """
+
+        return self._glob_suffix
+
+    @property
     def img_size(self) -> int:
         """
         img size will be `img_size * img_size` after process
-
-        Returns:
-            int
 
         Note:
             It should fits your model
@@ -72,34 +81,36 @@ class DatasetConfig(object):
         return self._img_size
 
     @property
-    def train_ratio(self) -> int:
+    def angle_num(self) -> int:
+        """
+        how much rotate angles should be used
+
+        Note:
+            4 leads to [0°, 90°, 180°, 270°]
+        """
+
+        return self._angle_num
+
+    @property
+    def train_ratio(self) -> float:
         """
         how many ratio of imgs will be used for training
-
-        Returns:
-            float
         """
 
         return self._train_ratio
 
     @property
-    def val_ratio(self) -> int:
+    def val_ratio(self) -> float:
         """
         how many ratio of imgs will be used for validating
-
-        Returns:
-            float
         """
 
         return self._val_ratio
 
     @property
-    def test_ratio(self) -> int:
+    def test_ratio(self) -> float:
         """
         how many ratio of imgs will be used for testing
-
-        Returns:
-            float
         """
 
         return self._test_ratio
@@ -125,9 +136,6 @@ class TrainConfig(object):
     def loss(self) -> Dict[str, float]:
         """
         config for RotationLoss
-
-        Returns:
-            Dict[str,float]
         """
 
         return self._loss
@@ -136,9 +144,6 @@ class TrainConfig(object):
     def lr_scheduler(self) -> Dict[str, float]:
         """
         config for learning rate scheduler
-
-        Returns:
-            Dict[str,float]
         """
 
         return self._lr_scheduler
@@ -155,7 +160,7 @@ class RCCConfig(object):
     __slots__ = [
         '_dataset',
         '_train',
-        '_evaluate',
+        '_eval',
         '_loss',
         '_lr_scheduler',
     ]
@@ -171,9 +176,6 @@ class RCCConfig(object):
     def dataset(self) -> DatasetConfig:
         """
         config for dataset
-
-        Returns:
-            DatasetConfig
         """
 
         return self._dataset
@@ -182,9 +184,6 @@ class RCCConfig(object):
     def train(self) -> TrainConfig:
         """
         config for training
-
-        Returns:
-            TrainConfig
         """
 
         return self._train
@@ -193,9 +192,6 @@ class RCCConfig(object):
     def eval(self) -> EvalConfig:
         """
         config for evaluate
-
-        Returns:
-            EvalConfig
         """
 
         return self._eval

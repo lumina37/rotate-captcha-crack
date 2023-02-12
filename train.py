@@ -5,6 +5,7 @@ from pathlib import Path
 import numpy as np
 import torch
 from matplotlib import pyplot as plt
+from torch import Tensor
 from torchvision import transforms
 
 from rotate_captcha_crack import (
@@ -22,8 +23,8 @@ epoches = CONFIG.train.epoches
 lr = CONFIG.train.lr
 lambda_cos = CONFIG.train.loss['lambda_cos']
 exponent = CONFIG.train.loss['exponent']
-t_0: float = CONFIG.train.lr_scheduler['T_0']
-t_mult: float = CONFIG.train.lr_scheduler['T_mult']
+t_0 = CONFIG.train.lr_scheduler['T_0']
+t_mult = CONFIG.train.lr_scheduler['T_mult']
 
 start_time = time.time()
 start_time_int = int(start_time)
@@ -34,9 +35,9 @@ model_dir = Path(f"models/{start_time_int}")
 if not model_dir.exists():
     model_dir.mkdir(parents=True)
 
-trans = transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
-train_dataloader = get_dataloader("train", batch_size=batch_size, trans=trans, need_shuffle=True)
-val_dataloader = get_dataloader("val", batch_size=batch_size, trans=trans)
+trans = transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225], inplace=True)
+train_dataloader = get_dataloader("train", batch_size, device, trans)
+val_dataloader = get_dataloader("val", batch_size, device, trans)
 
 model = RotationNet()
 model = model.to(device)
@@ -53,16 +54,13 @@ previous_checkpoint_path = None
 
 for epoch_idx in range(epoches):
     model.train()
-    total_train_loss: float = 0
+    total_train_loss = 0.0
     steps = 0
 
     for step_idx, (source, target) in enumerate(train_dataloader):
-        source: torch.Tensor = source.to(device)
-        target: torch.Tensor = target.to(device)
-
         optmizer.zero_grad()
-        predict: torch.Tensor = model(source)
-        loss: torch.Tensor = criterion(predict, target)
+        predict: Tensor = model(source)
+        loss: Tensor = criterion(predict, target)
         loss.backward()
         total_train_loss += loss.cpu().item()
         optmizer.step()
@@ -75,15 +73,13 @@ for epoch_idx in range(epoches):
     train_loss_vec[epoch_idx] = train_loss
 
     model.eval()
-    total_eval_loss: float = 0
-    batch_count: int = 0
+    total_eval_loss = 0.0
+    batch_count = 0
     with torch.no_grad():
         for source, target in val_dataloader:
-            source: torch.Tensor = source.to(device)
-            target: torch.Tensor = target.to(device)
-            predict: torch.Tensor = model(source)
-
-            total_eval_loss += eval_criterion(predict, target).cpu().item() * 360
+            predict: Tensor = model(source)
+            eval_loss: Tensor = eval_criterion(predict, target)
+            total_eval_loss += eval_loss.cpu().item() * 360
             batch_count += 1
 
     eval_loss = total_eval_loss / batch_count
@@ -96,7 +92,7 @@ for epoch_idx in range(epoches):
     torch.save(model.state_dict(), str(model_dir / "last.pth"))
     if eval_loss < best_eval_loss:
         best_eval_loss = eval_loss
-        new_checkpoint_path = str(model_dir / f"{epoch_idx}_{eval_loss:.4f}.pth")
+        new_checkpoint_path = str(model_dir / f"{epoch_idx}.pth")
         torch.save(model.state_dict(), new_checkpoint_path)
         if previous_checkpoint_path is not None:
             os.remove(previous_checkpoint_path)

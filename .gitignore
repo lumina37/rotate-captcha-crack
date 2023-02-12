@@ -6,6 +6,7 @@ papers
 !rotate_captcha_crack/**
 
 __pycache__
+.vscode
 *.txt
 *.jpg
 *.png

@@ -4,6 +4,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import torch
 from PIL import Image
+from torch import Tensor
 from torchvision import transforms
 
 from rotate_captcha_crack import CONFIG, RotationNet, device, find_out_model_path
@@ -33,12 +34,14 @@ if __name__ == "__main__":
         model.eval()
         img = Image.open("datasets/tieba/1615096444.jpg")
 
-        img_tensor: torch.Tensor = trans(img).unsqueeze_(0).to(device)
-        predict: torch.Tensor = model(img_tensor)
+        img_tensor: Tensor = trans(img).unsqueeze_(0).to(device)
+        predict: Tensor = model(img_tensor)
         degree: float = predict.cpu().item() * 360
         print(f"Predict degree: {degree:.4f}")
 
-    img = img.rotate(-degree, resample=Image.Resampling.BILINEAR, fillcolor=(255, 255, 255))  # 因为是复原，这里需要-degree
+    img = img.rotate(
+        -degree, resample=Image.Resampling.BILINEAR, fillcolor=(255, 255, 255)
+    )  # use neg degree to recover the img
     plt.figure("debug")
     plt.imshow(img)
     plt.show()

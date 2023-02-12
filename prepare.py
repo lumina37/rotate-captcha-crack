@@ -1,37 +1,36 @@
+import random
 import shutil
-from io import BytesIO
 from pathlib import Path
-from typing import List, Literal, Tuple
+from typing import List, Literal
 
 import numpy as np
 from PIL import Image, ImageDraw
-from torch.utils.data.datapipes.utils.decoder import imagehandler
-from torchdata.datapipes.iter import FileLister, FileOpener, IterableWrapper, IterDataPipe, RoutedDecoder, Saver, Zipper
 from torchvision import transforms
 
 from rotate_captcha_crack import CONFIG
 
-filelist_datapipe = FileLister(root=str(CONFIG.dataset.root), masks='*.jpg')
-filelist_datapipe = list(filelist_datapipe)
+ds_cfg = CONFIG.dataset
+img_paths = list(ds_cfg.root.glob(ds_cfg.glob_suffix))
+total_num = len(img_paths)
 
-total_num = len(list(filelist_datapipe))
-train_ratio = CONFIG.dataset.train_ratio
-val_ratio = CONFIG.dataset.val_ratio
-test_ratio = CONFIG.dataset.test_ratio
+train_ratio = ds_cfg.train_ratio
+val_ratio = ds_cfg.val_ratio
+test_ratio = ds_cfg.test_ratio
 sum_ratio = train_ratio + val_ratio + test_ratio
 train_num = int(total_num * (train_ratio / sum_ratio))
 val_num = int(total_num * (val_ratio / sum_ratio))
-train_datapipe = filelist_datapipe[:train_num]
-val_datapipe = filelist_datapipe[train_num : train_num + val_num]
-test_datapipe = filelist_datapipe[train_num + val_num :]
+
+random.shuffle(img_paths)
+train_paths = img_paths[:train_num]
+val_paths = img_paths[train_num : train_num + val_num]
+test_paths = img_paths[train_num + val_num :]
 
 # create mask
-img_size = CONFIG.dataset.img_size
+img_size = ds_cfg.img_size
 circle_mask = Image.new('L', (img_size, img_size), color=255)  # white background
 circle_draw = ImageDraw.Draw(circle_mask)
 circle_draw.ellipse((0, 0, img_size, img_size), fill=0)  # black circle in center
 
-# transforms
 trans = transforms.Compose(
     [
         transforms.Resize(img_size),
@@ -39,49 +38,31 @@ trans = transforms.Compose(
     ]
 )
 
+angle_num = ds_cfg.angle_num
+unit_angle = 360 / angle_num
+angle_prob = np.full(angle_num, 1 / angle_num, dtype=np.float32)
 
-def process_datapipe(datapipe: List[str], save_type: Literal["train", "val", "test"]) -> None:
 
-    save_dir = CONFIG.dataset.root / "pytorch" / save_type
+def process_dataset(paths: List[Path], ds_type: Literal["train", "val", "test"]) -> None:
+    save_dir = ds_cfg.root / "pytorch" / ds_type
     if save_dir.exists():
         shutil.rmtree(str(save_dir))
     save_dir.mkdir(mode=0o755, parents=True)
 
-    dp_size = len(datapipe)
-    datapipe: IterDataPipe = FileOpener(datapipe, mode='b')
-    datapipe = RoutedDecoder(datapipe, imagehandler("pil"))
+    ds_size = len(paths)
+    angles = np.random.choice(angle_num, ds_size, p=angle_prob)
+    angles = (angles * unit_angle).astype(np.float32)
 
-    rand_rot_factors = np.random.random_sample(size=dp_size)
-    label_datapipe = IterableWrapper(rand_rot_factors, deepcopy=False)
-    datapipe = Zipper(datapipe, label_datapipe)
-
-    def img_process_fn(tup: Tuple[Tuple[str, Image.Image], float]) -> Tuple[str, bytes]:
-        (filepath, img), rot_factor = tup
-
-        square_img: Image.Image = trans(img)
-        square_img = square_img.rotate(rot_factor * 360, resample=Image.Resampling.BILINEAR)
+    for idx, (img_path, angle) in enumerate(zip(paths, angles)):
+        img = Image.open(img_path)
+        square_img = trans(img)
+        square_img = square_img.rotate(angle, resample=Image.Resampling.BILINEAR)
         square_img.paste(circle_mask, mask=circle_mask)
+        square_img.save(save_dir / f'{idx}.jpg', format='JPEG', quality=95)
 
-        img_bytesio = BytesIO()
-        square_img.save(img_bytesio, format='JPEG', quality=95)
-        img_bytes = img_bytesio.getvalue()
-
-        return filepath, img_bytes
-
-    datapipe = datapipe.map(fn=img_process_fn)
-
-    def filepath_fn(src_path: str) -> str:
-        src_path: Path = Path(src_path)
-        dst_path = str(save_dir / src_path.name)
-        return dst_path
-
-    # 保存图像文件
-    for _ in Saver(datapipe, mode='wb', filepath_fn=filepath_fn):
-        pass
-    # 保存旋转系数作为标签
-    np.save(str(save_dir.parent / f"{save_type}.npy"), rand_rot_factors)
+    np.save(save_dir.parent / f"{ds_type}.npy", angles)
 
 
-process_datapipe(train_datapipe, "train")
-process_datapipe(val_datapipe, "val")
-process_datapipe(test_datapipe, "test")
+process_dataset(train_paths, "train")
+process_dataset(val_paths, "val")
+process_dataset(test_paths, "test")

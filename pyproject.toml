@@ -7,14 +7,13 @@ authors = [{ name = "Starry-OvO", email = "starry.qvq@gmail.com" }]
 dependencies = [
     "torch>=1.11.0",
     "torchvision>=0.12.0",
-    "torchdata<0.6,>=0.5.0",
     "matplotlib",
     "tomli<3,>=2.0.0;python_version<'3.11'",
 ]
 dynamic = ["version"]
 
 [tool.setuptools.packages.find]
-include = ["rotate_captcha_crack*"]
+where = ["."]
 
 [tool.setuptools.dynamic]
 version = { attr = "rotate_captcha_crack.__version__.__version__" }
@@ -22,7 +21,6 @@ version = { attr = "rotate_captcha_crack.__version__.__version__" }
 [tool.black]
 line-length = 120
 skip-string-normalization = true
-extend-exclude = ["*_pb2.py"]
 target-version = ["py38"]
 
 [tool.isort]

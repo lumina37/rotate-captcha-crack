@@ -1,6 +1,7 @@
 import argparse
 
 import torch
+from torch import Tensor
 from torchvision import transforms
 
 from rotate_captcha_crack import CONFIG, DistanceBetweenAngles, RotationNet, device, find_out_model_path, get_dataloader
@@ -16,7 +17,7 @@ with torch.no_grad():
     eval_criterion = DistanceBetweenAngles()
 
     batch_size = CONFIG.eval.batch_size
-    test_dataloader = get_dataloader("test", batch_size=batch_size, trans=trans)
+    test_dataloader = get_dataloader("test", batch_size, device, trans)
 
     model = RotationNet(train=False)
     model_path = find_out_model_path(opts.timestamp, opts.epoch)
@@ -25,14 +26,11 @@ with torch.no_grad():
     model = model.to(device)
     model.eval()
 
-    total_degree_diff: float = 0
-    batch_count: int = 0
+    total_degree_diff = 0.0
+    batch_count = 0
 
     for source, target in test_dataloader:
-        source: torch.Tensor = source.to(device)
-        target: torch.Tensor = target.to(device)
-        predict: torch.Tensor = model(source)
-
+        predict: Tensor = model(source)
         total_degree_diff += eval_criterion(predict, target).cpu().item() * 360
         batch_count += 1
 

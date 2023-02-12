@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+from torch import Tensor
 
 
 class DistanceBetweenAngles(nn.Module):
@@ -15,7 +16,7 @@ class DistanceBetweenAngles(nn.Module):
         self.half_cycle = cycle / 2
 
     @torch.no_grad()
-    def forward(self, predict: torch.Tensor, target: torch.Tensor) -> torch.Tensor:
+    def forward(self, predict: Tensor, target: Tensor) -> Tensor:
         predict = predict.fmod(self.cycle)
         target = target.fmod(self.cycle)
         loss_tensor = self.half_cycle - ((predict - target).abs_() - self.half_cycle).abs_()
@@ -33,15 +34,8 @@ class RotationLoss(nn.Module):
         self.lambda_cos = lambda_cos
         self.exponent = exponent
 
-    def forward(self, predict: torch.Tensor, target: torch.Tensor) -> torch.Tensor:
+    def forward(self, predict: Tensor, target: Tensor) -> Tensor:
         diff = predict - target
         loss_tensor = ((diff * (torch.pi * 2)).cos_() - 1) * (-self.lambda_cos) + diff.pow_(self.exponent)
         loss = loss_tensor.mean()
         return loss
-
-
-if __name__ == "__main__":
-    loss = DistanceBetweenAngles(1)
-    predict = torch.tensor([2.9])
-    target = torch.tensor([3.1])
-    print(loss(predict, target).item() * 360)
