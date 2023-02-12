@@ -8,15 +8,8 @@ from matplotlib import pyplot as plt
 from torch import Tensor
 from torchvision import transforms
 
-from rotate_captcha_crack import (
-    CONFIG,
-    DistanceBetweenAngles,
-    RCCLogger,
-    RotationLoss,
-    RotationNet,
-    device,
-    get_dataloader,
-)
+import rotate_captcha_crack as rcc
+from rotate_captcha_crack import CONFIG, RCCLogger, device
 
 batch_size = CONFIG.train.batch_size
 epoches = CONFIG.train.epoches
@@ -36,15 +29,15 @@ if not model_dir.exists():
     model_dir.mkdir(parents=True)
 
 trans = transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225], inplace=True)
-train_dataloader = get_dataloader("train", batch_size, device, trans)
-val_dataloader = get_dataloader("val", batch_size, device, trans)
+train_dataloader = rcc.dataset.get_dataloader("train", batch_size, device, trans)
+val_dataloader = rcc.dataset.get_dataloader("val", batch_size, device, trans)
 
-model = RotationNet()
+model = rcc.model.RotationNet()
 model = model.to(device)
 optmizer = torch.optim.Adam(model.parameters(), lr=lr)
 scheduler = torch.optim.lr_scheduler.CosineAnnealingWarmRestarts(optmizer, T_0=t_0, T_mult=t_mult, eta_min=lr / 10e3)
-criterion = RotationLoss()
-eval_criterion = DistanceBetweenAngles()
+criterion = rcc.loss.RotationLoss()
+eval_criterion = rcc.loss.DistanceBetweenAngles()
 
 lr_vec = np.empty(epoches, dtype=np.float64)
 train_loss_vec = np.empty(epoches, dtype=np.float64)

@@ -7,7 +7,8 @@ from PIL import Image
 from torch import Tensor
 from torchvision import transforms
 
-from rotate_captcha_crack import CONFIG, RotationNet, device, find_out_model_path
+import rotate_captcha_crack as rcc
+from rotate_captcha_crack import CONFIG, device
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--timestamp", "-ts", type=int, default=0, help="Use which timestamp")
@@ -26,13 +27,13 @@ if __name__ == "__main__":
 
     with torch.no_grad():
         model_dir = Path("models")
-        model = RotationNet(train=False)
-        model_path = find_out_model_path(opts.timestamp, opts.epoch)
+        model = rcc.model.RotationNet(train=False)
+        model_path = rcc.utils.find_out_model_path(opts.timestamp, opts.epoch)
         print(f"Use model: {model_path}")
         model.load_state_dict(torch.load(str(model_path), map_location=device))
         model = model.to(device)
         model.eval()
-        img = Image.open("datasets/tieba/1615096444.jpg")
+        img = Image.open("datasets/tieba/1615096451.jpg")
 
         img_tensor: Tensor = trans(img).unsqueeze_(0).to(device)
         predict: Tensor = model(img_tensor)

@@ -3,14 +3,14 @@ from pathlib import Path
 
 def find_out_model_path(timestamp: int = 0, epoch: int = 0) -> Path:
     """
-    利用timestamp和epoch找到模型文件的路径
+    Use timestamp and epoch to find out the path of model
 
     Args:
-        timestamp (int): 训练开始的时间戳
-        epoch (int): 训练的epoch
+        timestamp (int): target training time
+        epoch (int): target epoch
 
     Returns:
-        Path: 模型文件路径
+        Path: path to the model
     """
 
     model_dir = Path("models")

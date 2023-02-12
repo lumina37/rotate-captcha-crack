@@ -1,17 +1,13 @@
-datasets
-models
-papers
+*/
 
 !rotate_captcha_crack
 !rotate_captcha_crack/**
 
 __pycache__
-.vscode
 *.txt
 *.jpg
 *.png
 *.code-workspace
-*.egg-info
 *.ipynb_checkpoints
 
 traditional_method.py

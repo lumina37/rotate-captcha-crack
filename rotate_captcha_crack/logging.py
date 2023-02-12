@@ -10,10 +10,8 @@ logging.Formatter.default_msec_format = '%s.%03d'
 
 class RCCLogger(logging.Logger):
     """
-    自定义的日志记录类
-
     Args:
-        timestamp (int): 启动时的时间戳
+        timestamp (int)
     """
 
     def __init__(self, timestamp: int) -> None:

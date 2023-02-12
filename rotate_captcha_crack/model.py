@@ -5,12 +5,13 @@ from torchvision import models
 
 class RotationNet(nn.Module):
     """
-    旋转角度预测网络
-    输出为[0,1]的旋转系数
-    将该系数乘以2 * pi则映射为图像被旋转的弧度，乘以360则映射为图像被旋转的角度
-
     Args:
-        train (bool, optional): 是否使用训练模式 若为True则会自动下载预训练模型. Default to True.
+        train (bool, optional): True to download pretrained model. Defaults to True.
+
+    Note:
+        The output is a factor between [0,1].
+        Multiply it by 360° then you will get the predict rotated degree.
+        Use rotate(-degree, ...) to recover the image.
     """
 
     def __init__(self, train: bool = True) -> None:

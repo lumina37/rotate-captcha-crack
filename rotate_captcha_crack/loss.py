@@ -7,7 +7,8 @@ class DistanceBetweenAngles(nn.Module):
     """
     Only for Evaluate!
 
-    cycle (float): 转过360度对应的系数变化. Default to 1.0.
+    Args:
+        cycle (float): how much will the factor increase after 0°->360°. Defaults to 1.0.
     """
 
     def __init__(self, cycle: float = 1.0) -> None:
@@ -26,7 +27,8 @@ class DistanceBetweenAngles(nn.Module):
 
 class RotationLoss(nn.Module):
     """
-    MSELoss的优化版本 加入余弦修正来缩小旋转系数0和1之间的距离
+    Optimized MSELoss.
+    Including a cosine correction to reduce the distance between 0 and 1.
     """
 
     def __init__(self, lambda_cos: float = 0.24, exponent: float = 2.0) -> None:
