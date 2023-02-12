@@ -2,7 +2,7 @@
 root = "./datasets/Landscape-Dataset"
 img_suffix = 'jpg'
 img_size = 224
-angle_num = 4
+angle_num = 8
 train_ratio = 0.9
 val_ratio = 0.05
 test_ratio = 0.05

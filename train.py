@@ -1,4 +1,5 @@
 import os
+import sys
 import time
 from pathlib import Path
 
@@ -42,7 +43,7 @@ eval_criterion = rcc.loss.DistanceBetweenAngles()
 lr_vec = np.empty(epoches, dtype=np.float64)
 train_loss_vec = np.empty(epoches, dtype=np.float64)
 eval_loss_vec = np.empty(epoches, dtype=np.float64)
-best_eval_loss = 10000000.0
+best_eval_loss = sys.maxsize
 previous_checkpoint_path = None
 
 for epoch_idx in range(epoches):
