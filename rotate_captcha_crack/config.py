@@ -75,7 +75,7 @@ class DatasetConfig(object):
         img size will be `img_size * img_size` after process
 
         Note:
-            It should fits your model
+            It should fit with your model
         """
 
         return self._img_size
@@ -83,7 +83,7 @@ class DatasetConfig(object):
     @property
     def angle_num(self) -> int:
         """
-        how much rotate angles should be used
+        how many rotate angles
 
         Note:
             4 leads to [0°, 90°, 180°, 270°]
