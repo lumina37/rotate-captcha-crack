@@ -118,17 +118,19 @@ class DatasetConfig(object):
 
 class TrainConfig(object):
     __slots__ = [
-        'batch_size',
-        'epoches',
         'lr',
+        'epoches',
+        'batch_size',
+        'num_workers',
         '_loss',
         '_lr_scheduler',
     ]
 
     def __init__(self, train_cfg: dict) -> None:
-        self.batch_size: int = train_cfg['batch_size']
-        self.epoches: int = train_cfg['epoches']
         self.lr: float = train_cfg['lr']
+        self.epoches: int = train_cfg['epoches']
+        self.batch_size: int = train_cfg['batch_size']
+        self.num_workers: int = train_cfg['num_workers']
         self._loss: Dict[str, float] = train_cfg['loss']
         self._lr_scheduler: Dict[str, float] = train_cfg['lr_scheduler']
 
@@ -149,18 +151,22 @@ class TrainConfig(object):
         return self._lr_scheduler
 
 
-class EvalConfig(object):
-    __slots__ = ['batch_size']
+class TestConfig(object):
+    __slots__ = [
+        'batch_size',
+        'num_workers',
+    ]
 
-    def __init__(self, eval_cfg: dict) -> None:
-        self.batch_size: int = eval_cfg['batch_size']
+    def __init__(self, test_cfg: dict) -> None:
+        self.batch_size: int = test_cfg['batch_size']
+        self.num_workers: int = test_cfg['num_workers']
 
 
 class RCCConfig(object):
     __slots__ = [
         '_dataset',
         '_train',
-        '_eval',
+        '_test',
         '_loss',
         '_lr_scheduler',
     ]
@@ -170,7 +176,7 @@ class RCCConfig(object):
             cfg = tomllib.load(f)
         self._dataset = DatasetConfig(cfg['dataset'])
         self._train = TrainConfig(cfg['train'])
-        self._eval = EvalConfig(cfg['evaluate'])
+        self._test = TestConfig(cfg['test'])
 
     @property
     def dataset(self) -> DatasetConfig:
@@ -189,12 +195,12 @@ class RCCConfig(object):
         return self._train
 
     @property
-    def eval(self) -> EvalConfig:
+    def test(self) -> TestConfig:
         """
-        config for evaluate
+        config for test
         """
 
-        return self._eval
+        return self._test
 
 
 CONFIG = RCCConfig()

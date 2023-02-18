@@ -1,85 +1,69 @@
-import functools
-from typing import Literal, Optional, Tuple
+from pathlib import Path
+from typing import Protocol, Sequence, Tuple
 
-import numpy as np
-import torch
 from PIL import Image
 from torch import Tensor
-from torch.utils.data import DataLoader, Dataset
-from torchvision.transforms import Compose
+from torch.utils.data import Dataset
+from torchvision.transforms import Normalize
+from torchvision.transforms import functional as F
 
-from rotate_captcha_crack.config import CONFIG
-
-mode_to_nptype = {"I": np.int32, "I;16": np.int16, "F": np.float32}
-
-
-def to_tensor(img: Image.Image, device: torch.device) -> Tensor:
-    img = img.convert('RGB')
-    img_np = np.array(img, mode_to_nptype.get(img.mode, np.uint8), copy=True)
-    img_tensor = torch.from_numpy(img_np).to(device)
-
-    img_tensor = img_tensor.view(img.size[1], img.size[0], 3)
-    img_tensor = img_tensor.permute(2, 0, 1)
-    if img_tensor.dtype != torch.get_default_dtype():
-        img_tensor = img_tensor.to(dtype=torch.get_default_dtype(), copy=False).div(255)
-
-    return img_tensor
+from .helper import DEFAULT_NORM, rand_angles, rotate, to_square
 
 
-class RCCDataset(Dataset[Tuple[Tensor, Tensor]]):
-    def __init__(
-        self, ds_type: Literal["train", "val", "test"], device: torch.device, trans: Optional[Compose] = None
-    ) -> None:
-        self.ds_type: str = ds_type
-        ds_dir = CONFIG.dataset.root / "pytorch" / ds_type
+class TypeGetImg(Protocol):
+    def __len__(self) -> int:
+        pass
 
-        self._img_paths = list(ds_dir.glob('*.jpg'))
-        self._img_paths.sort(key=lambda p: int(p.stem))
+    def __getitem__(self, idx: int) -> Tensor:
+        pass
 
-        angles = np.load(ds_dir.parent / f"{ds_type}.npy")
-        angles = torch.from_numpy(angles).to(device)
-        angles = angles / 360
-        self._angles = angles.to(torch.get_default_dtype())
 
-        if trans:
+TypeRCCItem = Tuple[Tensor, Tensor]
 
-            def img2tensor(img: Image.Image) -> Tensor:
-                img_tensor = to_tensor(img, device)
-                img_tensor = trans(img_tensor)
-                return img_tensor
 
-        else:
-            img2tensor = functools.partial(to_tensor, device=device)
+class GetImgFromPaths(TypeGetImg):
+    __slots__ = [
+        'img_paths',
+        'shift',
+        'length',
+        'norm',
+    ]
 
-        self.__img2tensor = img2tensor
+    def __init__(self, img_paths: Sequence[Path], _range: Tuple[float, float], norm: Normalize = DEFAULT_NORM) -> None:
+        length = len(img_paths)
+        start = int(_range[0] * length)
+        end = int(_range[1] * length)
+
+        self.img_paths = img_paths[start:end]
+        self.length = end - start
+
+        self.norm = norm
 
     def __len__(self) -> int:
-        return self._img_paths.__len__()
+        return self.length
 
-    def __getitem__(self, idx) -> Tuple[Tensor, Tensor]:
-        img_path = self._img_paths[idx]
+    def __getitem__(self, idx: int) -> Tensor:
+        img_path = self.img_paths[idx]
         img = Image.open(img_path)
-        img_tensor = self.__img2tensor(img)
+        img = img.convert('RGB')
+        img_ts = F.to_tensor(img)
+        img_ts = self.norm(img_ts)
+        return img_ts
 
-        angle = self._angles[idx]
 
-        return img_tensor, angle
+class RCCDataset(Dataset[TypeRCCItem]):
+    def __init__(self, getimg: TypeGetImg) -> None:
+        self.getimg = getimg
+        self.angles = rand_angles(len(getimg))
 
+    def __len__(self) -> int:
+        return self.getimg.__len__()
 
-def get_dataloader(
-    ds_type: Literal["train", "val", "test"],
-    batch_size: int,
-    device: torch.device,
-    trans: Optional[Compose] = None,
-    num_workers: int = 0,
-) -> DataLoader:
-    dataset = RCCDataset(ds_type, device, trans)
+    def __getitem__(self, idx: int) -> TypeRCCItem:
+        angle = self.angles[idx]
 
-    dataloader = DataLoader(
-        dataset,
-        batch_size=batch_size,
-        num_workers=num_workers,
-        drop_last=True,
-    )
+        img_ts = self.getimg[idx]
+        img_ts = to_square(img_ts)
+        img_ts = rotate(img_ts, angle.item() * 360)
 
-    return dataloader
+        return img_ts, angle

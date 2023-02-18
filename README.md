@@ -32,11 +32,7 @@ pip install .
 
 + 在`config.toml`里配置`dataset.root`字段指向装有图片的文件夹
 
-+ 运行`prepare.py`准备数据集
-
-```bash
-python prepare.py
-```
++ 不需要额外准备工作，dataset会在读取图片的同时自动完成矩形裁剪、添加圆形遮罩等工作
 
 ## 训练
 
@@ -47,7 +43,7 @@ python train.py
 ## 在测试集上验证模型
 
 ```bash
-python evaluate.py
+python test.py
 ```
 
 ## 扔一张图进去看看实际效果
@@ -55,12 +51,10 @@ python evaluate.py
 Linux环境需要配置GUI或者自己把debug方法从显示图像改成保存图像
 
 ```bash
-python test.py
+python test_one.py
 ```
 
 ## 设计细节
-
-+ 搞这个项目的主要目的是练手[`torchdata`](https://pytorch.org/data/beta/index.html)，数据集的预处理与构建流程是本项目的精髓所在
 
 + 现有的旋图验证码破解方法大多基于[`RotNet (ICLR2018)`](https://arxiv.org/abs/1803.07728)，其backbone为`ResNet50`，将角度预测视作360分类问题，并计算交叉熵损失，本项目的`RotationNet`是对`RotNet`的简单改进
 

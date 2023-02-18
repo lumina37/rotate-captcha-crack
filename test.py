@@ -1,48 +1,59 @@
 import argparse
-from pathlib import Path
+from typing import Iterable
 
-import matplotlib.pyplot as plt
 import torch
-from PIL import Image
 from torch import Tensor
-from torchvision import transforms
+from torch.utils.data import DataLoader
 
-import rotate_captcha_crack as rcc
-from rotate_captcha_crack import CONFIG, device
+from rotate_captcha_crack.config import CONFIG, device
+from rotate_captcha_crack.dataset import GetImgFromPaths, RCCDataset, TypeRCCItem
+from rotate_captcha_crack.loss import DistanceBetweenAngles
+from rotate_captcha_crack.model import RotationNet
+from rotate_captcha_crack.utils import find_out_model_path
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--timestamp", "-ts", type=int, default=0, help="Use which timestamp")
 parser.add_argument("--epoch", type=int, default=0, help="Use which epoch")
 opts = parser.parse_args()
 
-if __name__ == "__main__":
-    img_size = CONFIG.dataset.img_size
-    trans = transforms.Compose(
-        [
-            transforms.Resize(img_size),
-            transforms.ToTensor(),
-            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-        ]
-    )
-
+if __name__ == '__main__':
     with torch.no_grad():
-        model_dir = Path("models")
-        model = rcc.model.RotationNet(train=False)
-        model_path = rcc.utils.find_out_model_path(opts.timestamp, opts.epoch)
+        ds_cfg = CONFIG.dataset
+        test_cfg = CONFIG.test
+        test_criterion = DistanceBetweenAngles()
+
+        batch_size = CONFIG.test.batch_size
+
+        img_paths = list(ds_cfg.root.glob(ds_cfg.glob_suffix))
+        start = ds_cfg.train_ratio + ds_cfg.val_ratio
+        test_range = (start, start + ds_cfg.test_ratio)
+        test_dataset = RCCDataset(GetImgFromPaths(img_paths, test_range))
+        test_dataloader: Iterable[TypeRCCItem] = DataLoader(
+            test_dataset,
+            test_cfg.batch_size,
+            num_workers=test_cfg.num_workers,
+            drop_last=True,
+        )
+
+        model = RotationNet(train=False)
+        model_path = find_out_model_path(opts.timestamp, opts.epoch)
         print(f"Use model: {model_path}")
         model.load_state_dict(torch.load(str(model_path), map_location=device))
         model = model.to(device)
         model.eval()
-        img = Image.open("datasets/tieba/1615096451.jpg")
 
-        img_tensor: Tensor = trans(img).unsqueeze_(0).to(device)
-        predict: Tensor = model(img_tensor)
-        degree: float = predict.cpu().item() * 360
-        print(f"Predict degree: {degree:.4f}")
+        total_degree_diff = 0.0
+        batch_count = 0
 
-    img = img.rotate(
-        -degree, resample=Image.Resampling.BILINEAR, fillcolor=(255, 255, 255)
-    )  # use neg degree to recover the img
-    plt.figure("debug")
-    plt.imshow(img)
-    plt.show()
+        for source, target in test_dataloader:
+            source: Tensor = source.to(device=device)
+            target: Tensor = target.to(device=device)
+
+            predict: Tensor = model(source)
+
+            digree_diff: Tensor = test_criterion(predict, target)
+            total_degree_diff += digree_diff.cpu().item() * 360
+
+            batch_count += 1
+
+        print(f"test_loss: {total_degree_diff/batch_count:.4f} degrees")

@@ -13,6 +13,8 @@ lr_scheduler = { T_0 = 5, T_mult = 2 }
 loss = { lambda_cos = 0.24, exponent = 2 }
 epoches = 64
 batch_size = 64
+num_workers = 12
 
-[evaluate]
-batch_size = 64
+[test]
+batch_size = 128
+num_workers = 12

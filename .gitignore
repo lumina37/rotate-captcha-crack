@@ -1,13 +1,17 @@
-*/
+*
+
+!.gitignore
+!LICENSE
+
+!config.toml
+!pyproject.toml
+
+!draw_loss_figs.py
+!train.py
+!test.py
+!test_one.py
 
 !rotate_captcha_crack
 !rotate_captcha_crack/**
 
 __pycache__
-*.txt
-*.jpg
-*.png
-*.code-workspace
-*.ipynb_checkpoints
-
-traditional_method.py
