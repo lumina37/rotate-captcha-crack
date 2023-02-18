@@ -1,10 +1,7 @@
-import os
-import random
 import sys
 from pathlib import Path
 from typing import Dict
 
-import numpy as np
 import torch
 
 if sys.version_info >= (3, 11):
@@ -12,19 +9,11 @@ if sys.version_info >= (3, 11):
 else:
     import tomli as tomllib
 
-seed = 42 + (67232 + 8094)
-torch.manual_seed(seed)
-np.random.seed(seed)
-random.seed(seed)
-os.environ['PYTHONHASHSEED'] = str(seed)
-
 if not torch.cuda.is_available():
     raise NotImplementedError("cuda is not available")
 
 device = torch.device('cuda')
 torch.backends.cudnn.benchmark = True
-torch.cuda.manual_seed(seed)
-torch.cuda.manual_seed_all(seed)
 
 
 class DatasetConfig(object):
