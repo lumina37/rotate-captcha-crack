@@ -51,9 +51,6 @@ class DatasetConfig(object):
     def root(self) -> Path:
         """
         `Path` points to the directory containing pics
-
-        Note:
-            the processed dataset will be placed in {$root}/pytorch/(train or val or test)
         """
 
         return self._root
