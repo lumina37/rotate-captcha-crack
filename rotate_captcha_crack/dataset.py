@@ -11,6 +11,14 @@ from .helper import DEFAULT_NORM, rand_angles, rotate, to_square
 
 
 class TypeGetImg(Protocol):
+    """
+    Methods:
+
+        `def __len__(self) -> int:` length of the dataset
+
+        `def __getitem__(self, idx: int) -> Tensor:` get img in tensor ([C,H,W]=undefined, dtype=float32, range=[0,1])
+    """
+
     def __len__(self) -> int:
         pass
 
@@ -22,9 +30,21 @@ TypeRCCItem = Tuple[Tensor, Tensor]
 
 
 class GetImgFromPaths(TypeGetImg):
+    """
+    Args:
+        img_paths (Sequence[Path]): sequence of paths. Each path points to an img file
+        _range (Sequence[Path]): select which part of sequence. Use (0.0,0.5) to select the first half
+        norm (Normalize): normalize policy
+
+    Methods:
+
+        `def __len__(self) -> int:` length of the dataset
+
+        `def __getitem__(self, idx: int) -> Tensor:` get img in tensor ([C,H,W]=[3,ud,ud], dtype=float32, range=[0,1])
+    """
+
     __slots__ = [
         'img_paths',
-        'shift',
         'length',
         'norm',
     ]
@@ -52,6 +72,18 @@ class GetImgFromPaths(TypeGetImg):
 
 
 class RCCDataset(Dataset[TypeRCCItem]):
+    """
+    dataset for RCC
+
+    Args:
+        getimg (TypeGetImg): upstream dataset
+    """
+
+    __slots__ = [
+        'getimg',
+        'angles',
+    ]
+
     def __init__(self, getimg: TypeGetImg) -> None:
         self.getimg = getimg
         self.angles = rand_angles(len(getimg))
