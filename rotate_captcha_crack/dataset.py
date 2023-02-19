@@ -10,13 +10,13 @@ from torchvision.transforms import functional as F
 from .helper import DEFAULT_NORM, rand_angles, rotate, to_square
 
 
-class TypeGetImg(Protocol):
+class TypeSeqImg(Protocol):
     """
     Methods:
 
         `def __len__(self) -> int:` length of the dataset
 
-        `def __getitem__(self, idx: int) -> Tensor:` get img in tensor ([C,H,W]=undefined, dtype=float32, range=[0,1])
+        `def __getitem__(self, idx: int) -> Tensor:` get img_tensor ([C,H,W]=[3,ud,ud], dtype=float32, range=[0,1])
     """
 
     def __len__(self) -> int:
@@ -29,7 +29,7 @@ class TypeGetImg(Protocol):
 TypeRCCItem = Tuple[Tensor, Tensor]
 
 
-class GetImgFromPaths(TypeGetImg):
+class GetImgFromPaths(TypeSeqImg):
     """
     Args:
         img_paths (Sequence[Path]): sequence of paths. Each path points to an img file
@@ -40,7 +40,7 @@ class GetImgFromPaths(TypeGetImg):
 
         `def __len__(self) -> int:` length of the dataset
 
-        `def __getitem__(self, idx: int) -> Tensor:` get img in tensor ([C,H,W]=[3,ud,ud], dtype=float32, range=[0,1])
+        `def __getitem__(self, idx: int) -> Tensor:` get img_tensor ([C,H,W]=[3,ud,ud], dtype=float32, range=[0,1])
     """
 
     __slots__ = [
@@ -77,6 +77,13 @@ class RCCDataset(Dataset[TypeRCCItem]):
 
     Args:
         getimg (TypeGetImg): upstream dataset
+
+    Methods:
+
+        `def __len__(self) -> int:` length of the dataset
+
+        `def __getitem__(self, idx: int) -> Tensor:` get img_tensor ([C,H,W]=[3,cfg.img_size,cfg.img_size], dtype=float32, range=[0,1])
+            square tensor with a circle mask (edge is white)
     """
 
     __slots__ = [
@@ -84,7 +91,7 @@ class RCCDataset(Dataset[TypeRCCItem]):
         'angles',
     ]
 
-    def __init__(self, getimg: TypeGetImg) -> None:
+    def __init__(self, getimg: TypeSeqImg) -> None:
         self.getimg = getimg
         self.angles = rand_angles(len(getimg))
 
