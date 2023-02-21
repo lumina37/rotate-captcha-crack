@@ -36,7 +36,7 @@ if __name__ == "__main__":
     train_dataloader: Iterable[TypeRCCItem] = DataLoader(
         train_dataset,
         train_cfg.batch_size,
-        num_workers=0,
+        num_workers=train_cfg.num_workers,
         drop_last=True,
     )
 
@@ -45,7 +45,7 @@ if __name__ == "__main__":
     val_dataloader: Iterable[TypeRCCItem] = DataLoader(
         val_dataset,
         train_cfg.batch_size,
-        num_workers=0,
+        num_workers=CONFIG.test.num_workers,
         drop_last=True,
     )
 
