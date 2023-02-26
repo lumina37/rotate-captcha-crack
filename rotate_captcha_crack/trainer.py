@@ -69,7 +69,7 @@ class Trainer(object):
             start_dt_str = datetime.now().strftime("%y%m%d_%H_%M_%S")
             dt_perfix_len = len(start_dt_str) + 1
 
-            models_dir = Path(const.MODELS_DIR)
+            models_dir = Path(const.MODELS_DIR) / self.model.__class__.__name__
             try:
                 *_, last_dir = models_dir.iterdir()
                 last_idx_str = last_dir.name[dt_perfix_len:]
