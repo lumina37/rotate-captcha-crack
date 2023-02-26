@@ -17,7 +17,7 @@ class RCCLogger(logging.Logger):
         save_dir (Path, optional): where to save the log file. use default dir if None. Defaults to None.
 
     Note:
-        Make sure the save_dir is already created
+        Make sure the save_dir is already created.
     """
 
     def __init__(self, save_dir: Optional[Path] = None) -> None:

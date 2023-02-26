@@ -13,13 +13,12 @@ class RCCDataset(Dataset[TypeRCCItem]):
     Args:
         getimg (TypeGetImg): upstream dataset
         target_size (int, optional): output img size
-        angle_num (int, optional): how many rotate angles. 4 leads to [0°, 90°, 180°, 270°]
+        angle_num (int, optional): how many rotate angles. 4 leads to [0°, 90°, 180°, 270°]. Defaults to 4.
         norm (Normalize, optional): normalize policy
 
     Methods:
-        `def __len__(self) -> int:` length of the dataset
-
-        `def __getitem__(self, idx: int) -> Tensor:` get square img_tensor ([C,H,W]=[3,target_size,target_size], dtype=float32, range=[0,1])
+        - `def __len__(self) -> int:` length of the dataset
+        - `def __getitem__(self, idx: int) -> Tensor:` get square img_tensor ([C,H,W]=[3,target_size,target_size], dtype=float32, range=[0,1])
     """
 
     __slots__ = [
@@ -31,7 +30,7 @@ class RCCDataset(Dataset[TypeRCCItem]):
     ]
 
     def __init__(
-        self, getimg: TypeImgSeq, target_size: int = 224, angle_num: int = 8, norm: Normalize = DEFAULT_NORM
+        self, getimg: TypeImgSeq, target_size: int = 224, angle_num: int = 4, norm: Normalize = DEFAULT_NORM
     ) -> None:
         self.getimg = getimg
         self.target_size = target_size

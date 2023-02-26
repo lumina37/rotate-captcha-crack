@@ -9,9 +9,9 @@ class RCCNet(nn.Module):
         train (bool, optional): True to download pretrained model. Defaults to True.
 
     Note:
-        The output is a factor between [0,1].
-        Multiply it by 360° then you will get the predict rotated degree.
-        Use rotate(-degree, ...) to recover the image.
+        - The output is a factor between [0,1].
+        - Multiply it by 360° then you will get the predict rotated degree.
+        - Use rotate(-degree, ...) to recover the image.
     """
 
     def __init__(self, train: bool = True) -> None:

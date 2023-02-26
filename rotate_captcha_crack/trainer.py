@@ -1,4 +1,3 @@
-import os
 import sys
 import time
 from datetime import datetime
@@ -108,7 +107,6 @@ class Trainer(object):
         train_loss_vec = np.empty(epoches, dtype=np.float64)
         eval_loss_vec = np.empty(epoches, dtype=np.float64)
         best_eval_loss = sys.maxsize
-        previous_checkpoint_path = None
 
         eval_loss_c = DistanceBetweenAngles()
 
@@ -160,18 +158,13 @@ class Trainer(object):
             eval_loss_vec[epoch_idx] = eval_loss
 
             log.info(
-                f"Epoch#{epoch_idx}. time_cost: {time.perf_counter()-start_t:.2f} s. train_loss: {train_loss:.8f}. eval_loss: {eval_loss:.4f} degrees"
+                f"Epoch#{epoch_idx}. time_cost: {time.perf_counter()-start_t:.1f} s. train_loss: {train_loss:.8f}. eval_loss: {eval_loss:.4f} degrees"
             )
 
             torch.save(self.model.state_dict(), str(self.model_dir / "last.pth"))
             if eval_loss < best_eval_loss:
                 best_eval_loss = eval_loss
-                new_checkpoint_path = str(self.model_dir / f"{epoch_idx}.pth")
-                torch.save(self.model.state_dict(), new_checkpoint_path)
-                if previous_checkpoint_path is not None:
-                    os.remove(previous_checkpoint_path)
-
-                previous_checkpoint_path = new_checkpoint_path
+                torch.save(self.model.state_dict(), str(self.model_dir / "best.pth"))
 
         x = np.arange(epoches, dtype=np.int16)
 
