@@ -26,11 +26,11 @@ cd ./rotate-captcha-crack
 pip install .
 ```
 
-*不要漏了`install`后面那个`.`*
+注意不要漏了`install`后面那个`.`
 
 ## 准备数据集
 
-+ 我这里直接扒的[`Landscape-Dataset`](https://github.com/yuweiming70/Landscape-Dataset)，你也可以自己收集一些风景照并放到一个文件夹里，没有图像尺寸要求
++ 我这里直接扒的[`Landscape-Dataset`](https://github.com/yuweiming70/Landscape-Dataset)，你也可以自己收集一些风景照并放到一个文件夹里，图像没有尺寸要求
 
 + 在`train.py`里配置`dataset_root`变量指向装有图片的文件夹
 
