@@ -49,4 +49,4 @@ if __name__ == "__main__":
     ### Custom configuration area ###
     #################################
 
-    trainer.train(epoches=64)
+    trainer.train(epoches=epoches)

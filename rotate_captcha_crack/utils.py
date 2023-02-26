@@ -29,18 +29,19 @@ def slice_from_range(seq: Sequence[_T], _range: Tuple[float, float]) -> Sequence
     return seq[start:end]
 
 
-def find_out_model_path(index: int = 0) -> Path:
+def find_out_model_path(cls_name: str, index: int = 0) -> Path:
     """
-    Use index to find out the path of model
+    Use cls_name and index to find out the path of model
 
     Args:
+        cls_name (Module): name of the model cls
         index (int, optional): use which index. use last model if 0. Defaults to 0.
 
     Returns:
         Path: path to the model
     """
 
-    models_dir = Path(const.MODELS_DIR)
+    models_dir = Path(const.MODELS_DIR) / cls_name
 
     if not index:
         try:

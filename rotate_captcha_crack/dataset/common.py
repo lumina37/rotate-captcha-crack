@@ -1,7 +1,8 @@
+import torch
 from torch.utils.data import Dataset
 from torchvision.transforms import Normalize
 
-from ..helper import DEFAULT_NORM, rand_angles, square_and_rotate
+from ..helper import DEFAULT_NORM, square_and_rotate
 from .typing import TypeImgSeq, TypeRCCItem
 
 
@@ -11,7 +12,8 @@ class RCCDataset(Dataset[TypeRCCItem]):
 
     Args:
         getimg (TypeGetImg): upstream dataset
-        target_size (TypeGetImg, optional): output img size
+        target_size (int, optional): output img size
+        angle_num (int, optional): how many rotate angles. 4 leads to [0°, 90°, 180°, 270°]
         norm (Normalize, optional): normalize policy
 
     Methods:
@@ -23,25 +25,31 @@ class RCCDataset(Dataset[TypeRCCItem]):
     __slots__ = [
         'getimg',
         'target_size',
+        'angle_num',
         'norm',
-        'angles',
+        'length',
     ]
 
-    def __init__(self, getimg: TypeImgSeq, target_size: int = 224, norm: Normalize = DEFAULT_NORM) -> None:
+    def __init__(
+        self, getimg: TypeImgSeq, target_size: int = 224, angle_num: int = 8, norm: Normalize = DEFAULT_NORM
+    ) -> None:
         self.getimg = getimg
         self.target_size = target_size
+        self.angle_num = angle_num
         self.norm = norm
 
-        self.angles = rand_angles(len(getimg))
+        self.length = self.getimg.__len__() * self.angle_num
 
     def __len__(self) -> int:
-        return self.getimg.__len__()
+        return self.length
 
     def __getitem__(self, idx: int) -> TypeRCCItem:
-        angle = self.angles[idx]
-        img_ts = self.getimg[idx]
+        img_idx = idx // self.angle_num
+        img_ts = self.getimg[img_idx]
+        angle = (idx - img_idx * self.angle_num) / self.angle_num
+        angle_ts = torch.tensor(angle, dtype=torch.float32)
 
-        img_ts = square_and_rotate(img_ts, self.target_size, angle.item())
+        img_ts = square_and_rotate(img_ts, self.target_size, angle)
         img_ts = self.norm(img_ts)
 
-        return img_ts, angle
+        return img_ts, angle_ts

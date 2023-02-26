@@ -94,7 +94,7 @@ class Trainer(object):
         """
 
         if self._model_dir is None:
-            self._model_dir = Path(const.MODELS_DIR) / self.task_name
+            self._model_dir = Path(const.MODELS_DIR) / self.model.__class__.__name__ / self.task_name
             self._model_dir.mkdir(0o755, exist_ok=True)
         return self._model_dir
 

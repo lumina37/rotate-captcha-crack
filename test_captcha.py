@@ -19,10 +19,8 @@ opts = parser.parse_args()
 if __name__ == "__main__":
     with torch.no_grad():
         model = RCCNet(train=False)
-
-        model_path = find_out_model_path(opts.index)
+        model_path = find_out_model_path(cls_name=model.__class__.__name__, index=opts.index)
         print(f"Use model: {model_path}")
-
         model.load_state_dict(torch.load(str(model_path)))
         model = model.to(device=device)
         model.eval()
@@ -31,14 +29,14 @@ if __name__ == "__main__":
         assert img.height == img.width
         img_size = img.height
 
-        img_t = F.to_tensor(img)
-        img_t = F.center_crop(img_t, img_size / 2 * math.sqrt(2))
-        img_t = F.resize(img_t, 224)
-        img_t: Tensor = DEFAULT_NORM(img_t)
-        img_t = img_t.unsqueeze_(0)
-        img_t = img_t.to(device=device)
+        img_ts = F.to_tensor(img)
+        img_ts = F.center_crop(img_ts, img_size / 2 * math.sqrt(2))
+        img_ts = F.resize(img_ts, 224)
+        img_ts: Tensor = DEFAULT_NORM(img_ts)
+        img_ts = img_ts.unsqueeze_(0)
+        img_ts = img_ts.to(device=device)
 
-        predict: Tensor = model(img_t)
+        predict: Tensor = model(img_ts)
         degree: float = predict.cpu().item() * 360
         print(f"Predict degree: {degree:.4f}")
 

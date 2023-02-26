@@ -55,22 +55,3 @@ def square_and_rotate(src: Tensor, target_size: int, angle_factor: float) -> Ten
 
     return dst
 
-
-def rand_angles(length: int) -> Tensor:
-    """
-    generate random angle factor array
-
-    Args:
-        length (int): length of array
-
-    Returns:
-        Tensor: angle factors between [0.0,1.0]
-    """
-
-    angle_num = 8
-    unit_angle = 1 / angle_num
-    angle_prob = np.full(angle_num, 1 / angle_num, dtype=np.float32)
-    angles = np.random.choice(angle_num, length, p=angle_prob)
-    angles = (angles * unit_angle).astype(np.float32)
-    angles = torch.tensor(angles, dtype=torch.float32)
-    return angles

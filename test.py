@@ -33,7 +33,7 @@ if __name__ == '__main__':
         )
 
         model = RCCNet(train=False)
-        model_path = find_out_model_path(opts.index)
+        model_path = find_out_model_path(cls_name=model.__class__.__name__, index=opts.index)
         print(f"Use model: {model_path}")
         model.load_state_dict(torch.load(str(model_path)))
         model.to(device=device)
