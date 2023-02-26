@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 from typing import Sequence, Tuple, TypeVar
+from . import const
 
 _T = TypeVar('_T')
 
@@ -27,38 +28,35 @@ def slice_from_range(seq: Sequence[_T], _range: Tuple[float, float]) -> Sequence
     return seq[start:end]
 
 
-def find_out_model_path(timestamp: int = 0, epoch: int = 0) -> Path:
+def find_out_model_path(index: int = 0) -> Path:
     """
-    Use timestamp and epoch to find out the path of model
+    Use index to find out the path of model
 
     Args:
-        timestamp (int): target training time
-        epoch (int): target epoch
+        index (int, optional): use which index. use last model if 0. Defaults to 0.
 
     Returns:
         Path: path to the model
     """
 
-    model_dir = Path("models")
+    models_dir = Path(const.MODELS_DIR)
 
-    if not timestamp:
-        ts_dirs = list(model_dir.glob("*"))
-        if not ts_dirs:
-            raise FileNotFoundError(f"{model_dir} is empty")
-        ts_dir = ts_dirs[-1]
-        timestamp = int(ts_dir.name)
-    ts_dir = model_dir / str(timestamp)
+    if not index:
+        try:
+            *_, model_dir = models_dir.iterdir()
+        except ValueError:
+            raise FileNotFoundError(f"{models_dir} is empty")
 
-    if not epoch:
-        model_paths = list(ts_dir.glob("*.pth"))
-        if not model_paths:
-            raise FileNotFoundError(f"cannot find any .pth in {ts_dir}")
-        model_path = model_paths[-1]
-        model_name = model_path.name
     else:
-        model_name = f"{epoch}.pth"
+        model_dir = None
+        for d in models_dir.iterdir():
+            _, index_str = d.name.rsplit('_', 1)
+            if index == int(index_str):
+                model_dir = d
+        if model_dir is None:
+            raise FileNotFoundError(f"model_dir not exist. index={index}")
 
-    model_path = ts_dir / model_name
+    model_path = model_dir / 'last.pth'
     return model_path
 
 

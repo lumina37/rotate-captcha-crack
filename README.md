@@ -2,7 +2,7 @@
 
 CNN预测图片旋转角度
 
-在下文提到的数据集上训练64个epoch（耗时1h）得到的平均预测误差为`6.4266°`，模型文件大小`35.0MB`，可以轻松破解百度旋图验证码
+在下文提到的数据集上训练64个epoch（耗时41.7min）得到的平均预测误差为`3.0557°`，模型文件大小`35.0MB`，可以轻松破解百度旋图验证码
 
 测试效果如下
 
@@ -32,7 +32,7 @@ pip install .
 
 + 我这里直接扒的[`Landscape-Dataset`](https://github.com/yuweiming70/Landscape-Dataset)，你也可以自己收集一些风景照并放到一个文件夹里，没有图像尺寸要求
 
-+ 在`train.py`里配置`dataset_root`指向装有图片的文件夹
++ 在`train.py`里配置`dataset_root`变量指向装有图片的文件夹
 
 + 不需要手动标注，dataset会在读取图片的同时自动完成矩形裁剪、缩放旋转等工作
 
@@ -48,17 +48,17 @@ python train.py
 python test.py
 ```
 
-## 扔一张图进去看看实际效果
+## 输入一个验证码图像并查看旋转效果
 
 Linux环境需要配置GUI或者自己把debug方法从显示图像改成保存图像
 
 ```bash
-python test_one.py
+python test_captcha.py
 ```
 
 ## 设计细节
 
-+ 现有的旋图验证码破解方法大多基于[`RotNet (ICLR2018)`](https://arxiv.org/abs/1803.07728)，其backbone为`ResNet50`，将角度预测视作360分类问题，并计算交叉熵损失，本项目的`RotationNet`是对`RotNet`的简单改进
++ 现有的旋图验证码破解方法大多基于[`RotNet (ICLR2018)`](https://arxiv.org/abs/1803.07728)，其backbone为`ResNet50`，将角度预测视作360分类问题，并计算交叉熵损失，本项目的`RCCNet`是对`RotNet`的简单改进
 
 + backbone为[`regnet (CVPR2020)`](https://arxiv.org/abs/2003.13678)的`RegNetY 1.6GFLOPs`
 

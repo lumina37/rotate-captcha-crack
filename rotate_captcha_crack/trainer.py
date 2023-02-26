@@ -10,7 +10,7 @@ import torch
 from torch import Tensor
 from torch.nn import Module
 from torch.optim import Optimizer
-from torch.optim.lr_scheduler import _LRScheduler as LRScheduler
+from torch.optim.lr_scheduler import ReduceLROnPlateau
 from torch.utils.data import DataLoader
 
 from . import const
@@ -28,7 +28,7 @@ class Trainer(object):
         train_dataloader (DataLoader): dl for training
         val_dataloader (DataLoader): dl for validation
         optmizer (Optimizer): set learning rate
-        lr_scheduler (LRScheduler): change learning rate by epoches
+        lr_scheduler (ReduceLROnPlateau): change learning rate by epoches
         loss (Module): compute loss between `predict` and `target`
     """
 
@@ -38,7 +38,7 @@ class Trainer(object):
         train_dataloader: DataLoader,
         val_dataloader: DataLoader,
         optmizer: Optimizer,
-        lr_scheduler: LRScheduler,
+        lr_scheduler: ReduceLROnPlateau,
         loss: Module,
     ) -> None:
         self.model = model
@@ -136,11 +136,11 @@ class Trainer(object):
                 self.optmizer.step()
                 steps += 1
 
-            self.lr_scheduler.step()
-            lr_vec[epoch_idx] = self.lr_scheduler.get_last_lr()[0]
-
             train_loss = total_train_loss / steps
             train_loss_vec[epoch_idx] = train_loss
+
+            self.lr_scheduler.step(metrics=train_loss)
+            lr_vec[epoch_idx] = self.lr_scheduler._last_lr[0]
 
             self.model.eval()
             total_eval_loss = 0.0

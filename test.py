@@ -13,8 +13,7 @@ from rotate_captcha_crack.model import RCCNet
 from rotate_captcha_crack.utils import default_num_workers, find_out_model_path, slice_from_range
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--timestamp", "-ts", type=int, default=0, help="Use which timestamp")
-parser.add_argument("--epoch", type=int, default=0, help="Use which epoch")
+parser.add_argument("--index", "-i", type=int, default=0, help="Use which index")
 opts = parser.parse_args()
 
 if __name__ == '__main__':
@@ -34,9 +33,10 @@ if __name__ == '__main__':
         )
 
         model = RCCNet(train=False)
-        model_path = find_out_model_path(opts.timestamp, opts.epoch)
+        model_path = find_out_model_path(opts.index)
         print(f"Use model: {model_path}")
-        model.load_state_dict(torch.load(str(model_path), map_location=device))
+        model.load_state_dict(torch.load(str(model_path)))
+        model.to(device=device)
         model.eval()
 
         total_degree_diff = 0.0

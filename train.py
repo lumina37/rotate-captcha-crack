@@ -40,7 +40,7 @@ if __name__ == "__main__":
 
     lr = 0.0004
     optmizer = torch.optim.Adam(model.parameters(), lr=lr)
-    lr_scheduler = torch.optim.lr_scheduler.CosineAnnealingWarmRestarts(optmizer, T_0=5, T_mult=2, eta_min=lr / 1e3)
+    lr_scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optmizer, patience=4, min_lr=lr / 1e3)
     loss = RotationLoss(lambda_cos=0.24, exponent=2)
 
     epoches = 64
