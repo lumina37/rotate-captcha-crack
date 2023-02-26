@@ -5,10 +5,9 @@
 
 !pyproject.toml
 
-!draw_loss_figs.py
 !train.py
 !test.py
-!test_one.py
+!test_captcha.py
 
 !rotate_captcha_crack
 !rotate_captcha_crack/**
