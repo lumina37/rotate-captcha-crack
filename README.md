@@ -28,11 +28,11 @@ pip install .
 
 ## 准备数据集
 
-+ 我这里直接扒的[`Landscape-Dataset`](https://github.com/yuweiming70/Landscape-Dataset)，你也可以自己收集一些风景照放到任意一个文件夹里，因为是自监督学习，所以不限制图像尺寸也不需要标注
++ 我这里直接扒的[`Landscape-Dataset`](https://github.com/yuweiming70/Landscape-Dataset)，你也可以自己收集一些风景照并放到一个文件夹里，没有图像尺寸要求
 
-+ 在`config.toml`里配置`dataset.root`字段指向装有图片的文件夹
++ 在`train.py`里配置`dataset_root`指向装有图片的文件夹
 
-+ 不需要额外准备工作，dataset会在读取图片的同时自动完成矩形裁剪、添加圆形遮罩等工作
++ 不需要手动标注，dataset会在读取图片的同时自动完成矩形裁剪、缩放旋转等工作
 
 ## 训练
 

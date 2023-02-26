@@ -9,7 +9,7 @@ from torchvision import transforms
 
 from rotate_captcha_crack.config import CONFIG, device
 from rotate_captcha_crack.helper import DEFAULT_NORM
-from rotate_captcha_crack.model import RotationNet
+from rotate_captcha_crack.model import RCCNet
 from rotate_captcha_crack.utils import find_out_model_path
 
 parser = argparse.ArgumentParser()
@@ -29,7 +29,7 @@ if __name__ == "__main__":
 
     with torch.no_grad():
         model_dir = Path("models")
-        model = RotationNet(train=False)
+        model = RCCNet(train=False)
         model_path = find_out_model_path(opts.timestamp, opts.epoch)
         print(f"Use model: {model_path}")
         model.load_state_dict(torch.load(str(model_path), map_location=device))

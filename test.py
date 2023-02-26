@@ -1,15 +1,16 @@
 import argparse
+from pathlib import Path
 from typing import Iterable
 
 import torch
 from torch import Tensor
 from torch.utils.data import DataLoader
 
-from rotate_captcha_crack.config import CONFIG, device
-from rotate_captcha_crack.dataset import GetImgFromPaths, RCCDataset, TypeRCCItem
+from rotate_captcha_crack.common import device
+from rotate_captcha_crack.dataset import ImgSeqFromPaths, RCCDataset, TypeRCCItem
 from rotate_captcha_crack.loss import DistanceBetweenAngles
-from rotate_captcha_crack.model import RotationNet
-from rotate_captcha_crack.utils import find_out_model_path
+from rotate_captcha_crack.model import RCCNet
+from rotate_captcha_crack.utils import default_num_workers, find_out_model_path, slice_from_range
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--timestamp", "-ts", type=int, default=0, help="Use which timestamp")
@@ -18,28 +19,24 @@ opts = parser.parse_args()
 
 if __name__ == '__main__':
     with torch.no_grad():
-        ds_cfg = CONFIG.dataset
-        test_cfg = CONFIG.test
+        dataset_root = Path("./datasets/Landscape-Dataset")
+
         test_criterion = DistanceBetweenAngles()
 
-        batch_size = CONFIG.test.batch_size
-
-        img_paths = list(ds_cfg.root.glob(ds_cfg.glob_suffix))
-        start = ds_cfg.train_ratio + ds_cfg.val_ratio
-        test_range = (start, start + ds_cfg.test_ratio)
-        test_dataset = RCCDataset(GetImgFromPaths(img_paths, test_range))
+        img_paths = list(dataset_root.glob('*.jpg'))
+        test_img_paths = slice_from_range(img_paths, (0.95, 1.0))
+        test_dataset = RCCDataset(ImgSeqFromPaths(test_img_paths))
         test_dataloader: Iterable[TypeRCCItem] = DataLoader(
             test_dataset,
-            test_cfg.batch_size,
-            num_workers=test_cfg.num_workers,
+            batch_size=128,
+            num_workers=default_num_workers(),
             drop_last=True,
         )
 
-        model = RotationNet(train=False)
+        model = RCCNet(train=False)
         model_path = find_out_model_path(opts.timestamp, opts.epoch)
         print(f"Use model: {model_path}")
         model.load_state_dict(torch.load(str(model_path), map_location=device))
-        model = model.to(device)
         model.eval()
 
         total_degree_diff = 0.0

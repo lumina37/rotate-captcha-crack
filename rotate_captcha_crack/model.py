@@ -3,7 +3,7 @@ from torch import Tensor
 from torchvision import models
 
 
-class RotationNet(nn.Module):
+class RCCNet(nn.Module):
     """
     Args:
         train (bool, optional): True to download pretrained model. Defaults to True.
@@ -15,7 +15,7 @@ class RotationNet(nn.Module):
     """
 
     def __init__(self, train: bool = True) -> None:
-        super(RotationNet, self).__init__()
+        super(RCCNet, self).__init__()
 
         weights = models.RegNet_Y_1_6GF_Weights.DEFAULT if train else None
         self.backbone = models.regnet_y_1_6gf(weights=weights)

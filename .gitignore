@@ -3,7 +3,6 @@
 !.gitignore
 !LICENSE
 
-!config.toml
 !pyproject.toml
 
 !draw_loss_figs.py
