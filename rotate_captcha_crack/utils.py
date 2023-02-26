@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 from typing import Sequence, Tuple, TypeVar
+
 from . import const
 
 _T = TypeVar('_T')

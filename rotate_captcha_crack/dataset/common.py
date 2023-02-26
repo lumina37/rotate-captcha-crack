@@ -7,7 +7,7 @@ from .typing import TypeImgSeq, TypeRCCItem
 
 class RCCDataset(Dataset[TypeRCCItem]):
     """
-    dataset for RCC
+    dataset for RCCNet
 
     Args:
         getimg (TypeGetImg): upstream dataset
@@ -17,8 +17,7 @@ class RCCDataset(Dataset[TypeRCCItem]):
     Methods:
         `def __len__(self) -> int:` length of the dataset
 
-        `def __getitem__(self, idx: int) -> Tensor:` get img_tensor ([C,H,W]=[3,target_size,target_size], dtype=float32, range=[0,1])
-            square tensor with a circle mask (edge is white)
+        `def __getitem__(self, idx: int) -> Tensor:` get square img_tensor ([C,H,W]=[3,target_size,target_size], dtype=float32, range=[0,1])
     """
 
     __slots__ = [

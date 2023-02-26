@@ -15,6 +15,18 @@ DEFAULT_NORM = transforms.Normalize(
 
 
 def square_and_rotate(src: Tensor, target_size: int, angle_factor: float) -> Tensor:
+    """
+    crop the tensor into square shape and rotate it
+
+    Args:
+        src (Tensor): source tensor
+        target_size (int): target size. usually 224
+        angle_factor (float): angle factor in [0.0,1.0]
+
+    Returns:
+        Tensor: rotated square tensor
+    """
+
     src_h, src_w = src.shape[-2:]
 
     # to square
@@ -45,7 +57,17 @@ def square_and_rotate(src: Tensor, target_size: int, angle_factor: float) -> Ten
 
 
 def rand_angles(length: int) -> Tensor:
-    angle_num = 4
+    """
+    generate random angle factor array
+
+    Args:
+        length (int): length of array
+
+    Returns:
+        Tensor: angle factors between [0.0,1.0]
+    """
+
+    angle_num = 8
     unit_angle = 1 / angle_num
     angle_prob = np.full(angle_num, 1 / angle_num, dtype=np.float32)
     angles = np.random.choice(angle_num, length, p=angle_prob)

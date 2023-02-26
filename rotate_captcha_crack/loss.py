@@ -8,7 +8,7 @@ class DistanceBetweenAngles(nn.Module):
     Only for Evaluate!
 
     Args:
-        cycle (float): how much will the factor increase after 0°->360°. Defaults to 1.0.
+        cycle (float): How much will the factor increase after 0°->360°. Defaults to 1.0.
     """
 
     def __init__(self, cycle: float = 1.0) -> None:
