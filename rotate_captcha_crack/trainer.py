@@ -74,7 +74,7 @@ class Trainer(object):
                 last_idx_str = last_dir.name[dt_perfix_len:]
                 last_idx = int(last_idx_str)
                 idx = last_idx + 1
-            except ValueError:
+            except (ValueError, OSError):
                 # if model_dir is empty or not exist
                 models_dir.mkdir(0o755, parents=True, exist_ok=True)
                 idx = 0

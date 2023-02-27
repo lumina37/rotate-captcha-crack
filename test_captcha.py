@@ -30,7 +30,7 @@ if __name__ == "__main__":
         img_size = img.height
 
         img_ts = F.to_tensor(img)
-        img_ts = F.center_crop(img_ts, img_size / 2 * math.sqrt(2))
+        img_ts = F.center_crop(img_ts, img_size / math.sqrt(2))
         img_ts = F.resize(img_ts, 224)
         img_ts: Tensor = DEFAULT_NORM(img_ts)
         img_ts = img_ts.unsqueeze_(0)
@@ -38,7 +38,7 @@ if __name__ == "__main__":
 
         predict: Tensor = model(img_ts)
         degree: float = predict.cpu().item() * 360
-        print(f"Predict degree: {degree:.4f}")
+        print(f"Predict degree: {degree:.4f}°")
 
     img = img.rotate(
         -degree, resample=Image.Resampling.BILINEAR, fillcolor=(255, 255, 255)

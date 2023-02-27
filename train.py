@@ -16,10 +16,11 @@ if __name__ == "__main__":
     dataset_root = Path("./datasets/Landscape-Dataset")
 
     img_paths = list(dataset_root.glob('*.jpg'))
+    angle_num = 8
     train_img_paths = slice_from_range(img_paths, (0.0, 0.9))
-    train_dataset = RCCDataset(ImgSeqFromPaths(train_img_paths))
+    train_dataset = RCCDataset(ImgSeqFromPaths(train_img_paths), angle_num=angle_num)
     val_img_paths = slice_from_range(img_paths, (0.9, 0.95))
-    val_dataset = RCCDataset(ImgSeqFromPaths(val_img_paths))
+    val_dataset = RCCDataset(ImgSeqFromPaths(val_img_paths), angle_num=angle_num)
 
     num_workers = default_num_workers()
     train_dataloader = DataLoader(

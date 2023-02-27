@@ -1,8 +1,6 @@
 import math
 import random
 
-import numpy as np
-import torch
 from torch import Tensor
 from torchvision import transforms
 from torchvision.transforms import functional as F
@@ -43,10 +41,10 @@ def square_and_rotate(src: Tensor, target_size: int, angle_factor: float) -> Ten
     else:
         dst = src
 
-    angle_rad = angle_factor * math.pi
-    resize_t = math.ceil((abs(math.sin(angle_rad)) + abs(math.cos(angle_rad))) * target_size)
+    angle_rad = (angle_factor % 0.25) * (2 * math.pi)
+    resize_t = math.ceil((math.sin(angle_rad) + math.cos(angle_rad)) * target_size)
     if not (src_h == resize_t and src_w == resize_t):
-        dst = F.resize(dst, target_size)
+        dst = F.resize(dst, resize_t)
 
     if angle_factor != 0:
         angle_deg = angle_factor * 360
@@ -54,4 +52,3 @@ def square_and_rotate(src: Tensor, target_size: int, angle_factor: float) -> Ten
         dst = F.center_crop(dst, target_size)
 
     return dst
-

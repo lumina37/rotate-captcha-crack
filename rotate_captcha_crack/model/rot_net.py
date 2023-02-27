@@ -1,4 +1,3 @@
-import torch
 import torch.nn as nn
 from torch import Tensor
 from torchvision import models
@@ -23,19 +22,7 @@ class RotNet(nn.Module):
         self.softmax = nn.Softmax(360)
 
     def forward(self, x: Tensor) -> Tensor:
-        x = self.backbone.conv1(x)
-        x = self.backbone.bn1(x)
-        x = self.backbone.relu(x)
-        x = self.backbone.maxpool(x)
-
-        x = self.backbone.layer1(x)
-        x = self.backbone.layer2(x)
-        x = self.backbone.layer3(x)
-        x = self.backbone.layer4(x)
-
-        x = self.backbone.avgpool(x)
-        x = torch.flatten(x, 1)
-        x = self.backbone.fc(x)
+        x = self.backbone.forward(x)
         x = self.softmax(x)
 
         return x
