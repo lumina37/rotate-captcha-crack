@@ -1,8 +1,6 @@
 import math
 import random
 
-import numpy as np
-import torch
 from torch import Tensor
 from torchvision import transforms
 from torchvision.transforms import functional as F
@@ -55,21 +53,5 @@ def square_and_rotate(src: Tensor, target_size: int, angle_factor: float) -> Ten
         angle_deg = angle_factor * 360
         dst = F.rotate(dst, angle_deg, F.InterpolationMode.BILINEAR)
         dst = F.center_crop(dst, target_size)
-
-    return dst
-
-
-def generate_angles(ori_size: int, angle_num: int, copy_num: int) -> Tensor:
-    dst_size = ori_size * copy_num
-    dst_array = np.empty(dst_size, dtype=np.float32)
-    rng = np.random.default_rng()
-
-    for i in range(0, dst_size, copy_num):
-        group = rng.choice(angle_num, copy_num, replace=False)
-        group = group.astype(np.float32)
-        np.divide(group, angle_num, group)
-        dst_array[i : i + copy_num] = group
-
-    dst = torch.from_numpy(dst_array)
 
     return dst

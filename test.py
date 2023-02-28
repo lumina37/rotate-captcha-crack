@@ -13,7 +13,7 @@ from rotate_captcha_crack.model import RCCNet
 from rotate_captcha_crack.utils import default_num_workers, find_out_model_path, slice_from_range
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--index", "-i", type=int, default=0, help="Use which index")
+parser.add_argument("--index", "-i", type=int, default=None, help="Use which index")
 opts = parser.parse_args()
 
 if __name__ == '__main__':

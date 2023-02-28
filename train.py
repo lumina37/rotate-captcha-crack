@@ -16,11 +16,10 @@ if __name__ == "__main__":
     dataset_root = Path("./datasets/Landscape-Dataset")
 
     img_paths = list(dataset_root.glob('*.jpg'))
-    angle_num = 8
     train_img_paths = slice_from_range(img_paths, (0.0, 0.9))
-    train_dataset = RCCDataset(ImgSeqFromPaths(train_img_paths), angle_num=angle_num)
+    train_dataset = RCCDataset(ImgSeqFromPaths(train_img_paths))
     val_img_paths = slice_from_range(img_paths, (0.9, 0.95))
-    val_dataset = RCCDataset(ImgSeqFromPaths(val_img_paths), angle_num=angle_num)
+    val_dataset = RCCDataset(ImgSeqFromPaths(val_img_paths))
 
     num_workers = default_num_workers()
     train_dataloader = DataLoader(
@@ -44,7 +43,7 @@ if __name__ == "__main__":
     lr_scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optmizer, patience=4, min_lr=lr / 1e3)
     loss = RotationLoss(lambda_cos=0.24, exponent=2)
 
-    epoches = 64
+    epoches = 48
 
     trainer = Trainer(model, train_dataloader, val_dataloader, optmizer, lr_scheduler, loss)
     ### Custom configuration area ###

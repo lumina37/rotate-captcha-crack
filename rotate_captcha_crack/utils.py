@@ -1,6 +1,6 @@
 import os
 from pathlib import Path
-from typing import Sequence, Tuple, TypeVar
+from typing import Optional, Sequence, Tuple, TypeVar
 
 from . import const
 
@@ -29,13 +29,13 @@ def slice_from_range(seq: Sequence[_T], _range: Tuple[float, float]) -> Sequence
     return seq[start:end]
 
 
-def find_out_model_path(cls_name: str, index: int = 0) -> Path:
+def find_out_model_path(cls_name: str, index: Optional[int] = None) -> Path:
     """
     Use cls_name and index to find out the path of model
 
     Args:
         cls_name (Module): name of the model cls
-        index (int, optional): use which index. use last model if 0. Defaults to 0.
+        index (int, optional): use which index. use last model if None. Defaults to None.
 
     Returns:
         Path: path to the model
@@ -43,7 +43,7 @@ def find_out_model_path(cls_name: str, index: int = 0) -> Path:
 
     models_dir = Path(const.MODELS_DIR) / cls_name
 
-    if not index:
+    if index is None:
         try:
             *_, model_dir = models_dir.iterdir()
         except ValueError:
@@ -58,7 +58,7 @@ def find_out_model_path(cls_name: str, index: int = 0) -> Path:
         if model_dir is None:
             raise FileNotFoundError(f"model_dir not exist. index={index}")
 
-    model_path = model_dir / 'last.pth'
+    model_path = model_dir / 'best.pth'
     return model_path
 
 

@@ -8,7 +8,7 @@ from torch import Tensor
 from torchvision.transforms import functional as F
 
 from rotate_captcha_crack.common import device
-from rotate_captcha_crack.helper import DEFAULT_NORM
+from rotate_captcha_crack.dataset.helper import DEFAULT_NORM
 from rotate_captcha_crack.model import RCCNet
 from rotate_captcha_crack.utils import find_out_model_path
 
@@ -25,7 +25,7 @@ if __name__ == "__main__":
         model = model.to(device=device)
         model.eval()
 
-        img = Image.open("datasets/tieba/1615096412.jpg")
+        img = Image.open("datasets/tieba/1615096421.jpg")
         assert img.height == img.width
         img_size = img.height
 
