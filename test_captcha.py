@@ -25,7 +25,7 @@ if __name__ == "__main__":
         model = model.to(device=device)
         model.eval()
 
-        img = Image.open("datasets/tieba/1615096444.jpg")
+        img = Image.open("datasets/tieba/1615096412.jpg")
         assert img.height == img.width
         img_size = img.height
 
