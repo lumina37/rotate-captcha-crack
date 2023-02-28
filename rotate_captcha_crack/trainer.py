@@ -18,7 +18,7 @@ from .logging import RCCLogger
 from .loss import DistanceBetweenAngles
 
 
-class Trainer(object):
+class Trainer(object):  # TODO: How to find the model
     """
     entry class for training
 

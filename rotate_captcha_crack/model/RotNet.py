@@ -22,6 +22,16 @@ class RotNet(nn.Module):
         self.softmax = nn.Softmax(360)
 
     def forward(self, x: Tensor) -> Tensor:
+        """
+        predict angle factors
+
+        Args:
+            x (Tensor): img_tensor ([N,C,H,W]=[batch_size,3,224,224], dtype=float32, range=[0,1])
+
+        Returns:
+            Tensor: predict result ([N]=[batch_size], dtype=float32, range=[0,1])
+        """
+
         x = self.backbone.forward(x)
         x = self.softmax(x)
 

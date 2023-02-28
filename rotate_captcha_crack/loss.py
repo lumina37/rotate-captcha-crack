@@ -27,8 +27,7 @@ class DistanceBetweenAngles(nn.Module):
 
 class RotationLoss(nn.Module):
     """
-    Optimized MSELoss.
-    Including a cosine correction to reduce the distance between 0 and 1.
+    Optimized MSELoss. Including a cosine correction to reduce the distance between 0 and 1.
     """
 
     def __init__(self, lambda_cos: float = 0.24, exponent: float = 2.0) -> None:
@@ -37,6 +36,17 @@ class RotationLoss(nn.Module):
         self.exponent = exponent
 
     def forward(self, predict: Tensor, target: Tensor) -> Tensor:
+        """
+        calculate the loss between `predict` and `target`
+
+        Args:
+            predict (Tensor): ([N]=[batch_size], dtype=float32, range=[0,1])
+            target (Tensor): ([N]=[batch_size], dtype=float32, range=[0,1])
+
+        Returns:
+            Tensor: loss ([N]=[batch_size], dtype=float32, range=[0,1])
+        """
+
         diff = predict - target
         loss_tensor = ((diff * (torch.pi * 2)).cos_() - 1) * (-self.lambda_cos) + diff.pow_(self.exponent)
         loss = loss_tensor.mean()

@@ -5,6 +5,8 @@ from torchvision import models
 
 class RCCNet_fc_1(nn.Module):
     """
+    RCCNet with single fc
+
     Args:
         train (bool, optional): True to download pretrained model. Defaults to True.
     """
@@ -23,6 +25,16 @@ class RCCNet_fc_1(nn.Module):
             nn.init.zeros_(self.backbone.fc.bias)
 
     def forward(self, x: Tensor) -> Tensor:
+        """
+        predict angle factors
+
+        Args:
+            x (Tensor): img_tensor ([N,C,H,W]=[batch_size,3,224,224], dtype=float32, range=[0,1])
+
+        Returns:
+            Tensor: predict result ([N]=[batch_size], dtype=float32, range=[0,1])
+        """
+
         x = self.backbone.stem(x)
         x = self.backbone.trunk_output(x)
 
