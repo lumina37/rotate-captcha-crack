@@ -10,7 +10,9 @@ CNN预测图片旋转角度
 
 其中百度验证码图片来自[RotateCaptchaBreak](https://github.com/chencchen/RotateCaptchaBreak/tree/master/data/baiduCaptcha)
 
-## 准备环境
+## 体验已有模型
+
+### 准备环境
 
 + 一张显存4G以上的GPU
 
@@ -28,7 +30,25 @@ pip install .
 
 注意不要漏了`install`后面那个`.`
 
-## 准备数据集
+### 下载模型
+
+下载[Release](https://github.com/Starry-OvO/rotate-captcha-crack/releases)中的压缩包并解压到`./models`文件夹下
+
+文件目录结构类似`./models/RCCNet_fc_1/230228_20_07_25_000/best.pth`
+
+本项目仍处于beta阶段，模型名称会频繁发生变更，因此出现任何`FileNotFoundError`请先尝试用git回退到对应的tag
+
+### 输入一个验证码图像并查看旋转效果
+
+Linux环境需要配置GUI或者自己把debug方法从显示图像改成保存图像
+
+```bash
+python test_captcha.py
+```
+
+## 训练新模型
+
+### 准备数据集
 
 + 我这里直接扒的[`Landscape-Dataset`](https://github.com/yuweiming70/Landscape-Dataset)，你也可以自己收集一些风景照并放到一个文件夹里，图像没有尺寸要求
 
@@ -36,24 +56,16 @@ pip install .
 
 + 不需要手动标注，dataset会在读取图片的同时自动完成矩形裁剪、缩放旋转等工作
 
-## 训练
+### 训练
 
 ```bash
 python train.py
 ```
 
-## 在测试集上验证模型
+### 在测试集上验证模型
 
 ```bash
 python test.py
-```
-
-## 输入一个验证码图像并查看旋转效果
-
-Linux环境需要配置GUI或者自己把debug方法从显示图像改成保存图像
-
-```bash
-python test_captcha.py
 ```
 
 ## 设计细节
