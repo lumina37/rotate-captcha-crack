@@ -9,7 +9,7 @@ from torch.utils.data import DataLoader
 from rotate_captcha_crack.common import device
 from rotate_captcha_crack.dataset import ImgSeqFromPaths, RCCDataset, TypeRCCItem
 from rotate_captcha_crack.loss import DistanceBetweenAngles
-from rotate_captcha_crack.model import RCCNet
+from rotate_captcha_crack.model import RCCNet_fc_1
 from rotate_captcha_crack.utils import default_num_workers, find_out_model_path, slice_from_range
 
 parser = argparse.ArgumentParser()
@@ -32,7 +32,7 @@ if __name__ == '__main__':
             drop_last=True,
         )
 
-        model = RCCNet(train=False)
+        model = RCCNet_fc_1(train=False)
         model_path = find_out_model_path(cls_name=model.__class__.__name__, index=opts.index)
         print(f"Use model: {model_path}")
         model.load_state_dict(torch.load(str(model_path)))

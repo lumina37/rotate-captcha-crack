@@ -3,19 +3,14 @@ from torch import Tensor
 from torchvision import models
 
 
-class RCCNet(nn.Module):
+class RCCNet_fc_1(nn.Module):
     """
     Args:
         train (bool, optional): True to download pretrained model. Defaults to True.
-
-    Note:
-        - The output is a factor between [0,1].
-        - Multiply it by 360° then you will get the predict rotated degree.
-        - Use rotate(-degree, ...) to recover the image.
     """
 
     def __init__(self, train: bool = True) -> None:
-        super(RCCNet, self).__init__()
+        super(RCCNet_fc_1, self).__init__()
 
         weights = models.RegNet_Y_1_6GF_Weights.DEFAULT if train else None
         self.backbone = models.regnet_y_1_6gf(weights=weights)

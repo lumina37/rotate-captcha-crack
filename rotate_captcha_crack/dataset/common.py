@@ -12,8 +12,8 @@ class RCCDataset(Dataset[TypeRCCItem]):
 
     Args:
         imgseq (TypeImgSeq): upstream dataset
-        target_size (int, optional): output img size
-        norm (Normalize, optional): normalize policy
+        target_size (int, optional): output img size. Defaults to 224.
+        norm (Normalize, optional): normalize policy. Defaults to DEFAULT_NORM.
 
     Methods:
         - `def __len__(self) -> int:` length of the dataset
@@ -48,7 +48,7 @@ class RCCDataset(Dataset[TypeRCCItem]):
         img_ts = self.imgseq[idx]
         angle_ts = self.angles[idx]
 
-        img_ts = square_and_rotate(img_ts, self.target_size, angle_ts.item())
+        img_ts = square_and_rotate(img_ts, angle_ts.item(), self.target_size)
         img_ts = self.norm(img_ts)
 
         return img_ts, angle_ts

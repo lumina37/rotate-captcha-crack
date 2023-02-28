@@ -2,11 +2,11 @@
 
 CNN预测图片旋转角度
 
-在下文提到的数据集上训练48个epoch（耗时2.84h）得到的平均预测误差为`1.1941°`，模型文件大小`39.7MB`，可以轻松破解百度旋图验证码
+在下文提到的数据集上训练48个epoch（耗时2.84h）得到的平均预测误差为`17°`，模型文件大小`39.7MB`，可用于破解百度旋图验证码
 
 测试效果如下
 
-![test_result](https://user-images.githubusercontent.com/48282276/217518434-b9385fa5-60b1-4bf2-b17b-d4bd8a118f56.png)
+![test_result](https://user-images.githubusercontent.com/48282276/221872572-7dfc7fcc-5bda-43e8-bee7-3a55ffd6e8a9.png)
 
 其中百度验证码图片来自[RotateCaptchaBreak](https://github.com/chencchen/RotateCaptchaBreak/tree/master/data/baiduCaptcha)
 

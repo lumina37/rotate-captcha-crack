@@ -6,7 +6,7 @@ from torch.utils.data import DataLoader
 from rotate_captcha_crack.common import device
 from rotate_captcha_crack.dataset import ImgSeqFromPaths, RCCDataset
 from rotate_captcha_crack.loss import RotationLoss
-from rotate_captcha_crack.model import RCCNet
+from rotate_captcha_crack.model import RCCNet_fc_1
 from rotate_captcha_crack.trainer import Trainer
 from rotate_captcha_crack.utils import default_num_workers, slice_from_range
 
@@ -35,7 +35,7 @@ if __name__ == "__main__":
         drop_last=True,
     )
 
-    model = RCCNet()
+    model = RCCNet_fc_1()
     model = model.to(device)
 
     lr = 0.0004

@@ -1,3 +1,5 @@
 MODELS_DIR = './models'
 DEFAULT_LOG_DIR = './log'
 LOG_FILE_SUFFIX = '.log'
+
+SQRT2 = 1.4142135623730951

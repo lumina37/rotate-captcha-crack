@@ -2,30 +2,30 @@ import math
 import random
 
 from torch import Tensor
-from torchvision import transforms
+from torchvision.transforms import Normalize
 from torchvision.transforms import functional as F
 
-DEFAULT_NORM = transforms.Normalize(
+DEFAULT_NORM = Normalize(
     mean=[0.485, 0.456, 0.406],
     std=[0.229, 0.224, 0.225],
     inplace=True,
 )
 
 
-def square_and_rotate(src: Tensor, target_size: int, angle_factor: float) -> Tensor:
+def square_and_rotate(src: Tensor, angle_factor: float, target_size: int) -> Tensor:
     """
     crop the tensor into square shape and rotate it
 
     Args:
         src (Tensor): source tensor
         target_size (int): target size. usually 224
-        angle_factor (float): angle factor in [0.0,1.0]
+        angle_factor (float): angle factor in [0.0,1.0]. 1.0 leads to an entire cycle.
 
     Returns:
-        Tensor: rotated square tensor
+        Tensor: rotated square tensor ([C,H,W]=[src,target_size,target_size])
 
     Note:
-        `dst is src` if there is nothing to do, without copy.
+        `dst is src` (no copy) if there is nothing to do.
     """
 
     src_h, src_w = src.shape[-2:]
