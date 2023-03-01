@@ -25,14 +25,14 @@ class FindOutModel(object):
     __slots__ = [
         '_model_name',
         '_model_dir',
-        '_task_index',
+        '_task_name',
     ]
 
     def __init__(self, model: Module) -> None:
         self._model_name = model.__class__.__name__
 
         self._model_dir: Path = None
-        self._task_index: str = None
+        self._task_name: str = None
 
     def with_index(self, task_index: Optional[int] = None) -> "FindOutModel":
         """
@@ -72,7 +72,7 @@ class FindOutModel(object):
             if model_dir is None:
                 raise FileNotFoundError(f"model_dir not exist. index={task_index}")
 
-        self._task_index = task_index
+        self._task_name = model_dir.name
         self._model_dir = model_dir
 
         return self
