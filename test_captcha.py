@@ -9,11 +9,11 @@ from rotate_captcha_crack.common import device
 from rotate_captcha_crack.model import FindOutModel, RCCNet_fc_1
 from rotate_captcha_crack.utils import strip_circle_border
 
-parser = argparse.ArgumentParser()
-parser.add_argument("--index", "-i", type=int, default=None, help="Use which index")
-opts = parser.parse_args()
-
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--index", "-i", type=int, default=None, help="Use which index")
+    opts = parser.parse_args()
+
     with torch.no_grad():
         model = RCCNet_fc_1(train=False)
         model_path = FindOutModel(model).with_index(opts.index).model_dir / "best.pth"

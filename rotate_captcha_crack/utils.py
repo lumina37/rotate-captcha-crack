@@ -6,7 +6,7 @@ from torch import Tensor
 from torchvision.transforms import Normalize
 from torchvision.transforms import functional as F
 
-from . import const
+from .const import SQRT2
 from .dataset.helper import DEFAULT_NORM
 
 _T = TypeVar('_T')
@@ -29,7 +29,7 @@ def strip_circle_border(src: Image, target_size: int = 224, norm: Normalize = DE
     assert src.height == src.width
 
     dst = F.to_tensor(src)
-    dst = F.center_crop(dst, src_size / const.SQRT2)
+    dst = F.center_crop(dst, src_size / SQRT2)
     dst = F.resize(dst, target_size)
     dst = norm(dst)
 

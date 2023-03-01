@@ -1,3 +1,4 @@
+import argparse
 from pathlib import Path
 
 import torch
@@ -9,8 +10,15 @@ from rotate_captcha_crack.loss import RotationLoss
 from rotate_captcha_crack.model import RCCNet_fc_1
 from rotate_captcha_crack.trainer import Trainer
 from rotate_captcha_crack.utils import default_num_workers, slice_from_range
+from rotate_captcha_crack.visualizer import visualize_train
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--resume", "-r", type=int, default=None, help="Resume from which index. -1 leads to the last training process"
+    )
+    opts = parser.parse_args()
+
     #################################
     ### Custom configuration area ###
     dataset_root = Path("./datasets/Landscape-Dataset")
@@ -44,9 +52,13 @@ if __name__ == "__main__":
     loss = RotationLoss(lambda_cos=0.24, exponent=2)
 
     epoches = 48
-
-    trainer = Trainer(model, train_dataloader, val_dataloader, optmizer, lr_scheduler, loss)
+    trainer = Trainer(model, train_dataloader, val_dataloader, optmizer, lr_scheduler, loss, epoches)
     ### Custom configuration area ###
     #################################
 
-    trainer.train(epoches=epoches)
+    if opts.resume is not None:
+        trainer.resume(opts.resume)
+
+    trainer.train()
+
+    visualize_train(trainer.finder.model_dir)

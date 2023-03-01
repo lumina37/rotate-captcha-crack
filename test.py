@@ -12,11 +12,11 @@ from rotate_captcha_crack.loss import DistanceBetweenAngles
 from rotate_captcha_crack.model import FindOutModel, RCCNet_fc_1
 from rotate_captcha_crack.utils import default_num_workers, slice_from_range
 
-parser = argparse.ArgumentParser()
-parser.add_argument("--index", "-i", type=int, default=None, help="Use which index")
-opts = parser.parse_args()
-
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--index", "-i", type=int, default=None, help="Use which index")
+    opts = parser.parse_args()
+
     with torch.no_grad():
         dataset_root = Path("./datasets/Landscape-Dataset")
 

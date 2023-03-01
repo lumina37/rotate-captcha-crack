@@ -1,6 +1,5 @@
 from datetime import datetime
 from pathlib import Path
-from typing import Optional
 
 from torch.nn import Module
 
@@ -34,12 +33,12 @@ class FindOutModel(object):
         self._model_dir: Path = None
         self._task_name: str = None
 
-    def with_index(self, task_index: Optional[int] = None) -> "FindOutModel":
+    def with_index(self, task_index: int = -1) -> "FindOutModel":
         """
         init with task index
 
         Args:
-            task_index (Optional[int], optional): index of task. None leads to the last index. Defaults to None.
+            task_index (Optional[int], optional): index of task. -1 leads to the last index. Defaults to -1.
 
         Raises:
             FileNotFoundError
@@ -57,7 +56,7 @@ class FindOutModel(object):
 
         models_dir = Path(const.MODELS_DIR) / self._model_name
 
-        if task_index is None:
+        if task_index == -1:
             try:
                 *_, model_dir = models_dir.iterdir()
             except ValueError:
