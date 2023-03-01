@@ -18,7 +18,7 @@ class DistanceBetweenAngles(nn.Module):
 
     @torch.no_grad()
     def forward(self, predict: Tensor, target: Tensor) -> Tensor:
-        predict = predict.fmod(self.cycle)
+        predict = predict.fmod(self.cycle)  # need copy
         target = target.fmod(self.cycle)
         loss_tensor = self.half_cycle - ((predict - target).abs_() - self.half_cycle).abs_()
         loss = loss_tensor.mean()

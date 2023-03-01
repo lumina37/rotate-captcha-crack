@@ -32,7 +32,7 @@ class RotNet_reg(nn.Module):
 
     def forward(self, x: Tensor) -> Tensor:
         """
-        predict angle factors
+        forward
 
         Args:
             x (Tensor): img_tensor ([N,C,H,W]=[batch_size,3,224,224], dtype=float32, range=[0,1])
@@ -45,3 +45,24 @@ class RotNet_reg(nn.Module):
         x = self.softmax(x)
 
         return x
+
+    def predict(self, img_ts: Tensor) -> float:
+        """
+        predict the counter clockwise rotation angle
+
+        Args:
+            img_ts (Tensor): img_tensor ([C,H,W]=[3,224,224], dtype=float32, range=[0,1])
+
+        Returns:
+            float: predict result. range=[0,1]
+
+        Note:
+            Use Image.rotate(-ret * 360) to recover the image.
+        """
+
+        img_ts = img_ts.unsqueeze_(0)
+
+        onehot_ts = self.backbone.forward(img_ts)
+        angle = float(onehot_ts.argmax(1).cpu().item()) / ROTNET_CLS_NUM
+
+        return angle

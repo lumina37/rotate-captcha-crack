@@ -1,20 +1,19 @@
 import argparse
 from pathlib import Path
-from typing import Iterable
 
 import torch
 from torch import Tensor
 from torch.utils.data import DataLoader
 
 from rotate_captcha_crack.common import device
-from rotate_captcha_crack.dataset import ImgSeqFromPaths, RCCDataset, TypeRCCItem
+from rotate_captcha_crack.dataset import ImgSeqFromPaths, RCCDataset
 from rotate_captcha_crack.loss import DistanceBetweenAngles
-from rotate_captcha_crack.model import WhereIsMyModel, RCCNet_fc_1
+from rotate_captcha_crack.model import RCCNet_fc_1, WhereIsMyModel
 from rotate_captcha_crack.utils import default_num_workers, slice_from_range
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument("--index", "-i", type=int, default=None, help="Use which index")
+    parser.add_argument("--index", "-i", type=int, default=-1, help="Use which index")
     opts = parser.parse_args()
 
     with torch.no_grad():
@@ -25,7 +24,7 @@ if __name__ == '__main__':
         img_paths = list(dataset_root.glob('*.jpg'))
         test_img_paths = slice_from_range(img_paths, (0.95, 1.0))
         test_dataset = RCCDataset(ImgSeqFromPaths(test_img_paths))
-        test_dataloader: Iterable[TypeRCCItem] = DataLoader(
+        test_dataloader = DataLoader(
             test_dataset,
             batch_size=128,
             num_workers=default_num_workers(),

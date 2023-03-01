@@ -27,7 +27,7 @@ class RCCNet_fc_1(nn.Module):
 
     def forward(self, x: Tensor) -> Tensor:
         """
-        predict angle factors
+        forward
 
         Args:
             x (Tensor): img_tensors ([N,C,H,W]=[batch_size,3,224,224], dtype=float32, range=[0,1])
@@ -37,6 +37,27 @@ class RCCNet_fc_1(nn.Module):
         """
 
         x = self.backbone.forward(x)
-        x.squeeze_(dim=1)
+        x.squeeze_(1)
 
         return x
+
+    def predict(self, img_ts: Tensor) -> float:
+        """
+        predict the counter clockwise rotation angle
+
+        Args:
+            img_ts (Tensor): img_tensor ([C,H,W]=[3,224,224], dtype=float32, range=[0,1])
+
+        Returns:
+            float: predict result. range=[0,1]
+
+        Note:
+            Counter clockwise. Use Image.rotate(-ret * 360) to recover the image.
+        """
+
+        img_ts = img_ts.unsqueeze_(0)
+
+        angle_ts = self.backbone.forward(img_ts)
+        angle = angle_ts.cpu().item()
+
+        return angle

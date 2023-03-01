@@ -13,7 +13,6 @@ from torch.utils.data import DataLoader
 from .common import device
 from .const import CKPT_PATH, LOG_PATH
 from .logging import RCCLogger
-from .loss import DistanceBetweenAngles
 from .model import WhereIsMyModel
 
 
@@ -169,7 +168,6 @@ class Trainer(object):
 
         start_t = time.perf_counter()
 
-        eval_loss_c = DistanceBetweenAngles()
         for epoch_idx in range(self.last_epoch + 1, self.epoches):
             self.model.train()
             total_train_loss = 0.0
@@ -198,7 +196,7 @@ class Trainer(object):
 
             self.model.eval()
             total_eval_loss = 0.0
-            batch_count = 0
+            eval_batch_count = 0
             with torch.no_grad():
                 for source, target in self.val_dataloader:
                     source: Tensor = source.to(device=device)
@@ -206,16 +204,16 @@ class Trainer(object):
 
                     predict: Tensor = self.model(source)
 
-                    eval_loss: Tensor = eval_loss_c(predict, target)
-                    total_eval_loss += eval_loss.cpu().item() * 360
-                    batch_count += 1
+                    eval_loss: Tensor = self.loss(predict, target)
+                    total_eval_loss += eval_loss.mean().cpu().item()
+                    eval_batch_count += 1
 
-            eval_loss = total_eval_loss / batch_count
+            eval_loss = total_eval_loss / eval_batch_count
             self.eval_loss_array[epoch_idx] = eval_loss
 
             self.t_cost += time.perf_counter() - start_t
             self.log.info(
-                f"Epoch#{epoch_idx}. time_cost: {self.t_cost:.2f} s. train_loss: {train_loss:.8f}. eval_loss: {eval_loss:.3f} degrees"
+                f"Epoch#{epoch_idx}. time_cost: {self.t_cost:.2f} s. train_loss: {train_loss:.8f}. eval_loss: {eval_loss:.8f}"
             )
 
             if eval_loss < self.best_eval_loss:
