@@ -4,6 +4,6 @@ Multiply it by 360° then you will get the predict rotated degree.
 Use rotate(-degree, ...) to recover the image.
 """
 
-from .helper import FindOutModel
+from .helper import WhereIsMyModel
 from .RCCNet_fc_1 import RCCNet_fc_1
-from .RotNet import RotNet
+from .RotNet_reg import RotNet_reg

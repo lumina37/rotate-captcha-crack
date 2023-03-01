@@ -6,7 +6,7 @@ from PIL import Image
 from torch import Tensor
 
 from rotate_captcha_crack.common import device
-from rotate_captcha_crack.model import FindOutModel, RCCNet_fc_1
+from rotate_captcha_crack.model import WhereIsMyModel, RCCNet_fc_1
 from rotate_captcha_crack.utils import strip_circle_border
 
 if __name__ == "__main__":
@@ -16,7 +16,7 @@ if __name__ == "__main__":
 
     with torch.no_grad():
         model = RCCNet_fc_1(train=False)
-        model_path = FindOutModel(model).with_index(opts.index).model_dir / "best.pth"
+        model_path = WhereIsMyModel(model).with_index(opts.index).model_dir / "best.pth"
         print(f"Use model: {model_path}")
         model.load_state_dict(torch.load(str(model_path)))
         model = model.to(device=device)

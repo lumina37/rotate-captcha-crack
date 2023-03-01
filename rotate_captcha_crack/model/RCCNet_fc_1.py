@@ -36,12 +36,7 @@ class RCCNet_fc_1(nn.Module):
             Tensor: predict result ([N]=[batch_size], dtype=float32, range=[0,1])
         """
 
-        x = self.backbone.stem(x)
-        x = self.backbone.trunk_output(x)
-
-        x = self.backbone.avgpool(x)
-        x = x.flatten(start_dim=1)
-        x = self.backbone.fc(x)
-
+        x = self.backbone.forward(x)
         x.squeeze_(dim=1)
+
         return x

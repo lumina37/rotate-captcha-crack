@@ -9,9 +9,9 @@ DT_SPLIT_CHAR = '_'
 DT_FMT_STR = DT_SPLIT_CHAR.join(["%y%m%d", "%H", "%M", "%S"])
 
 
-class FindOutModel(object):
+class WhereIsMyModel(object):
     """
-    help you find out model
+    help you find out your model
 
     Args:
         model (Module): the model you wanna use
@@ -33,7 +33,7 @@ class FindOutModel(object):
         self._model_dir: Path = None
         self._task_name: str = None
 
-    def with_index(self, task_index: int = -1) -> "FindOutModel":
+    def with_index(self, task_index: int = -1) -> "WhereIsMyModel":
         """
         init with task index
 
@@ -76,7 +76,7 @@ class FindOutModel(object):
 
         return self
 
-    def with_name(self, task_name: str) -> "FindOutModel":
+    def with_name(self, task_name: str) -> "WhereIsMyModel":
         """
         init with task name
 

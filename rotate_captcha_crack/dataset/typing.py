@@ -1,4 +1,4 @@
-from typing import Protocol, Tuple
+from typing import Protocol
 
 from torch import Tensor
 
@@ -15,6 +15,3 @@ class TypeImgSeq(Protocol):
 
     def __getitem__(self, idx: int) -> Tensor:
         pass
-
-
-TypeRCCItem = Tuple[Tensor, Tensor]

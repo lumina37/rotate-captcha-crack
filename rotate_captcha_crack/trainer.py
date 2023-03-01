@@ -14,7 +14,7 @@ from .common import device
 from .const import CKPT_PATH, LOG_PATH
 from .logging import RCCLogger
 from .loss import DistanceBetweenAngles
-from .model import FindOutModel
+from .model import WhereIsMyModel
 
 
 class Trainer(object):
@@ -67,7 +67,7 @@ class Trainer(object):
         self.lr_scheduler = lr_scheduler
         self.loss = loss
         self.epoches = epoches
-        self.finder = FindOutModel(model)
+        self.finder = WhereIsMyModel(model)
 
         self._log = None
         self._is_new_task = True
