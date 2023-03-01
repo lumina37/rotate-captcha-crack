@@ -9,8 +9,7 @@ class RotNet(nn.Module):
         train (bool, optional): True to load the pretrained parameters. Defaults to True.
 
     Note:
-        - impl: `rotnet_street_view_resnet50` in https://github.com/d4nst/RotNet
-        - paper: https://arxiv.org/abs/1803.07728 TODO: Not this
+        impl: `rotnet_street_view_resnet50` in https://github.com/d4nst/RotNet
     """
 
     def __init__(self, train: bool = True) -> None:

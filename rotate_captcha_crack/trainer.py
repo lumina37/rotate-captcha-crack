@@ -1,7 +1,5 @@
 import sys
 import time
-from datetime import datetime
-from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -12,13 +10,13 @@ from torch.optim import Optimizer
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 from torch.utils.data import DataLoader
 
-from . import const
 from .common import device
 from .logging import RCCLogger
 from .loss import DistanceBetweenAngles
+from .model import FindOutModel
 
 
-class Trainer(object):  # TODO: How to find the model
+class Trainer(object):
     """
     entry class for training
 
@@ -47,60 +45,18 @@ class Trainer(object):  # TODO: How to find the model
         self.lr_scheduler = lr_scheduler
         self.loss = loss
 
-        self._task_name = None
-        self._model_dir = None
-        self._logger = None
+        self.finder = FindOutModel(model)
+        self._log = None
 
     @property
-    def task_name(self) -> str:
+    def log(self) -> RCCLogger:
         """
-        auto-generated unique task_name
-
-        Returns:
-            str: task_name
-
-        Example:
-            "230229_22_58_59_001"
-            "{date}_{hour}_{min}_{sec}_{id}"
+        get logger
         """
 
-        if self._task_name is None:
-            start_dt_str = datetime.now().strftime("%y%m%d_%H_%M_%S")
-            dt_perfix_len = len(start_dt_str) + 1
-
-            models_dir = Path(const.MODELS_DIR) / self.model.__class__.__name__
-            try:
-                *_, last_dir = models_dir.iterdir()
-                last_idx_str = last_dir.name[dt_perfix_len:]
-                last_idx = int(last_idx_str)
-                idx = last_idx + 1
-            except (ValueError, OSError):
-                # if model_dir is empty or not exist
-                models_dir.mkdir(0o755, parents=True, exist_ok=True)
-                idx = 0
-
-            self._task_name = f"{start_dt_str}_{idx:0>3}"
-
-        return self._task_name
-
-    @property
-    def model_dir(self) -> Path:
-        """
-        directory to save model
-
-        Returns:
-            Path: model_dir
-        """
-
-        if self._model_dir is None:
-            self._model_dir = Path(const.MODELS_DIR) / self.model.__class__.__name__ / self.task_name
-            self._model_dir.mkdir(0o755, exist_ok=True)
-        return self._model_dir
-
-    def get_logger(self) -> RCCLogger:
-        if self._logger is None:
-            self._logger = RCCLogger(self.model_dir)
-        return self._logger
+        if self._log is None:
+            self._log = RCCLogger(self.finder.model_dir)
+        return self._log
 
     def train(self, epoches: int) -> None:
         lr_vec = np.empty(epoches, dtype=np.float64)
@@ -109,8 +65,6 @@ class Trainer(object):  # TODO: How to find the model
         best_eval_loss = sys.maxsize
 
         eval_loss_c = DistanceBetweenAngles()
-
-        log = self.get_logger()
 
         start_t = time.perf_counter()
 
@@ -157,25 +111,25 @@ class Trainer(object):  # TODO: How to find the model
             eval_loss = total_eval_loss / batch_count
             eval_loss_vec[epoch_idx] = eval_loss
 
-            log.info(
+            self.log.info(
                 f"Epoch#{epoch_idx}. time_cost: {time.perf_counter()-start_t:.1f} s. train_loss: {train_loss:.8f}. eval_loss: {eval_loss:.4f} degrees"
             )
 
-            torch.save(self.model.state_dict(), str(self.model_dir / "last.pth"))
+            torch.save(self.model.state_dict(), str(self.finder.model_dir / "last.pth"))
             if eval_loss < best_eval_loss:
                 best_eval_loss = eval_loss
-                torch.save(self.model.state_dict(), str(self.model_dir / "best.pth"))
+                torch.save(self.model.state_dict(), str(self.finder.model_dir / "best.pth"))
 
         x = np.arange(epoches, dtype=np.int16)
 
         fig, ax = plt.subplots(figsize=(8, 8))
         ax.plot(x, eval_loss_vec)
-        fig.savefig(str(self.model_dir / "eval_loss.png"))
+        fig.savefig(str(self.finder.model_dir / "eval_loss.png"))
 
         fig, ax = plt.subplots(figsize=(8, 8))
         ax.plot(x, train_loss_vec)
-        fig.savefig(str(self.model_dir / "train_loss.png"))
+        fig.savefig(str(self.finder.model_dir / "train_loss.png"))
 
         fig, ax = plt.subplots(figsize=(8, 8))
         ax.plot(x, lr_vec)
-        fig.savefig(str(self.model_dir / "lr.png"))
+        fig.savefig(str(self.finder.model_dir / "lr.png"))

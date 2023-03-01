@@ -1,10 +1,39 @@
 import os
-from pathlib import Path
-from typing import Optional, Sequence, Tuple, TypeVar
+from typing import Sequence, Tuple, TypeVar
+
+from PIL.Image import Image
+from torch import Tensor
+from torchvision.transforms import Normalize
+from torchvision.transforms import functional as F
 
 from . import const
+from .dataset.helper import DEFAULT_NORM
 
 _T = TypeVar('_T')
+
+
+def strip_circle_border(src: Image, target_size: int = 224, norm: Normalize = DEFAULT_NORM) -> Tensor:
+    """
+    strip the circle border
+
+    Args:
+        src (Image): source image
+        target_size (int, optional): target size. Defaults to 224.
+        norm (Normalize, optional): normalize policy
+
+    Returns:
+        Tensor: striped tensor ([C,H,W]=[src,target_size,target_size])
+    """
+
+    src_size = src.height
+    assert src.height == src.width
+
+    dst = F.to_tensor(src)
+    dst = F.center_crop(dst, src_size / const.SQRT2)
+    dst = F.resize(dst, target_size)
+    dst = norm(dst)
+
+    return dst
 
 
 def slice_from_range(seq: Sequence[_T], _range: Tuple[float, float]) -> Sequence[_T]:
@@ -29,39 +58,6 @@ def slice_from_range(seq: Sequence[_T], _range: Tuple[float, float]) -> Sequence
     return seq[start:end]
 
 
-def find_out_model_path(cls_name: str, index: Optional[int] = None) -> Path:
-    """
-    Use cls_name and index to find out the path of model
-
-    Args:
-        cls_name (Module): name of the model cls
-        index (int, optional): use which index. use last model if None. Defaults to None.
-
-    Returns:
-        Path: path to the model
-    """
-
-    models_dir = Path(const.MODELS_DIR) / cls_name
-
-    if index is None:
-        try:
-            *_, model_dir = models_dir.iterdir()
-        except ValueError:
-            raise FileNotFoundError(f"{models_dir} is empty")
-
-    else:
-        model_dir = None
-        for d in models_dir.iterdir():
-            _, index_str = d.name.rsplit('_', 1)
-            if index == int(index_str):
-                model_dir = d
-        if model_dir is None:
-            raise FileNotFoundError(f"model_dir not exist. index={index}")
-
-    model_path = model_dir / 'best.pth'
-    return model_path
-
-
 NUM_WORKERS = None
 
 
@@ -74,7 +70,7 @@ def default_num_workers() -> int:
         else:
             cpu_count = cpu_count >> 1
             if cpu_count > 2:
-                # reserve 2 cores for other application
+                # reserve 2 cores for other apps
                 NUM_WORKERS = cpu_count - 2
             else:
                 NUM_WORKERS = 0
