@@ -16,14 +16,14 @@ CNN预测图片旋转角度
 
 + 一张显存4G以上的GPU
 
-+ 确保你的`Python`版本`>=3.8`
++ 确保你的`Python`版本`>=3.8 <3.11`
 
 + 确保你的`PyTorch`版本`>=1.11`
 
 + 拉取代码并安装依赖库
 
 ```shell
-git clone https://github.com/Starry-OvO/rotate-captcha-crack.git
+git clone --depth=1 https://github.com/Starry-OvO/rotate-captcha-crack.git
 cd ./rotate-captcha-crack
 pip install .
 ```
@@ -45,6 +45,20 @@ Linux环境需要配置GUI或者自己把debug方法从显示图像改成保存�
 ```bash
 python test_captcha.py
 ```
+
+### 使用http服务端
+
++ 安装额外依赖
+
+```shell
+pip install aiohttp httpx[cli]
+```
+
++ 运行http服务端
+  
+`python server.py`
+
++ 另开一命令行窗口
 
 ## 训练新模型
 

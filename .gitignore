@@ -8,6 +8,7 @@
 !train.py
 !test.py
 !test_captcha.py
+!server.py
 
 !rotate_captcha_crack
 !rotate_captcha_crack/**
