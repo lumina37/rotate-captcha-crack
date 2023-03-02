@@ -13,7 +13,7 @@ routes = web.RouteTableDef()
 dumps = functools.partial(json.dumps, separators=(',', ':'))
 
 
-@routes.get('/')
+@routes.post('/')
 async def hello(request: web.Request):
     resp = {'err': {'code': 0, 'msg': 'success'}}
 

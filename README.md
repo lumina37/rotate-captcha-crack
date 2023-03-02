@@ -30,6 +30,17 @@ pip install .
 
 注意不要漏了`install`后面那个`.`
 
++ 或者，使用虚拟环境
+
+```shell
+git clone --depth=1 https://github.com/Starry-OvO/rotate-captcha-crack.git
+python -m venv ./rotate-captcha-crack
+cd ./rotate-captcha-crack
+# 根据你的系统类型挑选一个合适的脚本激活虚拟环境 ./Script/active*
+python -m pip install -U pip
+pip install .
+```
+
 ### 下载模型
 
 下载[Release](https://github.com/Starry-OvO/rotate-captcha-crack/releases)中的压缩包并解压到`./models`文件夹下
@@ -63,7 +74,7 @@ python server.py
 + 另开一命令行窗口发送图像
 
 ```shell
- httpx -m get http://127.0.0.1:4396 -f image .\test.jpg
+ httpx -m POST http://127.0.0.1:4396 -f img ./test.jpg
 ```
 
 ## 训练新模型
