@@ -56,9 +56,15 @@ pip install aiohttp httpx[cli]
 
 + 运行http服务端
   
-`python server.py`
+```shell
+python server.py
+```
 
-+ 另开一命令行窗口
++ 另开一命令行窗口发送图像
+
+```shell
+ httpx -m get http://127.0.0.1:4396 -f image .\test.jpg
+```
 
 ## 训练新模型
 
