@@ -1,31 +1,9 @@
 import torch
-import torch.nn as nn
 from torch import Tensor
+from torch.nn import Module
 
 
-class DistanceBetweenAngles(nn.Module):
-    """
-    Only for Evaluate!
-
-    Args:
-        cycle (float): How much will the factor increase after 0°->360°. Defaults to 1.0.
-    """
-
-    def __init__(self, cycle: float = 1.0) -> None:
-        super(DistanceBetweenAngles, self).__init__()
-        self.cycle = cycle
-        self.half_cycle = cycle / 2
-
-    @torch.no_grad()
-    def forward(self, predict: Tensor, target: Tensor) -> Tensor:
-        predict = predict.fmod(self.cycle)  # need copy
-        target = target.fmod(self.cycle)
-        loss_tensor = self.half_cycle - ((predict - target).abs_() - self.half_cycle).abs_()
-        loss = loss_tensor.mean()
-        return loss
-
-
-class RotationLoss(nn.Module):
+class RotationLoss(Module):
     """
     Optimized MSELoss. Including a cosine correction to reduce the distance between 0 and 1.
     """
