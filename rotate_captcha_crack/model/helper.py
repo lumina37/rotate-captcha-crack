@@ -17,8 +17,8 @@ class WhereIsMyModel(object):
         model (Module): the model you wanna use
 
     Example:
-        for existing model: `FindOutModel(model).with_index(opts.index).model_dir`
-        for training new model: `FindOutModel(model).model_dir`
+        find existing model: `FindOutModel(model).with_index(index).model_dir`
+        obtain new model: `FindOutModel(model).model_dir`
     """
 
     __slots__ = [
