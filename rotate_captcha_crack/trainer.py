@@ -166,9 +166,9 @@ class Trainer(object):
             (self.finder.model_dir / CKPT_PATH).mkdir(0o755, exist_ok=True)
             (self.finder.model_dir / LOG_PATH).mkdir(0o755, exist_ok=True)
 
-        start_t = time.perf_counter()
-
         for epoch_idx in range(self.last_epoch + 1, self.epoches):
+            start_t = time.perf_counter()
+            
             self.model.train()
             total_train_loss = 0.0
             steps = 0
@@ -191,9 +191,6 @@ class Trainer(object):
             train_loss = total_train_loss / steps
             self.train_loss_array[epoch_idx] = train_loss
 
-            self.lr_scheduler.step(metrics=train_loss)
-            self.lr_array[epoch_idx] = self.lr_scheduler._last_lr[0]
-
             self.model.eval()
             total_eval_loss = 0.0
             eval_batch_count = 0
@@ -211,7 +208,10 @@ class Trainer(object):
             eval_loss = total_eval_loss / eval_batch_count
             self.eval_loss_array[epoch_idx] = eval_loss
 
-            self.t_cost += time.perf_counter() - start_t
+            self.lr_scheduler.step(metrics=eval_loss)
+            self.lr_array[epoch_idx] = self.lr_scheduler._last_lr[0]
+
+            self.t_cost += (time.perf_counter() - start_t)
             self.log.info(
                 f"Epoch#{epoch_idx}. time_cost: {self.t_cost:.2f} s. train_loss: {train_loss:.8f}. eval_loss: {eval_loss:.8f}"
             )

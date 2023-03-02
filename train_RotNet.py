@@ -2,12 +2,12 @@ import argparse
 from pathlib import Path
 
 import torch
+from torch.nn import CrossEntropyLoss
 from torch.utils.data import DataLoader
 
 from rotate_captcha_crack.common import device
-from rotate_captcha_crack.dataset import ImgSeqFromPaths, RCCDataset
-from rotate_captcha_crack.loss import RotationLoss
-from rotate_captcha_crack.model import RCCNet_fc_1
+from rotate_captcha_crack.dataset import ImgSeqFromPaths, RotDataset
+from rotate_captcha_crack.model import RotNet_reg
 from rotate_captcha_crack.trainer import Trainer
 from rotate_captcha_crack.utils import default_num_workers, slice_from_range
 from rotate_captcha_crack.visualizer import visualize_train
@@ -25,9 +25,9 @@ if __name__ == "__main__":
 
     img_paths = list(dataset_root.glob('*.jpg'))
     train_img_paths = slice_from_range(img_paths, (0.0, 0.9))
-    train_dataset = RCCDataset(ImgSeqFromPaths(train_img_paths))
+    train_dataset = RotDataset(ImgSeqFromPaths(train_img_paths))
     val_img_paths = slice_from_range(img_paths, (0.9, 0.95))
-    val_dataset = RCCDataset(ImgSeqFromPaths(val_img_paths))
+    val_dataset = RotDataset(ImgSeqFromPaths(val_img_paths))
 
     num_workers = default_num_workers()
     train_dataloader = DataLoader(
@@ -43,13 +43,14 @@ if __name__ == "__main__":
         drop_last=True,
     )
 
-    model = RCCNet_fc_1()
+    model = RotNet_reg()
     model = model.to(device)
 
-    lr = 0.0004
-    optmizer = torch.optim.Adam(model.parameters(), lr=lr)
-    lr_scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optmizer, patience=4, min_lr=lr / 1e3)
-    loss = RotationLoss(lambda_cos=0.24, exponent=2)
+    lr = 0.001
+    momentum = 0.9
+    optmizer = torch.optim.SGD(model.parameters(), lr=lr, momentum=momentum)
+    lr_scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optmizer, patience=3)
+    loss = CrossEntropyLoss()
 
     epoches = 48
     trainer = Trainer(model, train_dataloader, val_dataloader, optmizer, lr_scheduler, loss, epoches)

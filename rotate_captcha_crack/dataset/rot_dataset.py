@@ -54,7 +54,7 @@ class RotDataset(Dataset[TypeRotItem]):
 
     def __getitem__(self, idx: int) -> TypeRotItem:
         img_ts = self.imgseq[idx]
-        angle: int = self.angles[idx]
+        angle: int = self.angles[idx].item()
         angle_ts = torch.zeros(ROTNET_CLS_NUM, dtype=torch.float32)
         angle_ts[angle] = 1.0  # one-hot
 

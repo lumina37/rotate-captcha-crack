@@ -1,4 +1,7 @@
+import torch
 from torch import Tensor
+
+from .const import ROTNET_CLS_NUM
 
 ONE_CYCLE = 1.0
 HALF_CYCLE = ONE_CYCLE / 2
@@ -67,8 +70,8 @@ def dist_between_onehot(lhs: Tensor, rhs: Tensor) -> float:
         Multiply it by 360° to obtain dist in degrees.
     """
 
-    lhs = lhs.argmax(1)
-    rhs = rhs.argmax(1)
+    lhs = lhs.argmax(1).to(dtype=torch.float32).div_(ROTNET_CLS_NUM)
+    rhs = rhs.argmax(1).to(dtype=torch.float32).div_(ROTNET_CLS_NUM)
 
     loss = dist_between_angles_(lhs, rhs)
 

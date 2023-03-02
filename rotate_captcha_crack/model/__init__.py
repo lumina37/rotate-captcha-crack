@@ -5,5 +5,5 @@ Use rotate(-degree, ...) to recover the image.
 """
 
 from .helper import WhereIsMyModel
-from .RCCNet_fc_1 import RCCNet_fc_1
-from .RotNet_reg import RotNet_reg
+from .rcc_net_v0_2 import RCCNet_v0_2
+from .rot_net_reg import RotNet_reg

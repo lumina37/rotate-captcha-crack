@@ -17,18 +17,16 @@ class RotNet_reg(nn.Module):
     def __init__(self, train: bool = True) -> None:
         super(RotNet_reg, self).__init__()
 
-        weights = models.RegNet_Y_1_6GF_Weights.DEFAULT if train else None
-        self.backbone = models.regnet_y_1_6gf(weights=weights)
+        weights = models.RegNet_Y_3_2GF_Weights.DEFAULT if train else None
+        self.backbone = models.regnet_y_3_2gf(weights=weights)
 
         fc_channels = self.backbone.fc.in_features
         del self.backbone.fc
         self.backbone.fc = nn.Linear(fc_channels, ROTNET_CLS_NUM)
 
         if train:
-            nn.init.normal_(self.backbone.fc.weight, mean=0.0, std=0.01)
+            nn.init.normal_(self.backbone.fc.weight, mean=0.0, std=0.1)
             nn.init.zeros_(self.backbone.fc.bias)
-
-        self.softmax = nn.Softmax(ROTNET_CLS_NUM)
 
     def forward(self, x: Tensor) -> Tensor:
         """
@@ -42,7 +40,6 @@ class RotNet_reg(nn.Module):
         """
 
         x = self.backbone.forward(x)
-        x = self.softmax(x)
 
         return x
 

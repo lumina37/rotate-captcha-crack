@@ -5,8 +5,10 @@
 
 !pyproject.toml
 
-!train.py
-!test.py
+!train_RCCNet.py
+!train_RotNet.py
+!test_RCCNet.py
+!test_RotNet.py
 !test_captcha.py
 !server.py
 

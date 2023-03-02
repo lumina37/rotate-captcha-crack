@@ -3,16 +3,17 @@ from torch import Tensor
 from torchvision import models
 
 
-class RCCNet_fc_1(nn.Module):
+class RCCNet_v0_2(nn.Module):
     """
-    RCCNet with single fc
+    RCCNet v0.2
+    with single fc layer
 
     Args:
         train (bool, optional): True to load the pretrained parameters. Defaults to True.
     """
 
     def __init__(self, train: bool = True) -> None:
-        super(RCCNet_fc_1, self).__init__()
+        super(RCCNet_v0_2, self).__init__()
 
         weights = models.RegNet_Y_1_6GF_Weights.DEFAULT if train else None
         self.backbone = models.regnet_y_1_6gf(weights=weights)

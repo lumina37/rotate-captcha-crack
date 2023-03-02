@@ -2,13 +2,20 @@
 
 CNN预测图片旋转角度
 
-在下文提到的数据集上训练48个epoch（耗时31.9min）得到的平均预测误差为`18.66°`，模型文件大小`39.7MB`，可用于破解百度旋图验证码
+在下文提到的数据集上训练48个epoch（耗时40min）得到的平均预测误差为`18.66°`，模型文件大小`39.7MB`，可用于破解百度旋图验证码
 
 测试效果如下
 
 ![test_result](https://user-images.githubusercontent.com/48282276/221872572-7dfc7fcc-5bda-43e8-bee7-3a55ffd6e8a9.png)
 
 其中百度验证码图片来自[RotateCaptchaBreak](https://github.com/chencchen/RotateCaptchaBreak/tree/master/data/baiduCaptcha)
+
+本仓库实现了两类模型
+
+| 名称        | backbone          | 损失函数           | 同源测试集角度误差（越小越好） | 大小（MB） |
+| ----------- | ----------------- | ------------------ | ------------------------------ | ---------- |
+| RotNet_neg  | RegNetY 3.2GFLOPs | 360分类 交叉熵     | 87.3164°                       | 70.8       |
+| RCCNet_v0_2 | RegNetY 3.2GFLOPs | 回归 改进的MSELoss | 20.1210°                       | 70.8       |
 
 ## 体验已有模型
 
@@ -36,7 +43,7 @@ pip install .
 git clone --depth=1 https://github.com/Starry-OvO/rotate-captcha-crack.git
 python -m venv ./rotate-captcha-crack
 cd ./rotate-captcha-crack
-# 根据你的系统类型挑选一个合适的脚本激活虚拟环境 ./Script/active*
+# 根据你的Shell类型挑选一个合适的脚本激活虚拟环境 ./Script/active*
 python -m pip install -U pip
 pip install .
 ```
@@ -105,7 +112,7 @@ python test.py
 
 + 要特别注意，搜索RotNet搜出来的模型和论文是两码事，模型是我上面提到的`d4nst/RotNet`，论文是[*Unsupervised Representation Learning by Predicting Image Rotations (ICLR2018)*](https://arxiv.org/abs/1803.07728)，对应的开源仓库是[`FeatureLearningRotNet`](https://github.com/gidariss/FeatureLearningRotNet)。不要傻傻地用论文里的4/8分类来做旋转检测，那个是用来做内容分类的，在旋转角分类上效果很差，360分类才是做旋转角分类应该用的。下文的`RotNet`都是指代[`d4nst/RotNet`](https://github.com/d4nst/RotNet)
 
-+ `RCCNet`的backbone是[`regnet (CVPR2020)`](https://arxiv.org/abs/2003.13678)的`RegNetY 1.6GFLOPs`
++ `RCCNet`的backbone是[`regnet (CVPR2020)`](https://arxiv.org/abs/2003.13678)的`RegNetY 3.2GFLOPs`
 
 + `RotNet`中使用的交叉熵损失会令`1°`和`359°`之间的度量距离接近一个类似`358°`的较大值，这显然是一个违背常识的结果，它们之间的度量距离应当是一个类似`2°`的极小值。而[d4nst](https://github.com/d4nst)给出的[`angle_error_regression`](https://github.com/d4nst/RotNet/blob/a56ea59818bbdd76d4dd8d83b8bbbaae6a802310/utils.py#L30-L36)损失函数效果较差，因为该损失函数在应对离群值时的梯度方向存在明显问题，你可以在后续的损失函数图像比对中轻松看出这一点
 
