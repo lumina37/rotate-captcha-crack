@@ -6,7 +6,7 @@ from torch import Tensor
 from torch.utils.data import DataLoader
 
 from rotate_captcha_crack.common import device
-from rotate_captcha_crack.criterion import dist_between_angles
+from rotate_captcha_crack.criterion import dist_between_angles_
 from rotate_captcha_crack.dataset import ImgSeqFromPaths, RCCDataset
 from rotate_captcha_crack.model import RCCNet_fc_1, WhereIsMyModel
 from rotate_captcha_crack.utils import default_num_workers, slice_from_range
@@ -45,7 +45,7 @@ if __name__ == '__main__':
 
             predict: Tensor = model(source)
 
-            digree_diff = dist_between_angles(predict, target) * 360
+            digree_diff = dist_between_angles_(predict, target) * 360
             total_degree_diff += digree_diff
 
             batch_count += 1
