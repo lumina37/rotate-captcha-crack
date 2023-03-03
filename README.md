@@ -12,16 +12,16 @@ CNN预测图片旋转角度
 
 本仓库实现了两类模型
 
-| 名称        | backbone          | 损失函数           | 同源测试集角度误差（越小越好） | 大小（MB） |
-| ----------- | ----------------- | ------------------ | ------------------------------ | ---------- |
-| RotNet_neg  | RegNetY 3.2GFLOPs | 360分类/交叉熵     | 87.3164°                       | 70.8       |
-| RCCNet_v0_3 | RegNetY 3.2GFLOPs | 回归/改进的MSELoss | 20.1210°                       | 70.8       |
+| 名称        | backbone          | 损失函数         | 同源测试集误差（越小越好） | 大小（MB） |
+| ----------- | ----------------- | ---------------- | -------------------------- | ---------- |
+| RotNet_neg  | RegNetY 3.2GFLOPs | 交叉熵           | 87.3164°（待微调）         | 70.8       |
+| RCCNet_v0_3 | RegNetY 3.2GFLOPs | MSELoss+余弦修正 | 20.1210°                   | 70.8       |
 
 ## 体验已有模型
 
 ### 准备环境
 
-+ 一张显存4G以上的GPU
++ 一张显存4G以上的GPU（如需训练）
 
 + 确保你的`Python`版本`>=3.8 <3.11`
 
@@ -52,7 +52,7 @@ pip install .
 
 下载[Release](https://github.com/Starry-OvO/rotate-captcha-crack/releases)中的压缩包并解压到`./models`文件夹下
 
-文件目录结构类似`./models/RCCNet_fc_1/230228_20_07_25_000/best.pth`
+文件目录结构类似`./models/RCCNet_v0_3/230228_20_07_25_000/best.pth`
 
 本项目仍处于beta阶段，模型名称会频繁发生变更，因此出现任何`FileNotFoundError`请先尝试用git回退到对应的tag
 
