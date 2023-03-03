@@ -52,7 +52,8 @@ if __name__ == "__main__":
     loss = RotationLoss(lambda_cos=0.24, exponent=2)
 
     epoches = 48
-    trainer = Trainer(model, train_dataloader, val_dataloader, optmizer, lr_scheduler, loss, epoches)
+    steps = 128
+    trainer = Trainer(model, train_dataloader, val_dataloader, optmizer, lr_scheduler, loss, epoches, steps)
     ### Custom configuration area ###
     #################################
 

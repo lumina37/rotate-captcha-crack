@@ -46,13 +46,15 @@ if __name__ == "__main__":
     model = RotNet_reg()
     model = model.to(device)
 
-    lr = 0.005
-    optmizer = torch.optim.Adam(model.parameters(), lr=lr)
-    lr_scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optmizer, factor=0.2, patience=4)
+    lr = 0.01
+    momentum = 0.9
+    optmizer = torch.optim.SGD(model.parameters(), lr=lr, momentum=momentum)
+    lr_scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optmizer, factor=0.2, patience=3)
     loss = CrossEntropyLoss()
 
-    epoches = 48
-    trainer = Trainer(model, train_dataloader, val_dataloader, optmizer, lr_scheduler, loss, epoches)
+    epoches = 128
+    steps = 128
+    trainer = Trainer(model, train_dataloader, val_dataloader, optmizer, lr_scheduler, loss, epoches, steps)
     ### Custom configuration area ###
     #################################
 

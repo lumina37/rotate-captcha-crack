@@ -38,6 +38,7 @@ class Trainer(object):
         'lr_scheduler',
         'loss',
         'epoches',
+        'steps',
         'finder',
         'lr_array',
         'train_loss_array',
@@ -58,6 +59,7 @@ class Trainer(object):
         lr_scheduler: ReduceLROnPlateau,
         loss: Module,
         epoches: int,
+        steps: int,
     ) -> None:
         self.model = model
         self.train_dataloader = train_dataloader
@@ -66,6 +68,7 @@ class Trainer(object):
         self.lr_scheduler = lr_scheduler
         self.loss = loss
         self.epoches = epoches
+        self.steps = steps
         self.finder = WhereIsMyModel(model)
 
         self._log = None
@@ -168,7 +171,7 @@ class Trainer(object):
 
         for epoch_idx in range(self.last_epoch + 1, self.epoches):
             start_t = time.perf_counter()
-            
+
             self.model.train()
             total_train_loss = 0.0
             steps = 0
@@ -187,6 +190,9 @@ class Trainer(object):
 
                 self.optmizer.step()
                 steps += 1
+
+                if steps >= self.steps:
+                    break
 
             train_loss = total_train_loss / steps
             self.train_loss_array[epoch_idx] = train_loss
@@ -211,7 +217,7 @@ class Trainer(object):
             self.lr_scheduler.step(metrics=eval_loss)
             self.lr_array[epoch_idx] = self.lr_scheduler._last_lr[0]
 
-            self.t_cost += (time.perf_counter() - start_t)
+            self.t_cost += time.perf_counter() - start_t
             self.log.info(
                 f"Epoch#{epoch_idx}. time_cost: {self.t_cost:.2f} s. train_loss: {train_loss:.8f}. eval_loss: {eval_loss:.8f}"
             )
