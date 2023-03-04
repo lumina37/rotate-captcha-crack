@@ -3,7 +3,7 @@ from torch import Tensor
 from torchvision import models
 
 
-class RCCNet_v0_3(nn.Module):
+class RCCNet_v0_4(nn.Module):
     """
     RCCNet v0.2
     with single fc layer
@@ -13,7 +13,7 @@ class RCCNet_v0_3(nn.Module):
     """
 
     def __init__(self, train: bool = True) -> None:
-        super(RCCNet_v0_3, self).__init__()
+        super(RCCNet_v0_4, self).__init__()
 
         weights = models.RegNet_Y_3_2GF_Weights.DEFAULT if train else None
         self.backbone = models.regnet_y_3_2gf(weights=weights)

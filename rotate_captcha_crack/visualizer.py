@@ -24,7 +24,7 @@ def visualize_train(model_dir: Path) -> None:
 
     lr_array = np.load(checkpoint_dir / "lr.npy")
     train_loss_array = np.load(checkpoint_dir / "train_loss.npy")
-    eval_loss_array = np.load(checkpoint_dir / "eval_loss.npy")
+    val_loss_array = np.load(checkpoint_dir / "val_loss.npy")
 
     epoches = last_epoch + 1
     x = np.arange(epoches, dtype=np.int16)
@@ -47,8 +47,8 @@ def visualize_train(model_dir: Path) -> None:
     fig.savefig(figure_dir / "train_loss.png")
 
     fig, ax = plt.subplots(figsize=(8, 8))
-    ax.plot(x, eval_loss_array[:epoches])
+    ax.plot(x, val_loss_array[:epoches])
     ax.xaxis.set_major_locator(MaxNLocator(integer=True))
     ax.set_xlabel('epoches')
-    ax.set_title('eval_loss - epoches')
-    fig.savefig(figure_dir / "eval_loss.png")
+    ax.set_title('val_loss - epoches')
+    fig.savefig(figure_dir / "val_loss.png")

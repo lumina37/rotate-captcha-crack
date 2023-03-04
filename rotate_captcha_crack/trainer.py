@@ -6,13 +6,12 @@ import numpy as np
 import torch
 from torch import Tensor
 from torch.nn import Module
-from torch.optim import Optimizer
-from torch.optim.lr_scheduler import ReduceLROnPlateau
 from torch.utils.data import DataLoader
 
 from .common import device
 from .const import CKPT_PATH, LOG_PATH
 from .logging import RCCLogger
+from .lr import TypeLR
 from .model import WhereIsMyModel
 
 
@@ -24,7 +23,7 @@ class Trainer(object):
         model (Module): support `RCCNet` and `RotNet`
         train_dataloader (DataLoader): dl for training
         val_dataloader (DataLoader): dl for validation
-        optmizer (Optimizer): set learning rate
+        optimizer (Optimizer): set learning rate
         lr_scheduler (ReduceLROnPlateau): change learning rate by epoches
         loss (Module): compute loss between `predict` and `target`
         epoches (int): how many epoches to train
@@ -34,16 +33,15 @@ class Trainer(object):
         'model',
         'train_dataloader',
         'val_dataloader',
-        'optmizer',
-        'lr_scheduler',
+        'lr',
         'loss',
         'epoches',
         'steps',
         'finder',
         'lr_array',
         'train_loss_array',
-        'eval_loss_array',
-        'best_eval_loss',
+        'val_loss_array',
+        'best_val_loss',
         'last_epoch',
         't_cost',
         '_log',
@@ -55,8 +53,7 @@ class Trainer(object):
         model: Module,
         train_dataloader: DataLoader,
         val_dataloader: DataLoader,
-        optmizer: Optimizer,
-        lr_scheduler: ReduceLROnPlateau,
+        lr: TypeLR,
         loss: Module,
         epoches: int,
         steps: int,
@@ -64,8 +61,7 @@ class Trainer(object):
         self.model = model
         self.train_dataloader = train_dataloader
         self.val_dataloader = val_dataloader
-        self.optmizer = optmizer
-        self.lr_scheduler = lr_scheduler
+        self.lr = lr
         self.loss = loss
         self.epoches = epoches
         self.steps = steps
@@ -110,8 +106,7 @@ class Trainer(object):
         torch.save(
             {
                 'model': self.model.state_dict(),
-                'optmizer': self.optmizer.state_dict(),
-                'lr_scheduler': self.lr_scheduler.state_dict(),
+                'lr': self.lr.state_dict(),
             },
             checkpoint_dir / "last.ckpt",
         )
@@ -119,7 +114,7 @@ class Trainer(object):
         with open(checkpoint_dir / "last.json", 'w', encoding='utf-8') as f:
             json.dump(
                 {
-                    'best_eval_loss': self.best_eval_loss,
+                    'best_val_loss': self.best_val_loss,
                     'last_epoch': self.last_epoch,
                     't_cost': self.t_cost,
                 },
@@ -129,7 +124,7 @@ class Trainer(object):
 
         np.save(checkpoint_dir / "lr.npy", self.lr_array)
         np.save(checkpoint_dir / "train_loss.npy", self.train_loss_array)
-        np.save(checkpoint_dir / "eval_loss.npy", self.eval_loss_array)
+        np.save(checkpoint_dir / "val_loss.npy", self.val_loss_array)
 
     def load_checkpoint(self) -> None:
         """
@@ -140,18 +135,17 @@ class Trainer(object):
 
         state_dict = torch.load(checkpoint_dir / "last.ckpt")
         self.model.load_state_dict(state_dict['model'])
-        self.optmizer.load_state_dict(state_dict['optmizer'])
-        self.lr_scheduler.load_state_dict(state_dict['lr_scheduler'])
+        self.lr.load_state_dict(state_dict['lr'])
 
         with open(checkpoint_dir / "last.json", 'rb') as f:
             variables = json.load(f)
-            self.best_eval_loss = variables['best_eval_loss']
+            self.best_val_loss = variables['best_val_loss']
             self.last_epoch = variables['last_epoch']
             self.t_cost = variables['t_cost']
 
         self.lr_array = np.load(checkpoint_dir / "lr.npy")
         self.train_loss_array = np.load(checkpoint_dir / "train_loss.npy")
-        self.eval_loss_array = np.load(checkpoint_dir / "eval_loss.npy")
+        self.val_loss_array = np.load(checkpoint_dir / "val_loss.npy")
 
     def train(self) -> None:
         """
@@ -161,8 +155,8 @@ class Trainer(object):
         if self._is_new_task:
             self.lr_array = np.empty(self.epoches, dtype=np.float64)
             self.train_loss_array = np.empty(self.epoches, dtype=np.float64)
-            self.eval_loss_array = np.empty(self.epoches, dtype=np.float64)
-            self.best_eval_loss = sys.maxsize
+            self.val_loss_array = np.empty(self.epoches, dtype=np.float64)
+            self.best_val_loss = sys.maxsize
             self.last_epoch = 0
             self.t_cost = 0.0
 
@@ -180,15 +174,12 @@ class Trainer(object):
                 source: Tensor = source.to(device=device)
                 target: Tensor = target.to(device=device)
 
-                self.optmizer.zero_grad()
-                predict: Tensor = self.model(source)
-
-                loss: Tensor = self.loss(predict, target)
-                loss.backward()
+                with self.lr.optim_step():
+                    predict: Tensor = self.model(source)
+                    loss: Tensor = self.loss(predict, target)
+                    loss.backward()
 
                 total_train_loss += loss.cpu().item()
-
-                self.optmizer.step()
                 steps += 1
 
                 if steps >= self.steps:
@@ -198,7 +189,7 @@ class Trainer(object):
             self.train_loss_array[epoch_idx] = train_loss
 
             self.model.eval()
-            total_eval_loss = 0.0
+            total_val_loss = 0.0
             eval_batch_count = 0
             with torch.no_grad():
                 for source, target in self.val_dataloader:
@@ -207,23 +198,23 @@ class Trainer(object):
 
                     predict: Tensor = self.model(source)
 
-                    eval_loss: Tensor = self.loss(predict, target)
-                    total_eval_loss += eval_loss.mean().cpu().item()
+                    val_loss: Tensor = self.loss(predict, target)
+                    total_val_loss += val_loss.mean().cpu().item()
                     eval_batch_count += 1
 
-            eval_loss = total_eval_loss / eval_batch_count
-            self.eval_loss_array[epoch_idx] = eval_loss
+            val_loss = total_val_loss / eval_batch_count
+            self.val_loss_array[epoch_idx] = val_loss
 
-            self.lr_scheduler.step(metrics=eval_loss)
-            self.lr_array[epoch_idx] = self.lr_scheduler._last_lr[0]
+            self.lr.sched_step(val_loss)
+            self.lr_array[epoch_idx] = self.lr.last_lr
 
             self.t_cost += time.perf_counter() - start_t
             self.log.info(
-                f"Epoch#{epoch_idx}. time_cost: {self.t_cost:.2f} s. train_loss: {train_loss:.8f}. eval_loss: {eval_loss:.8f}"
+                f"Epoch#{epoch_idx}. time_cost: {self.t_cost:.2f} s. train_loss: {train_loss:.8f}. val_loss: {val_loss:.8f}"
             )
 
-            if eval_loss < self.best_eval_loss:
-                self.best_eval_loss = eval_loss
+            if val_loss < self.best_val_loss:
+                self.best_val_loss = val_loss
                 torch.save(self.model.state_dict(), self.finder.model_dir / "best.pth")
 
             self.last_epoch = epoch_idx

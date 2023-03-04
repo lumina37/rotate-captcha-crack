@@ -7,7 +7,8 @@ from torch.utils.data import DataLoader
 from rotate_captcha_crack.common import device
 from rotate_captcha_crack.dataset import ImgSeqFromPaths, RCCDataset
 from rotate_captcha_crack.loss import RotationLoss
-from rotate_captcha_crack.model import RCCNet_v0_3
+from rotate_captcha_crack.lr import LR
+from rotate_captcha_crack.model import RCCNet_v0_4
 from rotate_captcha_crack.trainer import Trainer
 from rotate_captcha_crack.utils import default_num_workers, slice_from_range
 from rotate_captcha_crack.visualizer import visualize_train
@@ -43,17 +44,18 @@ if __name__ == "__main__":
         drop_last=True,
     )
 
-    model = RCCNet_v0_3()
+    model = RCCNet_v0_4()
     model = model.to(device)
 
     lr = 0.0004
-    optmizer = torch.optim.Adam(model.parameters(), lr=lr)
-    lr_scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optmizer, patience=4, min_lr=lr / 1e3)
+    optimizer = torch.optim.Adam(model.parameters(), lr=lr)
+    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, patience=4, min_lr=lr / 1e3)
+    lr = LR(lr, scheduler, optimizer).with_val_loss()
     loss = RotationLoss(lambda_cos=0.24, exponent=2)
 
     epoches = 48
     steps = 128
-    trainer = Trainer(model, train_dataloader, val_dataloader, optmizer, lr_scheduler, loss, epoches, steps)
+    trainer = Trainer(model, train_dataloader, val_dataloader, lr, loss, epoches, steps)
     ### Custom configuration area ###
     #################################
 

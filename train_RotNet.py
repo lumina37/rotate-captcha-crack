@@ -7,6 +7,7 @@ from torch.utils.data import DataLoader
 
 from rotate_captcha_crack.common import device
 from rotate_captcha_crack.dataset import ImgSeqFromPaths, RotDataset
+from rotate_captcha_crack.lr import LR
 from rotate_captcha_crack.model import RotNet_reg
 from rotate_captcha_crack.trainer import Trainer
 from rotate_captcha_crack.utils import default_num_workers, slice_from_range
@@ -48,13 +49,14 @@ if __name__ == "__main__":
 
     lr = 0.01
     momentum = 0.9
-    optmizer = torch.optim.SGD(model.parameters(), lr=lr, momentum=momentum)
-    lr_scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optmizer, factor=0.2, patience=3)
+    optimizer = torch.optim.SGD(model.parameters(), lr=lr, momentum=momentum)
+    scheduler = torch.optim.lr_scheduler.CosineAnnealingWarmRestarts(optimizer, T_0=5, T_mult=2, eta_min=lr / 10e3)
+    lr = LR(lr, scheduler, optimizer)
     loss = CrossEntropyLoss()
 
     epoches = 128
     steps = 128
-    trainer = Trainer(model, train_dataloader, val_dataloader, optmizer, lr_scheduler, loss, epoches, steps)
+    trainer = Trainer(model, train_dataloader, val_dataloader, lr, loss, epoches, steps)
     ### Custom configuration area ###
     #################################
 

@@ -3,7 +3,6 @@ from typing import Tuple
 import numpy as np
 import torch
 from torch import Tensor
-from torch.nn import functional as F
 from torch.utils.data import Dataset
 from torchvision.transforms import Normalize
 
@@ -58,7 +57,6 @@ class RotDataset(Dataset[TypeRotItem]):
         angle: int = self.angles[idx].item()
         angle_ts = torch.zeros(ROTNET_CLS_NUM, dtype=torch.float32)
         angle_ts[angle] = 1.0  # one-hot
-        angle_ts = F.softmax(angle_ts, 0)
 
         img_ts = square_and_rotate(img_ts, angle, self.target_size)
         img_ts = self.norm(img_ts)
