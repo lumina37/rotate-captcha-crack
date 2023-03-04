@@ -50,7 +50,7 @@ if __name__ == "__main__":
     lr = 0.01
     momentum = 0.9
     optimizer = torch.optim.SGD(model.parameters(), lr=lr, momentum=momentum)
-    scheduler = torch.optim.lr_scheduler.CosineAnnealingWarmRestarts(optimizer, T_0=5, T_mult=2, eta_min=lr / 10e3)
+    scheduler = torch.optim.lr_scheduler.CosineAnnealingWarmRestarts(optimizer, T_0=5, T_mult=2, eta_min=lr / 1e3)
     lr = LR(lr, scheduler, optimizer)
     loss = CrossEntropyLoss()
 
