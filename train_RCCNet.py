@@ -22,7 +22,7 @@ if __name__ == "__main__":
 
     #################################
     ### Custom configuration area ###
-    dataset_root = Path("./datasets/Landscape-Dataset")
+    dataset_root = Path("D:/Dataset/Streetview/data/data")
 
     img_paths = list(dataset_root.glob('*.jpg'))
     train_img_paths = slice_from_range(img_paths, (0.0, 0.9))
@@ -53,7 +53,7 @@ if __name__ == "__main__":
     lr = LR(lr, scheduler, optimizer).with_val_loss()
     loss = RotationLoss(lambda_cos=0.24, exponent=2)
 
-    epoches = 48
+    epoches = 64
     steps = 128
     trainer = Trainer(model, train_dataloader, val_dataloader, lr, loss, epoches, steps)
     ### Custom configuration area ###

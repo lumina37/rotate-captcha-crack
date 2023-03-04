@@ -22,7 +22,7 @@ if __name__ == "__main__":
 
     #################################
     ### Custom configuration area ###
-    dataset_root = Path("./datasets/Landscape-Dataset")
+    dataset_root = Path("D:/Dataset/Streetview/data/data")
 
     img_paths = list(dataset_root.glob('*.jpg'))
     train_img_paths = slice_from_range(img_paths, (0.0, 0.9))
@@ -47,10 +47,10 @@ if __name__ == "__main__":
     model = RotNet_reg()
     model = model.to(device)
 
-    lr = 0.005
+    lr = 0.01
     momentum = 0.9
     optimizer = torch.optim.SGD(model.parameters(), lr=lr, momentum=momentum)
-    scheduler = torch.optim.lr_scheduler.CosineAnnealingWarmRestarts(optimizer, T_0=4, T_mult=1, eta_min=lr / 1e3)
+    scheduler = torch.optim.lr_scheduler.CosineAnnealingWarmRestarts(optimizer, T_0=4)
     lr = LR(lr, scheduler, optimizer)
     loss = CrossEntropyLoss()
 

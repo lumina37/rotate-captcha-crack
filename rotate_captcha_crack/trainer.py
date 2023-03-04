@@ -7,6 +7,7 @@ import torch
 from torch import Tensor
 from torch.nn import Module
 from torch.utils.data import DataLoader
+from tqdm import tqdm, trange
 
 from .common import device
 from .const import CKPT_PATH, LOG_PATH
@@ -170,29 +171,33 @@ class Trainer(object):
             total_train_loss = 0.0
             steps = 0
 
-            for source, target in self.train_dataloader:
-                source: Tensor = source.to(device=device)
-                target: Tensor = target.to(device=device)
+            self.log.debug(f"Epoch#{epoch_idx}. Training process.")
+            with tqdm(total=self.steps) as tbar:
+                for source, target in self.train_dataloader:
+                    source: Tensor = source.to(device=device)
+                    target: Tensor = target.to(device=device)
 
-                with self.lr.optim_step():
-                    predict: Tensor = self.model(source)
-                    loss: Tensor = self.loss(predict, target)
-                    loss.backward()
+                    with self.lr.optim_step():
+                        predict: Tensor = self.model(source)
+                        loss: Tensor = self.loss(predict, target)
+                        loss.backward()
 
-                total_train_loss += loss.cpu().item()
-                steps += 1
+                    total_train_loss += loss.cpu().item()
+                    steps += 1
+                    tbar.update(1)
 
-                if steps >= self.steps:
-                    break
+                    if steps >= self.steps:
+                        break
 
             train_loss = total_train_loss / steps
             self.train_loss_array[epoch_idx] = train_loss
 
+            self.log.debug(f"Epoch#{epoch_idx}. Validating process.")
             self.model.eval()
             total_val_loss = 0.0
             eval_batch_count = 0
             with torch.no_grad():
-                for source, target in self.val_dataloader:
+                for source, target in trange(self.val_dataloader):
                     source: Tensor = source.to(device=device)
                     target: Tensor = target.to(device=device)
 

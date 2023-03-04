@@ -35,8 +35,8 @@ class TypeLR(Protocol):
     @contextlib.contextmanager
     def optim_step(self) -> None:
         """
-        optimizer.zero_grad()
-        ...
+        optimizer.zero_grad()\n
+        ...\n
         optimizer.step()
         """
         ...

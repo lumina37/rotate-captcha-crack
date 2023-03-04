@@ -12,6 +12,8 @@ from .typing import TypeImgSeq
 
 TypeRotItem = Tuple[Tensor, Tensor]
 
+FACTOR2ANGLE = 360 / ROTNET_CLS_NUM
+
 
 class RotDataset(Dataset[TypeRotItem]):
     """
@@ -58,7 +60,7 @@ class RotDataset(Dataset[TypeRotItem]):
         angle_ts = torch.zeros(ROTNET_CLS_NUM, dtype=torch.float32)
         angle_ts[angle] = 1.0  # one-hot
 
-        img_ts = square_and_rotate(img_ts, angle, self.target_size)
+        img_ts = square_and_rotate(img_ts, angle * FACTOR2ANGLE, self.target_size)
         img_ts = self.norm(img_ts)
 
         return img_ts, angle_ts

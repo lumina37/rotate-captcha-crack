@@ -12,10 +12,12 @@ CNN预测图片旋转角度
 
 本仓库实现了两类模型
 
-| 名称        | backbone          | 损失函数         | 同源测试集误差（越小越好） | 大小（MB） |
-| ----------- | ----------------- | ---------------- | -------------------------- | ---------- |
-| RotNet_neg  | RegNetY 3.2GFLOPs | 交叉熵           | 87.3164°（待微调）         | 70.8       |
-| RCCNet_v0_4 | RegNetY 3.2GFLOPs | MSELoss+余弦修正 | 20.1210°                   | 70.8       |
+| 名称        | backbone          | 损失函数         | 跨域测试误差（越小越好） | 大小（MB） |
+| ----------- | ----------------- | ---------------- | ------------------------ | ---------- |
+| RotNet_neg  | RegNetY 3.2GFLOPs | 交叉熵           | 87.3164°（待微调）       | 70.8       |
+| RCCNet_v0_4 | RegNetY 3.2GFLOPs | MSELoss+余弦修正 | 61.4878°                 | 70.8       |
+
+注：跨域测试为谷歌街景训练，[`Landscape-Dataset`](https://github.com/yuweiming70/Landscape-Dataset)测试
 
 ## 体验已有模型
 
@@ -88,7 +90,7 @@ python server.py
 
 ### 准备数据集
 
-+ 我这里直接扒的[`Landscape-Dataset`](https://github.com/yuweiming70/Landscape-Dataset)，你也可以自己收集一些风景照并放到一个文件夹里，图像没有尺寸要求
++ 我这里直接扒的谷歌街景和[`Landscape-Dataset`](https://github.com/yuweiming70/Landscape-Dataset)，你也可以自己收集一些风景照并放到一个文件夹里，图像没有尺寸要求
 
 + 在`train.py`里配置`dataset_root`变量指向装有图片的文件夹
 
