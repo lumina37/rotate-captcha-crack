@@ -61,7 +61,7 @@ def dist_between_onehot(lhs: Tensor, rhs: Tensor) -> float:
 
     Args:
         lhs (Tensor): lhs tensor ([N,C]=[undefined,ROTNET_CLS_NUM], dtype=float32, range=[0,1])
-        rhs (Tensor): rhs tensor ([N,C]=[undefined,ROTNET_CLS_NUM], dtype=float32, range=[0,1])
+        rhs (Tensor): rhs tensor ([N,C]=[undefined], dtype=long, range=[0,ROTNET_CLS_NUM])
 
     Returns:
         float: average distance. range=[0,1]
@@ -71,7 +71,7 @@ def dist_between_onehot(lhs: Tensor, rhs: Tensor) -> float:
     """
 
     lhs = lhs.argmax(1).to(dtype=torch.float32).div_(ROTNET_CLS_NUM)
-    rhs = rhs.argmax(1).to(dtype=torch.float32).div_(ROTNET_CLS_NUM)
+    rhs = rhs.to(dtype=torch.float32).div_(ROTNET_CLS_NUM)
 
     loss = dist_between_angles_(lhs, rhs)
 

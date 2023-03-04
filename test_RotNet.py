@@ -8,7 +8,7 @@ from torch.utils.data import DataLoader
 from rotate_captcha_crack.common import device
 from rotate_captcha_crack.criterion import dist_between_onehot
 from rotate_captcha_crack.dataset import ImgSeqFromPaths, RotDataset
-from rotate_captcha_crack.model import RotNet_reg, WhereIsMyModel
+from rotate_captcha_crack.model import RotNet, WhereIsMyModel
 from rotate_captcha_crack.utils import default_num_workers, slice_from_range
 
 if __name__ == '__main__':
@@ -20,7 +20,7 @@ if __name__ == '__main__':
         dataset_root = Path("./datasets/Landscape-Dataset")
 
         img_paths = list(dataset_root.glob('*.jpg'))
-        test_img_paths = slice_from_range(img_paths, (0.95, 1.0))
+        test_img_paths = slice_from_range(img_paths, (0.0, 0.5))
         test_dataset = RotDataset(ImgSeqFromPaths(test_img_paths))
         test_dataloader = DataLoader(
             test_dataset,
@@ -29,8 +29,8 @@ if __name__ == '__main__':
             drop_last=True,
         )
 
-        model = RotNet_reg(train=False)
-        model_path = WhereIsMyModel(model).with_index(opts.index).model_dir / "best.pth"
+        model = RotNet(train=False)
+        model_path = WhereIsMyModel(model).with_index(opts.index).model_dir / "last.pth"
         print(f"Use model: {model_path}")
         model.load_state_dict(torch.load(str(model_path)))
         model.to(device=device)

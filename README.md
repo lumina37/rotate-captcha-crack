@@ -2,7 +2,7 @@
 
 CNN预测图片旋转角度
 
-在下文提到的数据集上训练48个epoch（耗时39.7min）得到的平均预测误差为`20.1210°`，模型文件大小`70.8MB`，可用于破解百度旋图验证码
+在下文提到的数据集上训练48个epoch（耗时39.7min）得到的平均预测误差为`53.2304°`，模型文件大小`70.8MB`，可用于破解百度旋图验证码
 
 测试效果如下
 
@@ -12,10 +12,10 @@ CNN预测图片旋转角度
 
 本仓库实现了两类模型
 
-| 名称        | backbone          | 损失函数         | 跨域测试误差（越小越好） | 大小（MB） |
-| ----------- | ----------------- | ---------------- | ------------------------ | ---------- |
-| RotNet_neg  | RegNetY 3.2GFLOPs | 交叉熵           | 87.3164°（待微调）       | 70.8       |
-| RCCNet_v0_4 | RegNetY 3.2GFLOPs | MSELoss+余弦修正 | 61.4878°                 | 70.8       |
+| 名称        | backbone          | 损失函数     | 跨域测试误差（越小越好） | 大小（MB） |
+| ----------- | ----------------- | ------------ | ------------------------ | ---------- |
+| RotNet  | ResNet50 | 交叉熵       | 87.3164°（待微调）       | 70.8       |
+| RCCNet_v0_4 | RegNetY 3.2GFLOPs | MSE+余弦修正 | 53.2304°                 | 70.8       |
 
 注：跨域测试为谷歌街景训练，[`Landscape-Dataset`](https://github.com/yuweiming70/Landscape-Dataset)测试
 
@@ -110,22 +110,22 @@ python test.py
 
 ## 设计细节
 
-+ 现有的旋图验证码破解方法大多基于[`d4nst/RotNet`](https://github.com/d4nst/RotNet)，其backbone为`ResNet50`，将角度预测视作360分类问题，并计算交叉熵损失，本项目的`RCCNet`是对`RotNet`的简单改进
+现有的旋图验证码破解方法大多基于[`d4nst/RotNet`](https://github.com/d4nst/RotNet)，其backbone为`ResNet50`，将角度预测视作360分类问题，并计算交叉熵损失，本项目的`RCCNet`是对`RotNet`的简单改进
 
-+ 要特别注意，搜索RotNet搜出来的模型和论文是两码事，模型是我上面提到的`d4nst/RotNet`，论文是[*Unsupervised Representation Learning by Predicting Image Rotations (ICLR2018)*](https://arxiv.org/abs/1803.07728)，对应的开源仓库是[`FeatureLearningRotNet`](https://github.com/gidariss/FeatureLearningRotNet)。不要傻傻地用论文里的4/8分类来做旋转检测，那个是用来做内容分类的，在旋转角分类上效果很差，360分类才是做旋转角分类应该用的。下文的`RotNet`都是指代[`d4nst/RotNet`](https://github.com/d4nst/RotNet)
+要特别注意，搜索RotNet搜出来的模型和论文是两码事，模型是我上面提到的`d4nst/RotNet`，论文是[*Unsupervised Representation Learning by Predicting Image Rotations (ICLR2018)*](https://arxiv.org/abs/1803.07728)，论文对应的开源仓库是[`FeatureLearningRotNet`](https://github.com/gidariss/FeatureLearningRotNet)。不要傻傻地用论文里的4/8分类来做旋转检测，那个是用来做内容分类的，在旋转角分类上效果很差，360分类才是做旋转角分类应该用的。下文的`RotNet`都是指代[`d4nst/RotNet`](https://github.com/d4nst/RotNet)
 
-+ `RCCNet`的backbone是[`regnet (CVPR2020)`](https://arxiv.org/abs/2003.13678)的`RegNetY 3.2GFLOPs`
+`RCCNet`的backbone是[`regnet (CVPR2020)`](https://arxiv.org/abs/2003.13678)的`RegNetY 3.2GFLOPs`
 
-+ `RotNet`中使用的交叉熵损失会令`1°`和`359°`之间的度量距离接近一个类似`358°`的较大值，这显然是一个违背常识的结果，它们之间的度量距离应当是一个类似`2°`的极小值。而[d4nst](https://github.com/d4nst)给出的[`angle_error_regression`](https://github.com/d4nst/RotNet/blob/a56ea59818bbdd76d4dd8d83b8bbbaae6a802310/utils.py#L30-L36)损失函数效果较差，因为该损失函数在应对离群值时的梯度方向存在明显问题，你可以在后续的损失函数图像比对中轻松看出这一点
+`RotNet`中使用的交叉熵损失会令`1°`和`359°`之间的度量距离接近一个类似`358°`的较大值，这显然是一个违背常识的结果，它们之间的度量距离应当是一个类似`2°`的极小值。而[d4nst](https://github.com/d4nst)给出的[`angle_error_regression`](https://github.com/d4nst/RotNet/blob/a56ea59818bbdd76d4dd8d83b8bbbaae6a802310/utils.py#L30-L36)损失函数效果较差，因为该损失函数在应对离群值时的梯度方向存在明显问题，你可以在后续的损失函数图像比对中轻松看出这一点
 
-+ 本人设计的损失函数`RotationLoss`和`angle_error_regression`的思路相近，我使用最后的全连接层预测出一个角度值并与`ground-truth`作差，然后在`MSELoss`的基础上加了个余弦约束项来缩小真实值的`±k*360°`与真实值之间的度量距离
+本人设计的损失函数`RotationLoss`和`angle_error_regression`的思路相近，我使用最后的全连接层预测出一个角度值并与`ground-truth`作差，然后在`MSELoss`的基础上加了个余弦约束项来缩小真实值的`±k*360°`与真实值之间的度量距离
 
-$L(diff) = {diff}^{2} - \cos(2\pi*{diff}) + 1$
+$L(dist) = {dist}^{2} - \cos(2\pi*{dist}) + 1$
 
-+ 为什么这里使用`MSELoss`，因为自监督学习生成的`label`可以保证不含有任何离群值，因此损失函数设计不需要考虑离群值的问题，同时`MSELoss`不破坏损失函数的可导性
+为什么这里使用`MSELoss`，因为自监督学习生成的`label`可以保证不含有任何离群值，因此损失函数设计不需要考虑离群值的问题，同时`MSELoss`不破坏损失函数的可导性
 
-+ 该损失函数在整个实数域可导且几乎为凸，为什么说是几乎，因为当`lambda_cos>0.25`时在`predict=±1`的地方会出现局部极小
+该损失函数在整个实数域可导且几乎为凸，为什么说是几乎，因为当`lambda_cos>0.25`时在`predict=±1`的地方会出现局部极小
 
-+ 最后直观比较一下`RotationLoss`和`angle_error_regression`的函数图像
+最后直观比较一下`RotationLoss`和`angle_error_regression`的函数图像
 
 ![loss](https://user-images.githubusercontent.com/48282276/222870501-27f47ec9-7615-435f-b979-f5a4c0fc7e12.png)

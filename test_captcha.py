@@ -5,7 +5,7 @@ import torch
 from PIL import Image
 
 from rotate_captcha_crack.common import device
-from rotate_captcha_crack.model import RCCNet_v0_4, WhereIsMyModel
+from rotate_captcha_crack.model import RotNet, WhereIsMyModel
 from rotate_captcha_crack.utils import strip_circle_border
 
 if __name__ == "__main__":
@@ -14,7 +14,7 @@ if __name__ == "__main__":
     opts = parser.parse_args()
 
     with torch.no_grad():
-        model = RCCNet_v0_4(train=False)
+        model = RotNet(train=False)
         model_path = WhereIsMyModel(model).with_index(opts.index).model_dir / "best.pth"
         print(f"Use model: {model_path}")
         model.load_state_dict(torch.load(str(model_path)))

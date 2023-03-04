@@ -20,7 +20,7 @@ if __name__ == '__main__':
         dataset_root = Path("./datasets/Landscape-Dataset")
 
         img_paths = list(dataset_root.glob('*.jpg'))
-        test_img_paths = slice_from_range(img_paths, (0.95, 1.0))
+        test_img_paths = slice_from_range(img_paths, (0.0, 0.5))
         test_dataset = RCCDataset(ImgSeqFromPaths(test_img_paths))
         test_dataloader = DataLoader(
             test_dataset,

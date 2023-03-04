@@ -1,6 +1,5 @@
 from typing import Tuple
 
-import numpy as np
 import torch
 from torch import Tensor
 from torch.utils.data import Dataset
@@ -35,7 +34,7 @@ class RotDataset(Dataset[TypeRotItem]):
         'target_size',
         'norm',
         'size',
-        'angles',
+        'indices',
     ]
 
     def __init__(
@@ -49,18 +48,16 @@ class RotDataset(Dataset[TypeRotItem]):
         self.norm = norm
 
         self.size = self.imgseq.__len__()
-        self.angles = np.random.randint(0, ROTNET_CLS_NUM, self.size, dtype=np.int32)
+        self.indices = torch.randint(ROTNET_CLS_NUM, (self.size,), dtype=torch.long)
 
     def __len__(self) -> int:
         return self.size
 
     def __getitem__(self, idx: int) -> TypeRotItem:
         img_ts = self.imgseq[idx]
-        angle: int = self.angles[idx].item()
-        angle_ts = torch.zeros(ROTNET_CLS_NUM, dtype=torch.float32)
-        angle_ts[angle] = 1.0  # one-hot
+        index_ts: Tensor = self.indices[idx]
 
-        img_ts = square_and_rotate(img_ts, angle * FACTOR2ANGLE, self.target_size)
+        img_ts = square_and_rotate(img_ts, index_ts.item() * FACTOR2ANGLE, self.target_size)
         img_ts = self.norm(img_ts)
 
-        return img_ts, angle_ts
+        return img_ts, index_ts

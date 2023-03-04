@@ -6,4 +6,4 @@ Use rotate(-degree, ...) to recover the image.
 
 from .helper import WhereIsMyModel
 from .rcc_net_v0_4 import RCCNet_v0_4
-from .rot_net_reg import RotNet_reg
+from .rot_net import RotNet

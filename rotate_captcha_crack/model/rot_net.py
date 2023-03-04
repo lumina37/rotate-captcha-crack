@@ -5,28 +5,28 @@ from torchvision import models
 from ..const import ROTNET_CLS_NUM
 
 
-class RotNet_reg(nn.Module):
+class RotNet(nn.Module):
     """
     Args:
         train (bool, optional): True to load the pretrained parameters. Defaults to True.
 
     Note:
-        impl: `rotnet_street_view_resnet50` in https://github.com/d4nst/RotNet but use regnet as backbone
+        impl: `rotnet_street_view_resnet50` in https://github.com/d4nst/RotNet
     """
 
     def __init__(self, train: bool = True) -> None:
-        super(RotNet_reg, self).__init__()
+        super(RotNet, self).__init__()
 
-        weights = models.RegNet_Y_3_2GF_Weights.DEFAULT if train else None
-        self.backbone = models.regnet_y_3_2gf(weights=weights)
+        weights = models.ResNet50_Weights.DEFAULT if train else None
+        self.backbone = models.resnet50(weights=weights)
 
         fc_channels = self.backbone.fc.in_features
         del self.backbone.fc
         self.backbone.fc = nn.Linear(fc_channels, ROTNET_CLS_NUM)
 
-        # if train:
-        #     nn.init.kaiming_uniform_(self.backbone.fc.weight)
-        #     nn.init.zeros_(self.backbone.fc.bias)
+        if train:
+            nn.init.xavier_normal_(self.backbone.fc.weight)
+            nn.init.zeros_(self.backbone.fc.bias)
 
     def forward(self, x: Tensor) -> Tensor:
         """

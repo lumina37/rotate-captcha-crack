@@ -24,8 +24,7 @@ class Trainer(object):
         model (Module): support `RCCNet` and `RotNet`
         train_dataloader (DataLoader): dl for training
         val_dataloader (DataLoader): dl for validation
-        optimizer (Optimizer): set learning rate
-        lr_scheduler (ReduceLROnPlateau): change learning rate by epoches
+        lr (TypeLR): lr manager
         loss (Module): compute loss between `predict` and `target`
         epoches (int): how many epoches to train
     """

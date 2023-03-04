@@ -22,12 +22,12 @@ if __name__ == "__main__":
 
     #################################
     ### Custom configuration area ###
-    dataset_root = Path("D:/Dataset/Streetview/data/data")
+    dataset_root = Path("E:/Dataset/Streetview/data/data")
 
     img_paths = list(dataset_root.glob('*.jpg'))
-    train_img_paths = slice_from_range(img_paths, (0.0, 0.9))
+    train_img_paths = slice_from_range(img_paths, (0.0, 0.98))
     train_dataset = RCCDataset(ImgSeqFromPaths(train_img_paths))
-    val_img_paths = slice_from_range(img_paths, (0.9, 0.95))
+    val_img_paths = slice_from_range(img_paths, (0.98, 1.0))
     val_dataset = RCCDataset(ImgSeqFromPaths(val_img_paths))
 
     num_workers = default_num_workers()
@@ -49,7 +49,7 @@ if __name__ == "__main__":
 
     lr = 0.0004
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
-    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, patience=4, min_lr=lr / 1e3)
+    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, patience=4, min_lr=lr / 1e4)
     lr = LR(lr, scheduler, optimizer).with_val_loss()
     loss = RotationLoss(lambda_cos=0.24, exponent=2)
 

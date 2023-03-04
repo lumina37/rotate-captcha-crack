@@ -8,7 +8,7 @@ from torch.utils.data import DataLoader
 from rotate_captcha_crack.common import device
 from rotate_captcha_crack.dataset import ImgSeqFromPaths, RotDataset
 from rotate_captcha_crack.lr import LR
-from rotate_captcha_crack.model import RotNet_reg
+from rotate_captcha_crack.model import RotNet
 from rotate_captcha_crack.trainer import Trainer
 from rotate_captcha_crack.utils import default_num_workers, slice_from_range
 from rotate_captcha_crack.visualizer import visualize_train
@@ -22,12 +22,12 @@ if __name__ == "__main__":
 
     #################################
     ### Custom configuration area ###
-    dataset_root = Path("D:/Dataset/Streetview/data/data")
+    dataset_root = Path("E:/Dataset/Streetview/data/data")
 
     img_paths = list(dataset_root.glob('*.jpg'))
-    train_img_paths = slice_from_range(img_paths, (0.0, 0.9))
+    train_img_paths = slice_from_range(img_paths, (0.0, 0.98))
     train_dataset = RotDataset(ImgSeqFromPaths(train_img_paths))
-    val_img_paths = slice_from_range(img_paths, (0.9, 0.95))
+    val_img_paths = slice_from_range(img_paths, (0.98, 1.0))
     val_dataset = RotDataset(ImgSeqFromPaths(val_img_paths))
 
     num_workers = default_num_workers()
@@ -44,17 +44,16 @@ if __name__ == "__main__":
         drop_last=True,
     )
 
-    model = RotNet_reg()
+    model = RotNet()
     model = model.to(device)
 
-    lr = 0.01
-    momentum = 0.9
-    optimizer = torch.optim.SGD(model.parameters(), lr=lr, momentum=momentum)
-    scheduler = torch.optim.lr_scheduler.CosineAnnealingWarmRestarts(optimizer, T_0=4)
+    lr = 0.001
+    optimizer = torch.optim.Adam(model.parameters(), lr=lr)
+    scheduler = torch.optim.lr_scheduler.LinearLR(optimizer, start_factor=0.01, total_iters=5)
     lr = LR(lr, scheduler, optimizer)
     loss = CrossEntropyLoss()
 
-    epoches = 64
+    epoches = 60
     steps = 128
     trainer = Trainer(model, train_dataloader, val_dataloader, lr, loss, epoches, steps)
     ### Custom configuration area ###
