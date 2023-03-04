@@ -14,10 +14,10 @@ CNN预测图片旋转角度
 
 | 名称        | backbone          | 损失函数     | 跨域测试误差（越小越好） | 大小（MB） |
 | ----------- | ----------------- | ------------ | ------------------------ | ---------- |
-| RotNet  | ResNet50 | 交叉熵       | 87.3164°（待微调）       | 70.8       |
+| RotNet      | ResNet50          | 交叉熵       | 87.3164°（待微调）       | 91.3       |
 | RCCNet_v0_4 | RegNetY 3.2GFLOPs | MSE+余弦修正 | 53.2304°                 | 70.8       |
 
-注：跨域测试为谷歌街景训练，[`Landscape-Dataset`](https://github.com/yuweiming70/Landscape-Dataset)测试
+注：跨域测试使用谷歌街景作为训练集，[`Landscape-Dataset`](https://github.com/yuweiming70/Landscape-Dataset)作为测试集
 
 ## 体验已有模型
 
@@ -54,7 +54,7 @@ pip install .
 
 下载[Release](https://github.com/Starry-OvO/rotate-captcha-crack/releases)中的压缩包并解压到`./models`文件夹下
 
-文件目录结构类似`./models/RCCNet_v0_3/230228_20_07_25_000/best.pth`
+文件目录结构类似`./models/RCCNet_v0_4/230228_20_07_25_000/best.pth`
 
 本项目仍处于beta阶段，模型名称会频繁发生变更，因此出现任何`FileNotFoundError`请先尝试用git回退到对应的tag
 
