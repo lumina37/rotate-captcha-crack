@@ -7,7 +7,7 @@ import torch
 from torch import Tensor
 from torch.nn import Module
 from torch.utils.data import DataLoader
-from tqdm import tqdm, trange
+from tqdm import tqdm
 
 from .common import device
 from .const import CKPT_PATH, LOG_PATH
@@ -197,7 +197,7 @@ class Trainer(object):
             total_val_loss = 0.0
             eval_batch_count = 0
             with torch.no_grad():
-                for source, target in trange(self.val_dataloader):
+                for source, target in tqdm(self.val_dataloader):
                     source: Tensor = source.to(device=device)
                     target: Tensor = target.to(device=device)
 

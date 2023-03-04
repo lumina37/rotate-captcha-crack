@@ -5,7 +5,7 @@ from torchvision import models
 
 class RCCNet_v0_4(nn.Module):
     """
-    RCCNet v0.2
+    RCCNet v0.4
     with single fc layer
 
     Args:
