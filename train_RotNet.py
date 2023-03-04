@@ -47,14 +47,14 @@ if __name__ == "__main__":
     model = RotNet_reg()
     model = model.to(device)
 
-    lr = 0.01
+    lr = 0.005
     momentum = 0.9
     optimizer = torch.optim.SGD(model.parameters(), lr=lr, momentum=momentum)
-    scheduler = torch.optim.lr_scheduler.CosineAnnealingWarmRestarts(optimizer, T_0=5, T_mult=2, eta_min=lr / 1e3)
+    scheduler = torch.optim.lr_scheduler.CosineAnnealingWarmRestarts(optimizer, T_0=4, T_mult=1, eta_min=lr / 1e3)
     lr = LR(lr, scheduler, optimizer)
     loss = CrossEntropyLoss()
 
-    epoches = 128
+    epoches = 64
     steps = 128
     trainer = Trainer(model, train_dataloader, val_dataloader, lr, loss, epoches, steps)
     ### Custom configuration area ###

@@ -118,16 +118,12 @@ python test.py
 
 + 本人设计的损失函数`RotationLoss`和`angle_error_regression`的思路相近，我使用最后的全连接层预测出一个角度值并与`ground-truth`作差，然后在`MSELoss`的基础上加了个余弦约束项来缩小真实值的`±k*360°`与真实值之间的度量距离
 
+$L(diff) = {diff}^{2} - \cos(2\pi*{diff}) + 1$
+
 + 为什么这里使用`MSELoss`，因为自监督学习生成的`label`可以保证不含有任何离群值，因此损失函数设计不需要考虑离群值的问题，同时`MSELoss`不破坏损失函数的可导性
 
 + 该损失函数在整个实数域可导且几乎为凸，为什么说是几乎，因为当`lambda_cos>0.25`时在`predict=±1`的地方会出现局部极小
 
 + 最后直观比较一下`RotationLoss`和`angle_error_regression`的函数图像
 
-- angle_error_regression
-
-![RotNet-angle_error_regression](https://user-images.githubusercontent.com/48282276/217518614-6ff5a46d-053c-4e8b-aec5-04695b6ec5f2.png)
-
-- RotationLoss
-
-![This-RotationLoss](https://user-images.githubusercontent.com/48282276/217518688-d9085be4-5192-44e7-b416-3ebd4f6dc2a4.png)
+![loss](https://user-images.githubusercontent.com/48282276/222870501-27f47ec9-7615-435f-b979-f5a4c0fc7e12.png)

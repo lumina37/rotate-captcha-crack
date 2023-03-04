@@ -28,6 +28,7 @@ def strip_circle_border(src: Image, target_size: int = 224, norm: Normalize = DE
     src_size = src.height
     assert src.height == src.width
 
+    src = src.convert('RGB')
     dst = F.to_tensor(src)
     dst = F.center_crop(dst, src_size / SQRT2)
     dst = F.resize(dst, target_size)

@@ -30,7 +30,7 @@ if __name__ == '__main__':
         )
 
         model = RotNet_reg(train=False)
-        model_path = WhereIsMyModel(model).with_index(opts.index).model_dir / "best.pth"
+        model_path = WhereIsMyModel(model).with_index(opts.index).model_dir / "last.pth"
         print(f"Use model: {model_path}")
         model.load_state_dict(torch.load(str(model_path)))
         model.to(device=device)
