@@ -33,10 +33,10 @@ class RotNet(nn.Module):
         forward
 
         Args:
-            x (Tensor): img_tensor ([N,C,H,W]=[batch_size,3,224,224], dtype=float32, range=[0,1])
+            x (Tensor): img_tensor ([N,C,H,W]=[batch_size,3,224,224], dtype=float32, range=[0,1))
 
         Returns:
-            Tensor: predict result ([N,C]=[batch_size,ROTNET_CLS_NUM], dtype=float32, range=[0,1])
+            Tensor: predict result ([N,C]=[batch_size,ROTNET_CLS_NUM), dtype=float32, range=[0,1))
         """
 
         x = self.backbone.forward(x)
@@ -48,10 +48,10 @@ class RotNet(nn.Module):
         predict the counter clockwise rotation angle
 
         Args:
-            img_ts (Tensor): img_tensor ([C,H,W]=[3,224,224], dtype=float32, range=[0,1])
+            img_ts (Tensor): img_tensor ([C,H,W]=[3,224,224], dtype=float32, range=[0,1))
 
         Returns:
-            float: predict result. range=[0,1]
+            float: predict result. range=[0,1)
 
         Note:
             Use Image.rotate(-ret * 360) to recover the image.

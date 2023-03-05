@@ -12,7 +12,7 @@ from tqdm import tqdm
 from .common import device
 from .const import CKPT_PATH, LOG_PATH
 from .logging import RCCLogger
-from .lr import TypeLR
+from .lr import TypeLRManager
 from .model import WhereIsMyModel
 
 
@@ -24,7 +24,7 @@ class Trainer(object):
         model (Module): support `RCCNet` and `RotNet`
         train_dataloader (DataLoader): dl for training
         val_dataloader (DataLoader): dl for validation
-        lr (TypeLR): lr manager
+        lr (TypeLRManager): lr manager
         loss (Module): compute loss between `predict` and `target`
         epoches (int): how many epoches to train
     """
@@ -33,7 +33,7 @@ class Trainer(object):
         'model',
         'train_dataloader',
         'val_dataloader',
-        'lr',
+        'lrm',
         'loss',
         'epoches',
         'steps',
@@ -53,7 +53,7 @@ class Trainer(object):
         model: Module,
         train_dataloader: DataLoader,
         val_dataloader: DataLoader,
-        lr: TypeLR,
+        lrm: TypeLRManager,
         loss: Module,
         epoches: int,
         steps: int,
@@ -61,7 +61,7 @@ class Trainer(object):
         self.model = model
         self.train_dataloader = train_dataloader
         self.val_dataloader = val_dataloader
-        self.lr = lr
+        self.lrm = lrm
         self.loss = loss
         self.epoches = epoches
         self.steps = steps
@@ -106,7 +106,7 @@ class Trainer(object):
         torch.save(
             {
                 'model': self.model.state_dict(),
-                'lr': self.lr.state_dict(),
+                'lrm': self.lrm.state_dict(),
             },
             checkpoint_dir / "last.ckpt",
         )
@@ -135,7 +135,7 @@ class Trainer(object):
 
         state_dict = torch.load(checkpoint_dir / "last.ckpt")
         self.model.load_state_dict(state_dict['model'])
-        self.lr.load_state_dict(state_dict['lr'])
+        self.lrm.load_state_dict(state_dict['lrm'])
 
         with open(checkpoint_dir / "last.json", 'rb') as f:
             variables = json.load(f)
@@ -176,7 +176,7 @@ class Trainer(object):
                     source: Tensor = source.to(device=device)
                     target: Tensor = target.to(device=device)
 
-                    with self.lr.optim_step():
+                    with self.lrm.optim_step():
                         predict: Tensor = self.model(source)
                         loss: Tensor = self.loss(predict, target)
                         loss.backward()
@@ -209,8 +209,8 @@ class Trainer(object):
             val_loss = total_val_loss / eval_batch_count
             self.val_loss_array[epoch_idx] = val_loss
 
-            self.lr.sched_step(val_loss)
-            self.lr_array[epoch_idx] = self.lr.last_lr
+            self.lrm.sched_step(val_loss)
+            self.lr_array[epoch_idx] = self.lrm.last_lr
 
             self.t_cost += time.perf_counter() - start_t
             self.log.info(

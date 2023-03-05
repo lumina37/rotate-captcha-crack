@@ -11,8 +11,6 @@ from .typing import TypeImgSeq
 
 TypeRotItem = Tuple[Tensor, Tensor]
 
-FACTOR2ANGLE = 360 / ROTNET_CLS_NUM
-
 
 class RotDataset(Dataset[TypeRotItem]):
     """
@@ -25,8 +23,8 @@ class RotDataset(Dataset[TypeRotItem]):
 
     Methods:
         - `def __len__(self) -> int:` length of the dataset
-        - `def __getitem__(self, idx: int) -> TypeRotItem:` get square img_ts and angle_ts\n
-            ([C,H,W]=[3,target_size,target_size], dtype=float32, range=[0,1]), ([N]=[ROTNET_CLS_NUM], dtype=float32, range=[0,1])
+        - `def __getitem__(self, idx: int) -> TypeRotItem:` get square img_ts and index_ts\n
+            ([C,H,W]=[3,target_size,target_size], dtype=float32, range=[0,1)), ([N]=[1], dtype=long, range=[0,ROTNET_CLS_NUM))
     """
 
     __slots__ = [
@@ -57,7 +55,7 @@ class RotDataset(Dataset[TypeRotItem]):
         img_ts = self.imgseq[idx]
         index_ts: Tensor = self.indices[idx]
 
-        img_ts = square_and_rotate(img_ts, index_ts.item() * FACTOR2ANGLE, self.target_size)
+        img_ts = square_and_rotate(img_ts, index_ts.item() / ROTNET_CLS_NUM, self.target_size)
         img_ts = self.norm(img_ts)
 
         return img_ts, index_ts

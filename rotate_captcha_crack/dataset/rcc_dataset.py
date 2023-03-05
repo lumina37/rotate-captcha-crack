@@ -23,7 +23,7 @@ class RCCDataset(Dataset[TypeRCCItem]):
     Methods:
         - `def __len__(self) -> int:` length of the dataset
         - `def __getitem__(self, idx: int) -> TypeRCCItem:` get square img_ts and angle_ts\n
-            ([C,H,W]=[3,target_size,target_size], dtype=float32, range=[0,1]), ([N]=[1], dtype=float32, range=[0,1])
+            ([C,H,W]=[3,target_size,target_size], dtype=float32, range=[0,1)), ([N]=[1], dtype=float32, range=[0,1))
     """
 
     __slots__ = [

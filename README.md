@@ -14,7 +14,7 @@ CNN预测图片旋转角度
 
 | 名称        | backbone          | 损失函数     | 跨域测试误差（越小越好） | 大小（MB） |
 | ----------- | ----------------- | ------------ | ------------------------ | ---------- |
-| RotNet      | ResNet50          | 交叉熵       | 87.3164°（待微调）       | 91.3       |
+| RotNet      | ResNet50          | 交叉熵       | 80.4654°（待微调）       | 91.3       |
 | RCCNet_v0_4 | RegNetY 3.2GFLOPs | MSE+余弦修正 | 53.2304°                 | 70.8       |
 
 注：跨域测试使用谷歌街景作为训练集，[`Landscape-Dataset`](https://github.com/yuweiming70/Landscape-Dataset)作为测试集

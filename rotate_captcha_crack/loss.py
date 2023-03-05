@@ -18,14 +18,14 @@ class RotationLoss(Module):
         calculate the loss between `predict` and `target`
 
         Args:
-            predict (Tensor): ([N]=[batch_size], dtype=float32, range=[0,1])
-            target (Tensor): ([N]=[batch_size], dtype=float32, range=[0,1])
+            predict (Tensor): ([N]=[batch_size], dtype=float32, range=[0,1))
+            target (Tensor): ([N]=[batch_size], dtype=float32, range=[0,1))
 
         Returns:
-            Tensor: loss ([N]=[batch_size], dtype=float32, range=[0,1])
+            Tensor: loss ([N]=[batch_size], dtype=float32, range=[0,1))
         """
 
-        diff = predict - target
-        loss_tensor = ((diff * (torch.pi * 2)).cos_() - 1) * (-self.lambda_cos) + diff.pow_(self.exponent)
+        dist = predict - target
+        loss_tensor = (dist * (torch.pi * 2)).cos_().sub_(-1.0).mul_(-self.lambda_cos).add_(dist.pow_(self.exponent))
         loss = loss_tensor.mean()
         return loss

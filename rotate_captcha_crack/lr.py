@@ -5,7 +5,7 @@ from torch.optim.lr_scheduler import _LRScheduler as LRScheduler
 from torch.optim.optimizer import Optimizer
 
 
-class TypeLR(Protocol):
+class TypeLRManager(Protocol):
     def state_dict(self) -> dict:
         ...
 
@@ -42,7 +42,7 @@ class TypeLR(Protocol):
         ...
 
 
-class LRWithValLoss(TypeLR):
+class LRManagerWithValLoss(TypeLRManager):
     def __init__(self, lr: float, scheduler: LRScheduler, optimizer: Optimizer) -> None:
         self._lr = lr
         self._scheduler = scheduler
@@ -76,14 +76,14 @@ class LRWithValLoss(TypeLR):
         self._optimizer.step()
 
 
-class LR(TypeLR):
+class LRManager(TypeLRManager):
     def __init__(self, lr: float, scheduler: LRScheduler, optimizer: Optimizer) -> None:
         self._lr = lr
         self._scheduler = scheduler
         self._optimizer = optimizer
 
-    def with_val_loss(self) -> LRWithValLoss:
-        ret = LRWithValLoss(self._lr, self._scheduler, self._optimizer)
+    def with_val_loss(self) -> LRManagerWithValLoss:
+        ret = LRManagerWithValLoss(self._lr, self._scheduler, self._optimizer)
         return ret
 
     def state_dict(self) -> dict:
