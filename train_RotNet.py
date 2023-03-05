@@ -25,9 +25,9 @@ if __name__ == "__main__":
     dataset_root = Path("E:/Dataset/Streetview/data/data")
 
     img_paths = from_google_streetview(dataset_root)
-    train_img_paths = slice_from_range(img_paths, (0.0, 0.98))
+    train_img_paths = slice_from_range(img_paths, (0.0, 0.99))
     train_dataset = RotDataset(ImgSeqFromPaths(train_img_paths))
-    val_img_paths = slice_from_range(img_paths, (0.98, 1.0))
+    val_img_paths = slice_from_range(img_paths, (0.99, 1.0))
     val_dataset = RotDataset(ImgSeqFromPaths(val_img_paths))
 
     num_workers = default_num_workers()
@@ -49,12 +49,12 @@ if __name__ == "__main__":
 
     lr = 0.001
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
-    scheduler = torch.optim.lr_scheduler.LinearLR(optimizer, start_factor=0.1, total_iters=4)
+    scheduler = torch.optim.lr_scheduler.LinearLR(optimizer, start_factor=0.01, total_iters=6)
     lr = LRManager(lr, scheduler, optimizer)
     loss = CrossEntropyLoss()
 
-    epoches = 64
-    steps = 128
+    epoches = 48
+    steps = 639
     trainer = Trainer(model, train_dataloader, val_dataloader, lr, loss, epoches, steps)
     ### Custom configuration area ###
     #################################
