@@ -124,7 +124,7 @@ $$\mathcal{L}(dist) = {dist}^{2} - \cos(2\pi*{dist}) + 1$$
 
 为什么这里使用`MSELoss`，因为自监督学习生成的`label`可以保证不含有任何离群值，因此损失函数设计不需要考虑离群值的问题，同时`MSELoss`不破坏损失函数的可导性
 
-该损失函数在整个实数域可导且几乎为凸，为什么说是几乎，因为当 ${lambda\_cos} \gt 0.25$时在$predict = \pm 1$ 的地方会出现局部极小
+该损失函数在整个实数域可导且几乎为凸，为什么说是几乎，因为当 $\lambda_{cos} \gt 0.25$时在$predict = \pm 1$ 的地方会出现局部极小
 
 最后直观比较一下`RotationLoss`和`angle_error_regression`的函数图像
 
