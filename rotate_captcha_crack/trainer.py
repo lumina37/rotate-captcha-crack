@@ -217,7 +217,6 @@ class Trainer(object):
                 f"Epoch#{epoch_idx}. time_cost: {self.t_cost:.2f} s. train_loss: {train_loss:.8f}. val_loss: {val_loss:.8f}"
             )
 
-            torch.save(self.model.state_dict(), self.finder.model_dir / "last.pth")
             if val_loss < self.best_val_loss:
                 self.best_val_loss = val_loss
                 torch.save(self.model.state_dict(), self.finder.model_dir / "best.pth")
