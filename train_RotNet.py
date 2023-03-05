@@ -35,6 +35,7 @@ if __name__ == "__main__":
         train_dataset,
         batch_size=64,
         num_workers=num_workers,
+        shuffle=True,
         drop_last=True,
     )
     val_dataloader = DataLoader(
