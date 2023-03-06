@@ -120,7 +120,7 @@ python test.py
 
 本人设计的损失函数`RotationLoss`和`angle_error_regression`的思路相近，我使用最后的全连接层预测出一个角度值并与`ground-truth`作差，然后在`MSELoss`的基础上加了个余弦约束项来缩小真实值的 $±k*360°$ 与真实值之间的度量距离
 
-$$\mathcal{L}(dist) = {dist}^{2} - \cos(2\pi*{dist}) + 1$$
+$$\mathcal{L}(dist) = {dist}^{2} + \lambda_{cos} (1 - \cos(2\pi*{dist})) $$
 
 为什么这里使用`MSELoss`，因为自监督学习生成的`label`可以保证不含有任何离群值，因此损失函数设计不需要考虑离群值的问题，同时`MSELoss`不破坏损失函数的可导性
 

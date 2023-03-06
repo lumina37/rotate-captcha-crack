@@ -26,6 +26,6 @@ class RotationLoss(Module):
         """
 
         dist = predict - target
-        loss_tensor = (dist * (torch.pi * 2)).cos_().sub_(-1.0).mul_(-self.lambda_cos).add_(dist.pow_(self.exponent))
+        loss_tensor = (dist * (torch.pi * 2)).cos_().sub_(1.0).mul_(-self.lambda_cos).add_(dist.pow_(self.exponent))
         loss = loss_tensor.mean()
         return loss
