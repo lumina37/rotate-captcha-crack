@@ -30,9 +30,9 @@ def to_tensor(img: Image) -> Tensor:
     """
 
     img = img.convert('RGB')
-    img_ts = torch.as_tensor(np.array(img))
-    img_ts = img_ts.view(*img.size, 3)
-    img_ts = img_ts.permute(2, 0, 1)
+    img_ts = torch.from_numpy(np.array(img))
+    img_ts = img_ts.view(img.height, img.width, 3)
+    img_ts = img_ts.permute(2, 0, 1).contiguous()
 
     return img_ts
 
@@ -69,6 +69,30 @@ def to_square(src: Tensor) -> Tensor:
     return dst
 
 
+def rotate_by_factor(src: Tensor, angle_factor: float) -> Tensor:
+    """
+    rotate a square tensor
+
+    Args:
+        src (Tensor): square tensor
+        angle_factor (float): angle factor in [0.0,1.0). 1.0 leads to an entire cycle.
+
+    Returns:
+        Tensor: rotated tensor ([C,H,W]=[src,src,src])
+
+    Note:
+        `dst is src` (no copy) if there is nothing to do.
+    """
+
+    if angle_factor != 0:
+        angle_deg = angle_factor * 360
+        dst = F.rotate(src, angle_deg, F.InterpolationMode.BILINEAR)
+    else:
+        dst = src
+
+    return dst
+
+
 def rotate_square(src: Tensor, angle_factor: float) -> Tensor:
     """
     rotate a square tensor without any extra border
@@ -88,16 +112,12 @@ def rotate_square(src: Tensor, angle_factor: float) -> Tensor:
     assert src_size == src_w
 
     # rotate with high resolution
-    if angle_factor != 0:
-        angle_deg = angle_factor * 360
-        dst = F.rotate(src, angle_deg, F.InterpolationMode.BILINEAR)
-    else:
-        dst = src
+    dst = rotate_by_factor(src, angle_factor)
 
     # strip the border
     angle_rad = (angle_factor % 0.25) * (2 * math.pi)
-    div_factor = int(math.sin(angle_rad) + math.cos(angle_rad))
-    if div_factor != 1:  # int(sin(pi/2)) is identically 1
+    div_factor = math.sin(angle_rad) + math.cos(angle_rad)
+    if div_factor != 1.0:  # sin(pi/2) is identical to 1.0
         crop_t = src_size / div_factor
         dst = F.center_crop(dst, crop_t)
 
@@ -156,13 +176,15 @@ def from_img(src: Tensor, angle_factor: float, target_size: int = DEFAULT_TARGET
 
     dst = to_square(src)
     dst = u8_to_float32(dst)
-    dst = rotate_square(dst, angle_factor, target_size)
+    dst = rotate_square(dst, angle_factor)
     dst = square_resize(dst, target_size)
 
+    return dst
 
-def strip_circle_border(src: Tensor) -> Tensor:
+
+def strip_border(src: Tensor) -> Tensor:
     """
-    strip the circle border
+    strip the border out of the middle circle
 
     Args:
         src (Tensor): square tensor with border
@@ -197,12 +219,8 @@ def from_captcha(src: Tensor, angle_factor: float, target_size: int = DEFAULT_TA
     """
 
     dst = u8_to_float32(src)
-
-    if angle_factor != 0:
-        angle_deg = angle_factor * 360
-        dst = F.rotate(dst, angle_deg, F.InterpolationMode.BILINEAR)
-
-    dst = strip_circle_border(dst)
+    dst = rotate_by_factor(src, angle_factor)
+    dst = strip_border(dst)
     dst = square_resize(dst, target_size)
 
     return dst

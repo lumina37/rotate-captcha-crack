@@ -7,7 +7,7 @@ from torchvision.transforms import Normalize
 
 from ..const import DEFAULT_TARGET_SIZE
 from .helper import DEFAULT_NORM, from_img
-from .typing import TypeImgSeq
+from .typing import TypeImgTsSeq
 
 TypeRCCItem = Tuple[Tensor, Tensor]
 
@@ -37,7 +37,7 @@ class RCCDataset(Dataset[TypeRCCItem]):
 
     def __init__(
         self,
-        imgseq: TypeImgSeq,
+        imgseq: TypeImgTsSeq,
         target_size: int = DEFAULT_TARGET_SIZE,
         norm: Normalize = DEFAULT_NORM,
     ) -> None:

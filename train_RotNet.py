@@ -6,7 +6,7 @@ from torch.nn import CrossEntropyLoss
 from torch.utils.data import DataLoader
 
 from rotate_captcha_crack.common import device
-from rotate_captcha_crack.dataset import ImgSeqFromPaths, RotDataset
+from rotate_captcha_crack.dataset import ImgTsSeqFromPath, RotDataset, from_google_streetview
 from rotate_captcha_crack.helper import default_num_workers
 from rotate_captcha_crack.lr import LRManager
 from rotate_captcha_crack.model import RotNet
@@ -23,13 +23,13 @@ if __name__ == "__main__":
 
     #################################
     ### Custom configuration area ###
-    dataset_root = Path("./datasets/Landscape-Dataset")
+    dataset_root = Path("E:/Dataset/Streetview/data/data")
 
-    img_paths = list(dataset_root.glob('*.jpg'))
-    train_img_paths = slice_from_range(img_paths, (0.0, 0.97))
-    train_dataset = RotDataset(ImgSeqFromPaths(train_img_paths))
-    val_img_paths = slice_from_range(img_paths, (0.97, 1.0))
-    val_dataset = RotDataset(ImgSeqFromPaths(val_img_paths))
+    img_paths = from_google_streetview(dataset_root)
+    train_img_paths = slice_from_range(img_paths, (0.0, 0.98))
+    train_dataset = RotDataset(ImgTsSeqFromPath(train_img_paths))
+    val_img_paths = slice_from_range(img_paths, (0.98, 1.0))
+    val_dataset = RotDataset(ImgTsSeqFromPath(val_img_paths))
 
     num_workers = default_num_workers()
     train_dataloader = DataLoader(

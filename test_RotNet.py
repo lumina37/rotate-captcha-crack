@@ -7,7 +7,7 @@ from torch.utils.data import DataLoader
 
 from rotate_captcha_crack.common import device
 from rotate_captcha_crack.criterion import dist_between_onehot
-from rotate_captcha_crack.dataset import ImgSeqFromPaths, ValDataset
+from rotate_captcha_crack.dataset import ImgTsSeqFromPath, ValDataset
 from rotate_captcha_crack.helper import default_num_workers
 from rotate_captcha_crack.model import RotNet, WhereIsMyModel
 
@@ -20,7 +20,7 @@ if __name__ == '__main__':
         dataset_root = Path("./datasets/use_img")
 
         img_paths = list(dataset_root.glob('*.png'))
-        test_dataset = ValDataset(ImgSeqFromPaths(img_paths))
+        test_dataset = ValDataset(ImgTsSeqFromPath(img_paths))
         test_dataloader = DataLoader(
             test_dataset,
             batch_size=128,

@@ -3,7 +3,7 @@ from typing import Protocol
 from torch import Tensor
 
 
-class TypeImgSeq(Protocol):
+class TypeImgTsSeq(Protocol):
     """
     Methods:
         - `def __len__(self) -> int:` length of the dataset

@@ -5,10 +5,10 @@ from PIL import Image
 from torch import Tensor
 
 from .helper import to_tensor
-from .typing import TypeImgSeq
+from .typing import TypeImgTsSeq
 
 
-class ImgSeqFromPaths(TypeImgSeq):
+class ImgTsSeqFromPath(TypeImgTsSeq):
     """
     Args:
         img_paths (Sequence[Path]): sequence of paths. Each path points to an img file
@@ -29,7 +29,7 @@ class ImgSeqFromPaths(TypeImgSeq):
     def __getitem__(self, idx: int) -> Tensor:
         img_path = self.img_paths[idx]
 
-        img = Image.open(img_path, ('JPEG', 'PNG', 'WEBP', 'TIFF'))
+        img = Image.open(img_path, formats=('JPEG', 'PNG', 'WEBP', 'TIFF'))
         img_ts = to_tensor(img)
 
         return img_ts

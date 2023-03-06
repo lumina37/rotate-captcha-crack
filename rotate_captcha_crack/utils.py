@@ -5,7 +5,7 @@ from torch import Tensor
 from torchvision.transforms import Normalize
 
 from .const import DEFAULT_TARGET_SIZE
-from .dataset.helper import DEFAULT_NORM, square_resize, strip_circle_border, to_tensor
+from .dataset.helper import DEFAULT_NORM, square_resize, strip_border, to_tensor, u8_to_float32
 
 _T = TypeVar('_T')
 
@@ -47,7 +47,8 @@ def process_captcha(img: Image, target_size: int = DEFAULT_TARGET_SIZE, norm: No
 
     img = img.convert('RGB')
     img_ts = to_tensor(img)
-    img_ts = strip_circle_border(img_ts)
+    img_ts = strip_border(img_ts)
+    img_ts = u8_to_float32(img_ts)
     img_ts = square_resize(img_ts, target_size)
     img_ts = norm(img_ts)
 
