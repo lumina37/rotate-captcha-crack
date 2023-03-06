@@ -1,6 +1,6 @@
 # Rotate-Captcha-Crack
 
-[中文](README.md) | English
+[中文](https://github.com/Starry-OvO/rotate-captcha-crack) | English
 
 Predict the rotation angle of given picture through CNN. It can be used for rotate-captcha cracking.
 
@@ -13,18 +13,18 @@ Two kinds of models are implemented, as shown below.
 | Name        | Backbone          | Loss                       | Cross-Domain Diff (less is better) | Size (MB) |
 | ----------- | ----------------- | -------------------------- | ---------------------------------- | --------- |
 | RotNet      | ResNet50          | CrossEntropy               | **1.3002°**                        | 92.7      |
-| RCCNet_v0_4 | RegNetY 3.2GFLOPs | MSE with Cosine Correction | 44.9389°                           | 70.8      |
+| RCCNet_v0_4 | RegNetY 3.2GFLOPs | MSE with Cosine Correction | 44.8499°                           | 70.8      |
 
 Note:
-- RotNet is the implementation of [d4nst/RotNet](https://github.com/d4nst/RotNet/blob/master/train/train_street_view.py) on PyTorch. The average prediction error is `1.3002°`, obtained by 64 epochs of training (costs 2hrs) on the [Google Street View](https://www.crcv.ucf.edu/data/GMCP_Geolocalization/) dataset.
-- About the Cross-Domain Test: [Google Street View](https://www.crcv.ucf.edu/data/GMCP_Geolocalization/) and [Landscape-Dataset](https://github.com/yuweiming70/Landscape-Dataset) for training, and Captcha Pictures from Baidu for testing (special thx to @xiangbei1997 )
+- RotNet is the implementation of [d4nst/RotNet](https://github.com/d4nst/RotNet/blob/master/train/train_street_view.py) over PyTorch. The average prediction error is `1.3002°`, obtained by 64 epochs of training (2hrs) on the [Google Street View](https://www.crcv.ucf.edu/data/GMCP_Geolocalization/) dataset.
+- About the Cross-Domain Test: [Google Street View](https://www.crcv.ucf.edu/data/GMCP_Geolocalization/) and [Landscape-Dataset](https://github.com/yuweiming70/Landscape-Dataset) for training, and Captcha Pictures from Baidu for testing (special thx to @xiangbei1997)
 - The captcha picture used in the demo above comes from [RotateCaptchaBreak](https://github.com/chencchen/RotateCaptchaBreak/tree/master/data/baiduCaptcha)
 
 ## Try it!
 
 ### Prepare
 
-+ GPU supporting CUDA10+ (mem>=4G if you wanna train your own model)
++ GPU supporting CUDA10+ (mem>=4G for training)
 
 + Python>=3.8 <3.11
 
@@ -57,9 +57,9 @@ Download the zip files in [Release](https://github.com/Starry-OvO/rotate-captcha
 
 The directory structure will be like `./models/RCCNet_v0_4/230228_20_07_25_000/best.pth`
 
-The models' names will be modified frequently as the project is still in beta status. So, if any `FileNotFoundError` occurs, plz try to rollback to the corresponding tag first.
+The models' names will change frequently as the project is still in beta status. So, if any `FileNotFoundError` occurs, plz try to rollback to the corresponding tag first.
 
-### Test the Rotation Effect by Inputting a Captcha Picture
+### Test the Rotation Effect by a Single Captcha Picture
 
 If no GUI is presented, try to change the debugging behavior from showing images to saving them.
 
@@ -91,7 +91,7 @@ python server.py
 
 ### Prepare Datasets
 
-+ For this project I'm using [Google Street View](https://www.crcv.ucf.edu/data/GMCP_Geolocalization/) and [Landscape-Dataset](https://github.com/yuweiming70/Landscape-Dataset) for training. You can collect some photos and leave them in one directory. Without any size requirement.
++ For this project I'm using [Google Street View](https://www.crcv.ucf.edu/data/GMCP_Geolocalization/) and [Landscape-Dataset](https://github.com/yuweiming70/Landscape-Dataset) for training. You can collect some photos and leave them in one directory. Without any size or shape requirement.
 
 + Modify the `dataset_root` variable in `train.py`, let it points to the directory containing images.
 
