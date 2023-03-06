@@ -8,8 +8,8 @@ from torch.utils.data import DataLoader
 from rotate_captcha_crack.common import device
 from rotate_captcha_crack.criterion import dist_between_angles
 from rotate_captcha_crack.dataset import ImgSeqFromPaths, ValDataset
+from rotate_captcha_crack.helper import default_num_workers
 from rotate_captcha_crack.model import RCCNet_v0_4, WhereIsMyModel
-from rotate_captcha_crack.utils import default_num_workers
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()

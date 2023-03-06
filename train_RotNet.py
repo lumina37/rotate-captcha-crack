@@ -7,10 +7,11 @@ from torch.utils.data import DataLoader
 
 from rotate_captcha_crack.common import device
 from rotate_captcha_crack.dataset import ImgSeqFromPaths, RotDataset
+from rotate_captcha_crack.helper import default_num_workers
 from rotate_captcha_crack.lr import LRManager
 from rotate_captcha_crack.model import RotNet
 from rotate_captcha_crack.trainer import Trainer
-from rotate_captcha_crack.utils import default_num_workers, slice_from_range
+from rotate_captcha_crack.utils import slice_from_range
 from rotate_captcha_crack.visualizer import visualize_train
 
 if __name__ == "__main__":

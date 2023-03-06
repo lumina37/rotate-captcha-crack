@@ -10,7 +10,7 @@ from PIL import Image
 from rotate_captcha_crack.common import device
 from rotate_captcha_crack.logging import RCCLogger
 from rotate_captcha_crack.model import RCCNet_v0_4, WhereIsMyModel
-from rotate_captcha_crack.utils import strip_circle_border
+from rotate_captcha_crack.utils import process_captcha
 
 logger = RCCLogger()
 routes = web.RouteTableDef()
@@ -39,7 +39,7 @@ async def hello(request: web.Request):
         img = Image.open(io.BytesIO(img_bytes))
 
         with torch.no_grad():
-            img_ts = strip_circle_border(img)
+            img_ts = process_captcha(img)
             img_ts = img_ts.to(device=device)
             predict = model.predict(img_ts) * 360
             resp['pred'] = predict

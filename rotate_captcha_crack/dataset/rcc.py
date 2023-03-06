@@ -5,7 +5,8 @@ from torch import Tensor
 from torch.utils.data import Dataset
 from torchvision.transforms import Normalize
 
-from .helper import DEFAULT_NORM, crop_rotate_resize
+from ..const import DEFAULT_TARGET_SIZE
+from .helper import DEFAULT_NORM, from_img
 from .typing import TypeImgSeq
 
 TypeRCCItem = Tuple[Tensor, Tensor]
@@ -17,7 +18,7 @@ class RCCDataset(Dataset[TypeRCCItem]):
 
     Args:
         imgseq (TypeImgSeq): upstream dataset
-        target_size (int, optional): output img size. Defaults to 224.
+        target_size (int, optional): output img size. Defaults to DEFAULT_TARGET_SIZE.
         norm (Normalize, optional): normalize policy. Defaults to DEFAULT_NORM.
 
     Methods:
@@ -37,7 +38,7 @@ class RCCDataset(Dataset[TypeRCCItem]):
     def __init__(
         self,
         imgseq: TypeImgSeq,
-        target_size: int = 224,
+        target_size: int = DEFAULT_TARGET_SIZE,
         norm: Normalize = DEFAULT_NORM,
     ) -> None:
         self.imgseq = imgseq
@@ -54,7 +55,7 @@ class RCCDataset(Dataset[TypeRCCItem]):
         img_ts = self.imgseq[idx]
         angle_ts = self.angles[idx]
 
-        img_ts = crop_rotate_resize(img_ts, angle_ts.item(), self.target_size)
+        img_ts = from_img(img_ts, angle_ts.item(), self.target_size)
         img_ts = self.norm(img_ts)
 
         return img_ts, angle_ts

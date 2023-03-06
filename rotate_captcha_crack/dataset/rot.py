@@ -5,8 +5,8 @@ from torch import Tensor
 from torch.utils.data import Dataset
 from torchvision.transforms import Normalize
 
-from ..const import ROTNET_CLS_NUM
-from .helper import DEFAULT_NORM, crop_rotate_resize
+from ..const import DEFAULT_TARGET_SIZE, ROTNET_CLS_NUM
+from .helper import DEFAULT_NORM, from_img
 from .typing import TypeImgSeq
 
 TypeRotItem = Tuple[Tensor, Tensor]
@@ -18,7 +18,7 @@ class RotDataset(Dataset[TypeRotItem]):
 
     Args:
         imgseq (TypeImgSeq): upstream dataset
-        target_size (int, optional): output img size. Defaults to 224.
+        target_size (int, optional): output img size. Defaults to DEFAULT_TARGET_SIZE.
         norm (Normalize, optional): normalize policy. Defaults to DEFAULT_NORM.
 
     Methods:
@@ -38,7 +38,7 @@ class RotDataset(Dataset[TypeRotItem]):
     def __init__(
         self,
         imgseq: TypeImgSeq,
-        target_size: int = 224,
+        target_size: int = DEFAULT_TARGET_SIZE,
         norm: Normalize = DEFAULT_NORM,
     ) -> None:
         self.imgseq = imgseq
@@ -55,7 +55,7 @@ class RotDataset(Dataset[TypeRotItem]):
         img_ts = self.imgseq[idx]
         index_ts: Tensor = self.indices[idx]
 
-        img_ts = crop_rotate_resize(img_ts, index_ts.item() / ROTNET_CLS_NUM, self.target_size)
+        img_ts = from_img(img_ts, index_ts.item() / ROTNET_CLS_NUM, self.target_size)
         img_ts = self.norm(img_ts)
 
         return img_ts, index_ts
