@@ -1,23 +1,22 @@
 # Rotate-Captcha-Crack
 
-CNN预测图片旋转角度
-
-在谷歌街景数据集上训练64个epoch（耗时2h）得到的平均预测误差为`1.3002°`，模型文件大小`92.7MB`，可用于破解百度旋图验证码
+CNN预测图片旋转角度，可用于破解百度旋图验证码
 
 测试效果如下
 
 ![test_result](https://user-images.githubusercontent.com/48282276/221872572-7dfc7fcc-5bda-43e8-bee7-3a55ffd6e8a9.png)
 
-其中百度验证码图片来自[RotateCaptchaBreak](https://github.com/chencchen/RotateCaptchaBreak/tree/master/data/baiduCaptcha)
-
 本仓库实现了两类模型
 
 | 名称        | backbone          | 损失函数     | 跨域测试误差（越小越好） | 大小（MB） |
 | ----------- | ----------------- | ------------ | ------------------------ | ---------- |
-| RotNet      | ResNet50          | 交叉熵       | 1.3002°                  | 92.7       |
+| RotNet      | ResNet50          | 交叉熵       | **1.3002°**              | 92.7       |
 | RCCNet_v0_4 | RegNetY 3.2GFLOPs | MSE+余弦修正 | 44.9389°                 | 70.8       |
 
-注：跨域测试使用谷歌街景/[`Landscape-Dataset`](https://github.com/yuweiming70/Landscape-Dataset)作为训练集，百度验证码作为测试集
+注：
+- RotNet为[d4nst/RotNet](https://github.com/d4nst/RotNet)的PyTorch实现，在谷歌街景数据集上训练64个epoch（耗时2h）得到的平均预测误差为`1.3002°`，模型文件大小`92.7MB`
+- 跨域测试使用谷歌街景/[`Landscape-Dataset`](https://github.com/yuweiming70/Landscape-Dataset)作为训练集，百度验证码作为测试集（特别鸣谢@xiangbei1997 ）
+- 演示用到的百度验证码图片来自[RotateCaptchaBreak](https://github.com/chencchen/RotateCaptchaBreak/tree/master/data/baiduCaptcha)
 
 ## 体验已有模型
 
@@ -128,4 +127,4 @@ $$\mathcal{L}(dist) = {dist}^{2} + \lambda_{cos} (1 - \cos(2\pi*{dist})) $$
 
 最后直观比较一下`RotationLoss`和`angle_error_regression`的函数图像
 
-![loss](https://user-images.githubusercontent.com/48282276/222870501-27f47ec9-7615-435f-b979-f5a4c0fc7e12.png)
+![loss](https://user-images.githubusercontent.com/48282276/223087577-fe054521-36c4-4665-9132-2ca7dd2270f8.png)
