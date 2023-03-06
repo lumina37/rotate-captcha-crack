@@ -1,8 +1,10 @@
 # Rotate-Captcha-Crack
 
-CNN预测图片旋转角度，可用于破解百度旋图验证码
+中文 | [English](README_EN.md)
 
-测试效果如下
+CNN预测图片旋转角度，可用于破解百度旋转验证码
+
+测试效果：
 
 ![test_result](https://user-images.githubusercontent.com/48282276/221872572-7dfc7fcc-5bda-43e8-bee7-3a55ffd6e8a9.png)
 
@@ -14,15 +16,15 @@ CNN预测图片旋转角度，可用于破解百度旋图验证码
 | RCCNet_v0_4 | RegNetY 3.2GFLOPs | MSE+余弦修正 | 44.9389°                 | 70.8       |
 
 注：
-- RotNet为[d4nst/RotNet](https://github.com/d4nst/RotNet/blob/master/train/train_street_view.py)的PyTorch实现，在谷歌街景数据集上训练64个epoch（耗时2h）得到的平均预测误差为`1.3002°`，模型文件大小`92.7MB`
-- 跨域测试使用谷歌街景/[`Landscape-Dataset`](https://github.com/yuweiming70/Landscape-Dataset)作为训练集，百度验证码作为测试集（特别鸣谢@xiangbei1997 ）
+- RotNet为[d4nst/RotNet](https://github.com/d4nst/RotNet/blob/master/train/train_street_view.py)的PyTorch实现，在[谷歌街景数据集](https://www.crcv.ucf.edu/data/GMCP_Geolocalization/)上训练64个epoch（耗时2h）得到的平均预测误差为`1.3002°`
+- 跨域测试使用[谷歌街景](https://www.crcv.ucf.edu/data/GMCP_Geolocalization/)/[`Landscape-Dataset`](https://github.com/yuweiming70/Landscape-Dataset)作为训练集，百度验证码作为测试集（特别鸣谢@xiangbei1997 ）
 - 演示用到的百度验证码图片来自[RotateCaptchaBreak](https://github.com/chencchen/RotateCaptchaBreak/tree/master/data/baiduCaptcha)
 
 ## 体验已有模型
 
 ### 准备环境
 
-+ 一张显存4G以上的GPU（如需训练）
++ 支持CUDA10+的GPU（如需训练则显存还需要不少于4G）
 
 + 确保你的`Python`版本`>=3.8 <3.11`
 
@@ -44,12 +46,12 @@ pip install .
 git clone --depth=1 https://github.com/Starry-OvO/rotate-captcha-crack.git
 python -m venv ./rotate-captcha-crack --system-site-packages
 cd ./rotate-captcha-crack
-# 根据你的Shell类型挑选一个合适的脚本激活虚拟环境 ./Script/active*
+# 根据你的Shell类型挑选一个合适的脚本激活虚拟环境 例如./Script/Active.ps1
 python -m pip install -U pip
 pip install .
 ```
 
-### 下载模型
+### 下载预训练模型
 
 下载[Release](https://github.com/Starry-OvO/rotate-captcha-crack/releases)中的压缩包并解压到`./models`文件夹下
 
@@ -59,7 +61,7 @@ pip install .
 
 ### 输入一个验证码图像并查看旋转效果
 
-Linux环境需要配置GUI或者自己把debug方法从显示图像改成保存图像
+如果你的系统没有GUI，尝试把debug方法从显示图像改成保存图像
 
 ```bash
 python test_captcha.py
@@ -73,8 +75,8 @@ python test_captcha.py
 pip install aiohttp httpx[cli]
 ```
 
-+ 运行http服务端
-  
++ 运行服务端
+
 ```shell
 python server.py
 ```
@@ -98,13 +100,13 @@ python server.py
 ### 训练
 
 ```bash
-python train.py
+python train_RotNet.py
 ```
 
 ### 在测试集上验证模型
 
 ```bash
-python test.py
+python test_RotNet.py
 ```
 
 ## 设计细节

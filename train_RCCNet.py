@@ -55,9 +55,9 @@ if __name__ == "__main__":
     lr = LRManager(lr, scheduler, optimizer).with_val_loss()
     loss = RotationLoss(lambda_cos=0.24, exponent=2)
 
-    epoches = 64
+    epochs = 64
     steps = 639
-    trainer = Trainer(model, train_dataloader, val_dataloader, lr, loss, epoches, steps)
+    trainer = Trainer(model, train_dataloader, val_dataloader, lr, loss, epochs, steps)
     ### Custom configuration area ###
     #################################
 

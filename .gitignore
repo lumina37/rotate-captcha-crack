@@ -2,6 +2,8 @@
 
 !.gitignore
 !LICENSE
+!README.md
+!README_EN.md
 
 !pyproject.toml
 

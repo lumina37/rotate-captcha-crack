@@ -26,7 +26,7 @@ class Trainer(object):
         val_dataloader (DataLoader): dl for validation
         lr (TypeLRManager): lr manager
         loss (Module): compute loss between `predict` and `target`
-        epoches (int): how many epoches to train
+        epochs (int): how many epochs to train
     """
 
     __slots__ = [
@@ -35,7 +35,7 @@ class Trainer(object):
         'val_dataloader',
         'lrm',
         'loss',
-        'epoches',
+        'epochs',
         'steps',
         'finder',
         'lr_array',
@@ -55,7 +55,7 @@ class Trainer(object):
         val_dataloader: DataLoader,
         lrm: TypeLRManager,
         loss: Module,
-        epoches: int,
+        epochs: int,
         steps: int,
     ) -> None:
         self.model = model
@@ -63,7 +63,7 @@ class Trainer(object):
         self.val_dataloader = val_dataloader
         self.lrm = lrm
         self.loss = loss
-        self.epoches = epoches
+        self.epochs = epochs
         self.steps = steps
         self.finder = WhereIsMyModel(model)
 
@@ -153,9 +153,9 @@ class Trainer(object):
         """
 
         if self._is_new_task:
-            self.lr_array = np.empty(self.epoches, dtype=np.float64)
-            self.train_loss_array = np.empty(self.epoches, dtype=np.float64)
-            self.val_loss_array = np.empty(self.epoches, dtype=np.float64)
+            self.lr_array = np.empty(self.epochs, dtype=np.float64)
+            self.train_loss_array = np.empty(self.epochs, dtype=np.float64)
+            self.val_loss_array = np.empty(self.epochs, dtype=np.float64)
             self.best_val_loss = sys.maxsize
             self.last_epoch = 0
             self.t_cost = 0.0
@@ -163,7 +163,7 @@ class Trainer(object):
             (self.finder.model_dir / CKPT_PATH).mkdir(0o755, exist_ok=True)
             (self.finder.model_dir / LOG_PATH).mkdir(0o755, exist_ok=True)
 
-        for epoch_idx in range(self.last_epoch, self.epoches):
+        for epoch_idx in range(self.last_epoch, self.epochs):
             start_t = time.perf_counter()
 
             self.model.train()

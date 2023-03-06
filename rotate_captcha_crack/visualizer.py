@@ -26,29 +26,29 @@ def visualize_train(model_dir: Path) -> None:
     train_loss_array = np.load(checkpoint_dir / "train_loss.npy")
     val_loss_array = np.load(checkpoint_dir / "val_loss.npy")
 
-    epoches = last_epoch + 1
-    x = np.arange(epoches, dtype=np.int16)
+    epochs = last_epoch + 1
+    x = np.arange(epochs, dtype=np.int16)
 
     figure_dir = model_dir / FIGURE_PATH
     figure_dir.mkdir(0o755, exist_ok=True)
 
     fig, ax = plt.subplots(figsize=(8, 8))
-    ax.plot(x, lr_array[:epoches])
+    ax.plot(x, lr_array[:epochs])
     ax.xaxis.set_major_locator(MaxNLocator(integer=True))
-    ax.set_xlabel('epoches')
-    ax.set_title('lr - epoches')
+    ax.set_xlabel('epochs')
+    ax.set_title('lr - epochs')
     fig.savefig(figure_dir / "lr.png")
 
     fig, ax = plt.subplots(figsize=(8, 8))
-    ax.plot(x, train_loss_array[:epoches])
+    ax.plot(x, train_loss_array[:epochs])
     ax.xaxis.set_major_locator(MaxNLocator(integer=True))
-    ax.set_xlabel('epoches')
-    ax.set_title('train_loss - epoches')
+    ax.set_xlabel('epochs')
+    ax.set_title('train_loss - epochs')
     fig.savefig(figure_dir / "train_loss.png")
 
     fig, ax = plt.subplots(figsize=(8, 8))
-    ax.plot(x, val_loss_array[:epoches])
+    ax.plot(x, val_loss_array[:epochs])
     ax.xaxis.set_major_locator(MaxNLocator(integer=True))
-    ax.set_xlabel('epoches')
-    ax.set_title('val_loss - epoches')
+    ax.set_xlabel('epochs')
+    ax.set_title('val_loss - epochs')
     fig.savefig(figure_dir / "val_loss.png")
