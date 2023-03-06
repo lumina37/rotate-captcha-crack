@@ -1,8 +1,6 @@
 import torch
 from torch import Tensor
 
-from .const import ROTNET_CLS_NUM
-
 ONE_CYCLE = 1.0
 HALF_CYCLE = ONE_CYCLE / 2
 
@@ -60,8 +58,8 @@ def dist_between_onehot(lhs: Tensor, rhs: Tensor) -> float:
     calculate the average distance between two one-hot array
 
     Args:
-        lhs (Tensor): lhs tensor ([N,C]=[undefined,ROTNET_CLS_NUM), dtype=float32, range=[0.0,1.0))
-        rhs (Tensor): rhs tensor ([N]=[undefined], dtype=long, range=[0,ROTNET_CLS_NUM))
+        lhs (Tensor): lhs tensor ([N,C]=[undefined,cls_num), dtype=float32, range=[0.0,1.0))
+        rhs (Tensor): rhs tensor ([N]=[undefined], dtype=long, range=[0,cls_num))
 
     Returns:
         float: average distance. range=[0.0,1.0)
@@ -70,8 +68,9 @@ def dist_between_onehot(lhs: Tensor, rhs: Tensor) -> float:
         Multiply it by 360° to obtain dist in degrees.
     """
 
-    lhs = lhs.argmax(1).to(dtype=torch.float32).div_(ROTNET_CLS_NUM)
-    rhs = rhs.to(dtype=torch.float32).div_(ROTNET_CLS_NUM)
+    cls_num = lhs.nelement()
+    lhs = lhs.argmax(1).to(dtype=torch.float32).div_(cls_num)
+    rhs = rhs.to(dtype=torch.float32).div_(cls_num)
 
     loss = dist_between_angles_(lhs, rhs)
 

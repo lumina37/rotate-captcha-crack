@@ -32,7 +32,7 @@ def to_tensor(img: Image) -> Tensor:
     img = img.convert('RGB')
     img_ts = torch.from_numpy(np.array(img))
     img_ts = img_ts.view(img.height, img.width, 3)
-    img_ts = img_ts.permute(2, 0, 1).contiguous()
+    img_ts = img_ts.permute(2, 0, 1)
 
     return img_ts
 
@@ -219,7 +219,7 @@ def from_captcha(src: Tensor, angle_factor: float, target_size: int = DEFAULT_TA
     """
 
     dst = u8_to_float32(src)
-    dst = rotate_by_factor(src, angle_factor)
+    dst = rotate_by_factor(dst, angle_factor)
     dst = strip_border(dst)
     dst = square_resize(dst, target_size)
 

@@ -2,7 +2,7 @@ import torch.nn as nn
 from torch import Tensor
 from torchvision import models
 
-from ..const import ROTNET_CLS_NUM
+from ..const import DEFAULT_CLS_NUM
 
 
 class RotNet(nn.Module):
@@ -14,15 +14,17 @@ class RotNet(nn.Module):
         impl: `rotnet_street_view_resnet50` in https://github.com/d4nst/RotNet
     """
 
-    def __init__(self, train: bool = True) -> None:
+    def __init__(self, cls_num: int = DEFAULT_CLS_NUM, train: bool = True) -> None:
         super(RotNet, self).__init__()
+
+        self.cls_num = cls_num
 
         weights = models.ResNet50_Weights.DEFAULT if train else None
         self.backbone = models.resnet50(weights=weights)
 
         fc_channels = self.backbone.fc.in_features
         del self.backbone.fc
-        self.backbone.fc = nn.Linear(fc_channels, ROTNET_CLS_NUM)
+        self.backbone.fc = nn.Linear(fc_channels, cls_num)
 
         if train:
             nn.init.xavier_normal_(self.backbone.fc.weight)
@@ -36,7 +38,7 @@ class RotNet(nn.Module):
             x (Tensor): img_tensor ([N,C,H,W]=[batch_size,3,224,224], dtype=float32, range=[0.0,1.0))
 
         Returns:
-            Tensor: predict result ([N,C]=[batch_size,ROTNET_CLS_NUM), dtype=float32, range=[0.0,1.0))
+            Tensor: predict result ([N,C]=[batch_size,cls_num), dtype=float32, range=[0.0,1.0))
         """
 
         x = self.backbone.forward(x)
@@ -60,6 +62,6 @@ class RotNet(nn.Module):
         img_ts = img_ts.unsqueeze_(0)
 
         onehot_ts = self.backbone.forward(img_ts)
-        angle = float(onehot_ts.argmax(1).cpu().item()) / ROTNET_CLS_NUM
+        angle = float(onehot_ts.argmax(1).cpu().item()) / self.cls_num
 
         return angle

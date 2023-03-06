@@ -51,12 +51,12 @@ if __name__ == "__main__":
 
     lr = 0.001
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
-    scheduler = torch.optim.lr_scheduler.LinearLR(optimizer, start_factor=0.01, total_iters=6)
+    scheduler = torch.optim.lr_scheduler.LinearLR(optimizer, start_factor=1.0, total_iters=1)
     lr = LRManager(lr, scheduler, optimizer)
     loss = CrossEntropyLoss()
 
     epoches = 64
-    steps = 110
+    steps = 128
     trainer = Trainer(model, train_dataloader, val_dataloader, lr, loss, epoches, steps)
     ### Custom configuration area ###
     #################################
