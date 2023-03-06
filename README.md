@@ -13,7 +13,7 @@ CNN预测图片旋转角度，可用于破解百度旋转验证码
 | 名称        | backbone          | 损失函数     | 跨域测试误差（越小越好） | 大小（MB） |
 | ----------- | ----------------- | ------------ | ------------------------ | ---------- |
 | RotNet      | ResNet50          | 交叉熵       | **1.3002°**              | 92.7       |
-| RCCNet_v0_4 | RegNetY 3.2GFLOPs | MSE+余弦修正 | 44.9389°                 | 70.8       |
+| RCCNet_v0_4 | RegNetY 3.2GFLOPs | MSE+余弦修正 | 44.8499°                 | 70.8       |
 
 注：
 - RotNet为[d4nst/RotNet](https://github.com/d4nst/RotNet/blob/master/train/train_street_view.py)的PyTorch实现，在[谷歌街景数据集](https://www.crcv.ucf.edu/data/GMCP_Geolocalization/)上训练64个epoch（耗时2h）得到的平均预测误差为`1.3002°`

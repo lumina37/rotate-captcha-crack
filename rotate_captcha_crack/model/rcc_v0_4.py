@@ -23,7 +23,7 @@ class RCCNet_v0_4(nn.Module):
         self.backbone.fc = nn.Linear(fc_channels, 1)
 
         if train:
-            nn.init.normal_(self.backbone.fc.weight, mean=0.0, std=0.01)
+            nn.init.kaiming_normal_(self.backbone.fc.weight)
             nn.init.zeros_(self.backbone.fc.bias)
 
     def forward(self, x: Tensor) -> Tensor:

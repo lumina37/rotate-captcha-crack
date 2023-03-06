@@ -9,6 +9,7 @@
 
 !train_RCCNet.py
 !train_RotNet.py
+!train_RotNetR.py
 !test_RCCNet.py
 !test_RotNet.py
 !test_captcha.py

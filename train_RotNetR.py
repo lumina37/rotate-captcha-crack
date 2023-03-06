@@ -26,7 +26,7 @@ if __name__ == "__main__":
     dataset_root = Path("E:/Dataset/Streetview/data/data")
 
     img_paths = from_google_streetview(dataset_root)
-    cls_num = 360
+    cls_num = 180
     train_img_paths = slice_from_range(img_paths, (0.0, 0.98))
     train_dataset = RotDataset(ImgTsSeqFromPath(train_img_paths), cls_num=cls_num)
     val_img_paths = slice_from_range(img_paths, (0.98, 1.0))
@@ -52,7 +52,7 @@ if __name__ == "__main__":
 
     lr = 0.001
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
-    scheduler = torch.optim.lr_scheduler.LinearLR(optimizer, start_factor=1.0, total_iters=1)
+    scheduler = torch.optim.lr_scheduler.LinearLR(optimizer, start_factor=0.05, total_iters=6)
     lr = LRManager(lr, scheduler, optimizer)
     loss = CrossEntropyLoss()
 
