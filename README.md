@@ -2,7 +2,7 @@
 
 CNN预测图片旋转角度
 
-在下文提到的数据集上训练48个epoch（耗时39.7min）得到的平均预测误差为`53.2304°`，模型文件大小`70.8MB`，可用于破解百度旋图验证码
+在下文提到的数据集上训练48个epoch（耗时39.7min）得到的平均预测误差为`52.5675°`，模型文件大小`70.8MB`，可用于破解百度旋图验证码
 
 测试效果如下
 
@@ -14,10 +14,10 @@ CNN预测图片旋转角度
 
 | 名称        | backbone          | 损失函数     | 跨域测试误差（越小越好） | 大小（MB） |
 | ----------- | ----------------- | ------------ | ------------------------ | ---------- |
-| RotNet      | ResNet50          | 交叉熵       | 80.4654°                 | 91.3       |
-| RCCNet_v0_4 | RegNetY 3.2GFLOPs | MSE+余弦修正 | 53.2304°                 | 70.8       |
+| RotNet      | ResNet50          | 交叉熵       | 79.6275°                 | 91.3       |
+| RCCNet_v0_4 | RegNetY 3.2GFLOPs | MSE+余弦修正 | 52.5675°                 | 70.8       |
 
-注：跨域测试使用谷歌街景作为训练集，[`Landscape-Dataset`](https://github.com/yuweiming70/Landscape-Dataset)作为测试集
+注：跨域测试使用谷歌街景/[`Landscape-Dataset`](https://github.com/yuweiming70/Landscape-Dataset)作为训练集，百度验证码作为测试集
 
 ## 体验已有模型
 

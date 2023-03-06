@@ -7,9 +7,9 @@ from torch.utils.data import DataLoader
 
 from rotate_captcha_crack.common import device
 from rotate_captcha_crack.criterion import dist_between_onehot
-from rotate_captcha_crack.dataset import ImgSeqFromPaths, RotDataset
+from rotate_captcha_crack.dataset import ImgSeqFromPaths, ValDataset
 from rotate_captcha_crack.model import RotNet, WhereIsMyModel
-from rotate_captcha_crack.utils import default_num_workers, slice_from_range
+from rotate_captcha_crack.utils import default_num_workers
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -17,11 +17,10 @@ if __name__ == '__main__':
     opts = parser.parse_args()
 
     with torch.no_grad():
-        dataset_root = Path("./datasets/Landscape-Dataset")
+        dataset_root = Path("./datasets/use_img")
 
-        img_paths = list(dataset_root.glob('*.jpg'))
-        test_img_paths = slice_from_range(img_paths, (0.0, 0.5))
-        test_dataset = RotDataset(ImgSeqFromPaths(test_img_paths))
+        img_paths = list(dataset_root.glob('*.png'))
+        test_dataset = ValDataset(ImgSeqFromPaths(img_paths))
         test_dataloader = DataLoader(
             test_dataset,
             batch_size=128,

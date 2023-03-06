@@ -1,40 +1,7 @@
 import os
 from typing import Sequence, Tuple, TypeVar
 
-from PIL.Image import Image
-from torch import Tensor
-from torchvision.transforms import Normalize
-from torchvision.transforms import functional as F
-
-from .const import SQRT2
-from .dataset.helper import DEFAULT_NORM
-
 _T = TypeVar('_T')
-
-
-def strip_circle_border(src: Image, target_size: int = 224, norm: Normalize = DEFAULT_NORM) -> Tensor:
-    """
-    strip the circle border
-
-    Args:
-        src (Image): source image
-        target_size (int, optional): target size. Defaults to 224.
-        norm (Normalize, optional): normalize policy
-
-    Returns:
-        Tensor: striped tensor ([C,H,W]=[src,target_size,target_size])
-    """
-
-    src_size = src.height
-    assert src.height == src.width
-
-    src = src.convert('RGB')
-    dst = F.to_tensor(src)
-    dst = F.center_crop(dst, src_size / SQRT2)
-    dst = F.resize(dst, target_size)
-    dst = norm(dst)
-
-    return dst
 
 
 def slice_from_range(seq: Sequence[_T], _range: Tuple[float, float]) -> Sequence[_T]:

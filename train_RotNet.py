@@ -6,7 +6,7 @@ from torch.nn import CrossEntropyLoss
 from torch.utils.data import DataLoader
 
 from rotate_captcha_crack.common import device
-from rotate_captcha_crack.dataset import ImgSeqFromPaths, RotDataset, from_google_streetview
+from rotate_captcha_crack.dataset import ImgSeqFromPaths, RotDataset
 from rotate_captcha_crack.lr import LRManager
 from rotate_captcha_crack.model import RotNet
 from rotate_captcha_crack.trainer import Trainer
@@ -22,12 +22,12 @@ if __name__ == "__main__":
 
     #################################
     ### Custom configuration area ###
-    dataset_root = Path("E:/Dataset/Streetview/data/data")
+    dataset_root = Path("./datasets/Landscape-Dataset")
 
-    img_paths = from_google_streetview(dataset_root)
-    train_img_paths = slice_from_range(img_paths, (0.0, 0.99))
+    img_paths = list(dataset_root.glob('*.jpg'))
+    train_img_paths = slice_from_range(img_paths, (0.0, 0.97))
     train_dataset = RotDataset(ImgSeqFromPaths(train_img_paths))
-    val_img_paths = slice_from_range(img_paths, (0.99, 1.0))
+    val_img_paths = slice_from_range(img_paths, (0.97, 1.0))
     val_dataset = RotDataset(ImgSeqFromPaths(val_img_paths))
 
     num_workers = default_num_workers()
@@ -54,8 +54,8 @@ if __name__ == "__main__":
     lr = LRManager(lr, scheduler, optimizer)
     loss = CrossEntropyLoss()
 
-    epoches = 48
-    steps = 639
+    epoches = 64
+    steps = 110
     trainer = Trainer(model, train_dataloader, val_dataloader, lr, loss, epoches, steps)
     ### Custom configuration area ###
     #################################

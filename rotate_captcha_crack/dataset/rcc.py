@@ -5,7 +5,7 @@ from torch import Tensor
 from torch.utils.data import Dataset
 from torchvision.transforms import Normalize
 
-from .helper import DEFAULT_NORM, square_and_rotate
+from .helper import DEFAULT_NORM, rotate, to_square
 from .typing import TypeImgSeq
 
 TypeRCCItem = Tuple[Tensor, Tensor]
@@ -54,7 +54,8 @@ class RCCDataset(Dataset[TypeRCCItem]):
         img_ts = self.imgseq[idx]
         angle_ts = self.angles[idx]
 
-        img_ts = square_and_rotate(img_ts, angle_ts.item(), self.target_size)
+        img_ts = to_square(img_ts)
+        img_ts = rotate(img_ts, angle_ts.item(), self.target_size)
         img_ts = self.norm(img_ts)
 
         return img_ts, angle_ts

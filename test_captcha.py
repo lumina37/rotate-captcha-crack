@@ -3,10 +3,12 @@ import argparse
 import matplotlib.pyplot as plt
 import torch
 from PIL import Image
+from torchvision.transforms import functional as F
 
 from rotate_captcha_crack.common import device
+from rotate_captcha_crack.dataset import strip_circle_border
+from rotate_captcha_crack.dataset.helper import DEFAULT_NORM
 from rotate_captcha_crack.model import RotNet, WhereIsMyModel
-from rotate_captcha_crack.utils import strip_circle_border
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -22,7 +24,10 @@ if __name__ == "__main__":
         model.eval()
 
         img = Image.open("datasets/tieba/1615096444.jpg")
-        img_ts = strip_circle_border(img)
+        img = img.convert('RGB')
+        img_ts = F.to_tensor(img)
+        img_ts = strip_circle_border(img_ts)
+        img_ts = DEFAULT_NORM(img_ts)
         img_ts = img_ts.to(device=device)
 
         predict = model.predict(img_ts)

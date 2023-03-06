@@ -25,9 +25,9 @@ if __name__ == "__main__":
     dataset_root = Path("E:/Dataset/Streetview/data/data")
 
     img_paths = from_google_streetview(dataset_root)
-    train_img_paths = slice_from_range(img_paths, (0.0, 0.98))
+    train_img_paths = slice_from_range(img_paths, (0.0, 0.97))
     train_dataset = RCCDataset(ImgSeqFromPaths(train_img_paths))
-    val_img_paths = slice_from_range(img_paths, (0.98, 1.0))
+    val_img_paths = slice_from_range(img_paths, (0.97, 1.0))
     val_dataset = RCCDataset(ImgSeqFromPaths(val_img_paths))
 
     num_workers = default_num_workers()
@@ -55,7 +55,7 @@ if __name__ == "__main__":
     loss = RotationLoss(lambda_cos=0.24, exponent=2)
 
     epoches = 64
-    steps = 128
+    steps = 639
     trainer = Trainer(model, train_dataloader, val_dataloader, lr, loss, epoches, steps)
     ### Custom configuration area ###
     #################################

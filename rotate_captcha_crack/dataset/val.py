@@ -5,16 +5,15 @@ from torch import Tensor
 from torch.utils.data import Dataset
 from torchvision.transforms import Normalize
 
-from ..const import ROTNET_CLS_NUM
-from .helper import DEFAULT_NORM, square_and_rotate
+from .helper import DEFAULT_NORM, rotate, strip_circle_border
 from .typing import TypeImgSeq
 
-TypeRotItem = Tuple[Tensor, Tensor]
+TypeValItem = Tuple[Tensor, Tensor]
 
 
-class RotDataset(Dataset[TypeRotItem]):
+class ValDataset(Dataset[TypeValItem]):
     """
-    dataset for RotNet
+    dataset for validate
 
     Args:
         imgseq (TypeImgSeq): upstream dataset
@@ -23,8 +22,8 @@ class RotDataset(Dataset[TypeRotItem]):
 
     Methods:
         - `def __len__(self) -> int:` length of the dataset
-        - `def __getitem__(self, idx: int) -> TypeRotItem:` get square img_ts and index_ts\n
-            ([C,H,W]=[3,target_size,target_size], dtype=float32, range=[0,1)), ([N]=[1], dtype=long, range=[0,ROTNET_CLS_NUM))
+        - `def __getitem__(self, idx: int) -> TypeRCCItem:` get square img_ts and angle_ts\n
+            ([C,H,W]=[3,target_size,target_size], dtype=float32, range=[0,1)), ([N]=[1], dtype=float32, range=[0,1))
     """
 
     __slots__ = [
@@ -32,7 +31,7 @@ class RotDataset(Dataset[TypeRotItem]):
         'target_size',
         'norm',
         'size',
-        'indices',
+        'angles',
     ]
 
     def __init__(
@@ -46,16 +45,17 @@ class RotDataset(Dataset[TypeRotItem]):
         self.norm = norm
 
         self.size = self.imgseq.__len__()
-        self.indices = torch.randint(ROTNET_CLS_NUM, (self.size,), dtype=torch.long)
+        self.angles = torch.rand(self.size, dtype=torch.float32)
 
     def __len__(self) -> int:
         return self.size
 
-    def __getitem__(self, idx: int) -> TypeRotItem:
+    def __getitem__(self, idx: int) -> TypeValItem:
         img_ts = self.imgseq[idx]
-        index_ts: Tensor = self.indices[idx]
+        angle_ts = self.angles[idx]
 
-        img_ts = square_and_rotate(img_ts, index_ts.item() / ROTNET_CLS_NUM, self.target_size)
+        img_ts = strip_circle_border(img_ts)
+        img_ts = rotate(img_ts, angle_ts.item(), self.target_size)
         img_ts = self.norm(img_ts)
 
-        return img_ts, index_ts
+        return img_ts, angle_ts
