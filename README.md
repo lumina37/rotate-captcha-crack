@@ -14,7 +14,7 @@ CNN预测图片旋转角度，可用于破解百度旋图验证码
 | RCCNet_v0_4 | RegNetY 3.2GFLOPs | MSE+余弦修正 | 44.9389°                 | 70.8       |
 
 注：
-- RotNet为[d4nst/RotNet](https://github.com/d4nst/RotNet)的PyTorch实现，在谷歌街景数据集上训练64个epoch（耗时2h）得到的平均预测误差为`1.3002°`，模型文件大小`92.7MB`
+- RotNet为[d4nst/RotNet](https://github.com/d4nst/RotNet/blob/master/train/train_street_view.py)的PyTorch实现，在谷歌街景数据集上训练64个epoch（耗时2h）得到的平均预测误差为`1.3002°`，模型文件大小`92.7MB`
 - 跨域测试使用谷歌街景/[`Landscape-Dataset`](https://github.com/yuweiming70/Landscape-Dataset)作为训练集，百度验证码作为测试集（特别鸣谢@xiangbei1997 ）
 - 演示用到的百度验证码图片来自[RotateCaptchaBreak](https://github.com/chencchen/RotateCaptchaBreak/tree/master/data/baiduCaptcha)
 
