@@ -17,7 +17,7 @@ Two kinds of models are implemented, as shown below.
 
 Note:
 - RotNet is the implementation of [d4nst/RotNet](https://github.com/d4nst/RotNet/blob/master/train/train_street_view.py) with PyTorch. The average prediction error is `1.3002°`, obtained by 64 epochs of training (costs 2 hrs) on the [Google Street View](https://www.crcv.ucf.edu/data/GMCP_Geolocalization/) dataset.
-- About the Cross-Domain Test: [Google Street View](https://www.crcv.ucf.edu/data/GMCP_Geolocalization/) and [`Landscape-Dataset`](https://github.com/yuweiming70/Landscape-Dataset) for training set, and Captcha Pictures from Baidu for testing set (special thx for @xiangbei1997 )
+- About the Cross-Domain Test: [Google Street View](https://www.crcv.ucf.edu/data/GMCP_Geolocalization/) and [Landscape-Dataset](https://github.com/yuweiming70/Landscape-Dataset) for training set, and Captcha Pictures from Baidu for testing set (special thx for @xiangbei1997 )
 - The captcha picture used in the demo above comes from [RotateCaptchaBreak](https://github.com/chencchen/RotateCaptchaBreak/tree/master/data/baiduCaptcha)
 
 ## Try it!
@@ -91,7 +91,7 @@ python server.py
 
 ### Prepare Datasets
 
-+ For this project I'm using [Google Street View](https://www.crcv.ucf.edu/data/GMCP_Geolocalization/) and [`Landscape-Dataset`](https://github.com/yuweiming70/Landscape-Dataset) for training. You can collect some photos and leave them in one directory. Without any size requirement.
++ For this project I'm using [Google Street View](https://www.crcv.ucf.edu/data/GMCP_Geolocalization/) and [Landscape-Dataset](https://github.com/yuweiming70/Landscape-Dataset) for training. You can collect some photos and leave them in one directory. Without any size requirement.
 
 + Modify the `dataset_root` variable in `train.py`, let it points to the directory containing images.
 

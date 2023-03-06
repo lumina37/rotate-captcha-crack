@@ -17,7 +17,7 @@ CNN预测图片旋转角度，可用于破解百度旋转验证码
 
 注：
 - RotNet为[d4nst/RotNet](https://github.com/d4nst/RotNet/blob/master/train/train_street_view.py)的PyTorch实现，在[谷歌街景数据集](https://www.crcv.ucf.edu/data/GMCP_Geolocalization/)上训练64个epoch（耗时2h）得到的平均预测误差为`1.3002°`
-- 跨域测试使用[谷歌街景](https://www.crcv.ucf.edu/data/GMCP_Geolocalization/)/[`Landscape-Dataset`](https://github.com/yuweiming70/Landscape-Dataset)作为训练集，百度验证码作为测试集（特别鸣谢@xiangbei1997 ）
+- 跨域测试使用[谷歌街景](https://www.crcv.ucf.edu/data/GMCP_Geolocalization/)/[Landscape-Dataset](https://github.com/yuweiming70/Landscape-Dataset)作为训练集，百度验证码作为测试集（特别鸣谢@xiangbei1997 ）
 - 演示用到的百度验证码图片来自[RotateCaptchaBreak](https://github.com/chencchen/RotateCaptchaBreak/tree/master/data/baiduCaptcha)
 
 ## 体验已有模型
@@ -91,7 +91,7 @@ python server.py
 
 ### 准备数据集
 
-+ 我这里直接扒的谷歌街景和[`Landscape-Dataset`](https://github.com/yuweiming70/Landscape-Dataset)，你也可以自己收集一些风景照并放到一个文件夹里，图像没有尺寸要求
++ 我这里直接扒的谷歌街景和[Landscape-Dataset](https://github.com/yuweiming70/Landscape-Dataset)，你也可以自己收集一些风景照并放到一个文件夹里，图像没有尺寸要求
 
 + 在`train.py`里配置`dataset_root`变量指向装有图片的文件夹
 
