@@ -43,7 +43,7 @@ pip install .
 
 ```shell
 git clone --depth=1 https://github.com/Starry-OvO/rotate-captcha-crack.git
-python -m venv ./rotate-captcha-crack
+python -m venv ./rotate-captcha-crack --system-site-packages
 cd ./rotate-captcha-crack
 # 根据你的Shell类型挑选一个合适的脚本激活虚拟环境 ./Script/active*
 python -m pip install -U pip
