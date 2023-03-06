@@ -6,7 +6,7 @@ from torch.utils.data import Dataset
 from torchvision.transforms import Normalize
 
 from ..const import ROTNET_CLS_NUM
-from .helper import DEFAULT_NORM, rotate, to_square
+from .helper import DEFAULT_NORM, crop_rotate_resize
 from .typing import TypeImgSeq
 
 TypeRotItem = Tuple[Tensor, Tensor]
@@ -24,7 +24,7 @@ class RotDataset(Dataset[TypeRotItem]):
     Methods:
         - `def __len__(self) -> int:` length of the dataset
         - `def __getitem__(self, idx: int) -> TypeRotItem:` get square img_ts and index_ts\n
-            ([C,H,W]=[3,target_size,target_size], dtype=float32, range=[0,1)), ([N]=[1], dtype=long, range=[0,ROTNET_CLS_NUM))
+            ([C,H,W]=[3,target_size,target_size], dtype=float32, range=[0.0,1.0)), ([N]=[1], dtype=long, range=[0,ROTNET_CLS_NUM))
     """
 
     __slots__ = [
@@ -55,8 +55,7 @@ class RotDataset(Dataset[TypeRotItem]):
         img_ts = self.imgseq[idx]
         index_ts: Tensor = self.indices[idx]
 
-        img_ts = to_square(img_ts)
-        img_ts = rotate(img_ts, index_ts.item() / ROTNET_CLS_NUM, self.target_size)
+        img_ts = crop_rotate_resize(img_ts, index_ts.item() / ROTNET_CLS_NUM, self.target_size)
         img_ts = self.norm(img_ts)
 
         return img_ts, index_ts

@@ -12,11 +12,11 @@ def dist_between_angles(lhs: Tensor, rhs: Tensor) -> float:
     calculate the average distance between two angle array
 
     Args:
-        lhs (Tensor): lhs tensor ([N]=[undefined], dtype=float32, range=[0,1))
-        rhs (Tensor): rhs tensor ([N]=[undefined], dtype=float32, range=[0,1))
+        lhs (Tensor): lhs tensor ([N]=[undefined], dtype=float32, range=[0.0,1.0))
+        rhs (Tensor): rhs tensor ([N]=[undefined], dtype=float32, range=[0.0,1.0))
 
     Returns:
-        float: average distance. range=[0,1)
+        float: average distance. range=[0.0,1.0)
 
     Note:
         Multiply it by 360° to obtain dist in degrees.
@@ -36,11 +36,11 @@ def dist_between_angles_(lhs: Tensor, rhs: Tensor) -> float:
     (INPLACE!!!) calculate the average distance between two angle array
 
     Args:
-        lhs (Tensor): lhs tensor ([N]=[undefined], dtype=float32, range=[0,1))
-        rhs (Tensor): rhs tensor ([N]=[undefined], dtype=float32, range=[0,1))
+        lhs (Tensor): lhs tensor ([N]=[undefined], dtype=float32, range=[0.0,1.0))
+        rhs (Tensor): rhs tensor ([N]=[undefined], dtype=float32, range=[0.0,1.0))
 
     Returns:
-        float: average distance. range=[0,1)
+        float: average distance. range=[0.0,1.0)
 
     Note:
         Multiply it by 360° to obtain dist in degrees.
@@ -60,11 +60,11 @@ def dist_between_onehot(lhs: Tensor, rhs: Tensor) -> float:
     calculate the average distance between two one-hot array
 
     Args:
-        lhs (Tensor): lhs tensor ([N,C]=[undefined,ROTNET_CLS_NUM), dtype=float32, range=[0,1))
+        lhs (Tensor): lhs tensor ([N,C]=[undefined,ROTNET_CLS_NUM), dtype=float32, range=[0.0,1.0))
         rhs (Tensor): rhs tensor ([N]=[undefined], dtype=long, range=[0,ROTNET_CLS_NUM))
 
     Returns:
-        float: average distance. range=[0,1)
+        float: average distance. range=[0.0,1.0)
 
     Note:
         Multiply it by 360° to obtain dist in degrees.

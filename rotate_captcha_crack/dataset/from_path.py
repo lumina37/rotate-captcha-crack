@@ -1,9 +1,10 @@
 from pathlib import Path
 from typing import Sequence
 
+import numpy as np
+import torch
 from PIL import Image
 from torch import Tensor
-from torchvision.transforms import functional as F
 
 from .typing import TypeImgSeq
 
@@ -15,7 +16,7 @@ class ImgSeqFromPaths(TypeImgSeq):
 
     Methods:
         - `def __len__(self) -> int:` length of the dataset
-        - `def __getitem__(self, idx: int) -> Tensor:` get img_tensor ([C,H,W]=[3,ud,ud], dtype=float32, range=[0,1))
+        - `def __getitem__(self, idx: int) -> Tensor:` get img_tensor ([C,H,W]=[3,ud,ud], dtype=uint8, range=[0,255], extra=not guaranteed to be continuous)
     """
 
     __slots__ = ['img_paths']
@@ -28,7 +29,9 @@ class ImgSeqFromPaths(TypeImgSeq):
 
     def __getitem__(self, idx: int) -> Tensor:
         img_path = self.img_paths[idx]
-        img = Image.open(img_path)
+        img = Image.open(img_path, ('JPEG', 'PNG', 'WEBP', 'TIFF'))
         img = img.convert('RGB')
-        img_ts = F.to_tensor(img)
+        img_ts = torch.as_tensor(np.array(img))
+        img_ts = img_ts.view(*img.size, 3)
+        img_ts = img_ts.permute(2, 0, 1)
         return img_ts

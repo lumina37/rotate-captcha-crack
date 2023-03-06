@@ -31,10 +31,10 @@ class RCCNet_v0_4(nn.Module):
         forward
 
         Args:
-            x (Tensor): img_tensors ([N,C,H,W]=[batch_size,3,224,224], dtype=float32, range=[0,1))
+            x (Tensor): img_tensors ([N,C,H,W]=[batch_size,3,224,224], dtype=float32, range=[0.0,1.0))
 
         Returns:
-            Tensor: predict result ([N]=[batch_size], dtype=float32, range=[0,1))
+            Tensor: predict result ([N]=[batch_size], dtype=float32, range=[0.0,1.0))
         """
 
         x = self.backbone.forward(x)
@@ -47,10 +47,10 @@ class RCCNet_v0_4(nn.Module):
         predict the counter clockwise rotation angle
 
         Args:
-            img_ts (Tensor): img_tensor ([C,H,W]=[3,224,224], dtype=float32, range=[0,1))
+            img_ts (Tensor): img_tensor ([C,H,W]=[3,224,224], dtype=float32, range=[0.0,1.0))
 
         Returns:
-            float: predict result. range=[0,1)
+            float: predict result. range=[0.0,1.0)
 
         Note:
             Counter clockwise. Use Image.rotate(-ret * 360) to recover the image.
