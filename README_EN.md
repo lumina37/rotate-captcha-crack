@@ -13,10 +13,11 @@ Two kinds of models are implemented, as shown below.
 | Name        | Backbone          | Loss                       | Cross-Domain Diff (less is better) | Size (MB) |
 | ----------- | ----------------- | -------------------------- | ---------------------------------- | --------- |
 | RotNet      | ResNet50          | CrossEntropy               | **1.3002°**                        | 92.7      |
+| RotNetR     | RegNetY 3.2GFLOPs | CrossEntropy               | **1.3089°**                        | 69.8      |
 | RCCNet_v0_4 | RegNetY 3.2GFLOPs | MSE with Cosine Correction | 44.8499°                           | 70.8      |
 
 Note:
-- RotNet is the implementation of [d4nst/RotNet](https://github.com/d4nst/RotNet/blob/master/train/train_street_view.py) over PyTorch. The average prediction error is `1.3002°`, obtained by 64 epochs of training (2hrs) on the [Google Street View](https://www.crcv.ucf.edu/data/GMCP_Geolocalization/) dataset.
+- RotNet is the implementation of [d4nst/RotNet](https://github.com/d4nst/RotNet/blob/master/train/train_street_view.py) over PyTorch. The average prediction error is `1.3002°`, obtained by 9 epochs of training (30min) on the [Google Street View](https://www.crcv.ucf.edu/data/GMCP_Geolocalization/) dataset.
 - About the Cross-Domain Test: [Google Street View](https://www.crcv.ucf.edu/data/GMCP_Geolocalization/) and [Landscape-Dataset](https://github.com/yuweiming70/Landscape-Dataset) for training, and Captcha Pictures from Baidu for testing (special thx to @xiangbei1997)
 - The captcha picture used in the demo above comes from [RotateCaptchaBreak](https://github.com/chencchen/RotateCaptchaBreak/tree/master/data/baiduCaptcha)
 
