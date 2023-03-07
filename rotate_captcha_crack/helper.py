@@ -11,7 +11,7 @@ def default_num_workers() -> int:
             NUM_WORKERS = 0
         else:
             cpu_count = cpu_count >> 1
-            if cpu_count > 2:
+            if cpu_count > 1:
                 # reserve 1 core for other apps
                 NUM_WORKERS = cpu_count - 1
             else:
