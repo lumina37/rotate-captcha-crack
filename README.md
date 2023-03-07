@@ -8,7 +8,7 @@ CNN预测图片旋转角度，可用于破解百度旋转验证码
 
 ![test_result](https://user-images.githubusercontent.com/48282276/221872572-7dfc7fcc-5bda-43e8-bee7-3a55ffd6e8a9.png)
 
-本仓库实现了两类模型
+本仓库实现了三类模型：
 
 | 名称        | Backbone          | 损失函数     | 跨域测试误差（越小越好） | 大小（MB） |
 | ----------- | ----------------- | ------------ | ------------------------ | ---------- |
@@ -17,7 +17,8 @@ CNN预测图片旋转角度，可用于破解百度旋转验证码
 | RCCNet_v0_4 | RegNetY 3.2GFLOPs | MSE+余弦修正 | 44.8499°                 | 70.8       |
 
 注：
-- RotNet为[`d4nst/RotNet`](https://github.com/d4nst/RotNet/blob/master/train/train_street_view.py)的PyTorch实现，在[谷歌街景数据集](https://www.crcv.ucf.edu/data/GMCP_Geolocalization/)上训练9个epoch（耗时30min）得到的平均预测误差为`1.3002°`
+- `RotNet`为[`d4nst/RotNet`](https://github.com/d4nst/RotNet/blob/master/train/train_street_view.py)的PyTorch实现
+- `RotNetR`仅在`RotNet`的基础上替换了backbone，并将分类数减少至180。其在[谷歌街景数据集](https://www.crcv.ucf.edu/data/GMCP_Geolocalization/)上训练9个epoch（耗时30min）得到的平均预测误差为`1.3089°`
 - 跨域测试使用[谷歌街景](https://www.crcv.ucf.edu/data/GMCP_Geolocalization/)/[Landscape-Dataset](https://github.com/yuweiming70/Landscape-Dataset)作为训练集，百度验证码作为测试集（特别鸣谢@xiangbei1997）
 - 演示用到的百度验证码图片来自[RotateCaptchaBreak](https://github.com/chencchen/RotateCaptchaBreak/tree/master/data/baiduCaptcha)
 
