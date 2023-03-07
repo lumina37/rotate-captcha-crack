@@ -14,7 +14,7 @@ Three kinds of models are implemented, as shown below.
 | ----------- | ----------------- | -------------------------- | ---------------------------------- | --------- |
 | RotNet      | ResNet50          | CrossEntropy               | **1.1548°**                        | 92.7      |
 | RotNetR     | RegNetY 3.2GFLOPs | CrossEntropy               | **1.3089°**                        | 69.8      |
-| RCCNet_v0_4 | RegNetY 3.2GFLOPs | MSE with Cosine-Correction | 44.8499°                           | 70.8      |
+| RCCNet_v0_5 | RegNetY 3.2GFLOPs | MSE with Cosine-Correction | 44.8499°                           | 70.8      |
 
 Note:
 - RotNet is the implementation of [`d4nst/RotNet`](https://github.com/d4nst/RotNet/blob/master/train/train_street_view.py) over PyTorch.
@@ -57,7 +57,7 @@ pip install .
 
 Download the zip files in [Release](https://github.com/Starry-OvO/rotate-captcha-crack/releases) and unzip them to the `./models` dir.
 
-The directory structure will be like `./models/RCCNet_v0_4/230228_20_07_25_000/best.pth`
+The directory structure will be like `./models/RCCNet_v0_5/230228_20_07_25_000/best.pth`
 
 The models' names will change frequently as the project is still in beta status. So, if any `FileNotFoundError` occurs, please try to rollback to the corresponding tag first.
 

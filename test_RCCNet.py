@@ -9,7 +9,7 @@ from rotate_captcha_crack.common import device
 from rotate_captcha_crack.criterion import dist_between_angles
 from rotate_captcha_crack.dataset import ImgTsSeqFromPath, ValDataset
 from rotate_captcha_crack.helper import default_num_workers
-from rotate_captcha_crack.model import RCCNet_v0_4, WhereIsMyModel
+from rotate_captcha_crack.model import RCCNet_v0_5, WhereIsMyModel
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -28,7 +28,7 @@ if __name__ == '__main__':
             drop_last=True,
         )
 
-        model = RCCNet_v0_4(train=False)
+        model = RCCNet_v0_5(train=False)
         model_path = WhereIsMyModel(model).with_index(opts.index).model_dir / "best.pth"
         print(f"Use model: {model_path}")
         model.load_state_dict(torch.load(str(model_path)))

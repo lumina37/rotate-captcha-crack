@@ -3,28 +3,23 @@ from torch import Tensor
 from torchvision import models
 
 
-class RCCNet_v0_4(nn.Module):
+class RCCNet_v0_5(nn.Module):
     """
-    RCCNet v0.4
-    with single fc layer
+    RCCNet v0.5
+    with avgpool
 
     Args:
         train (bool, optional): True to load the pretrained parameters. Defaults to True.
     """
 
     def __init__(self, train: bool = True) -> None:
-        super(RCCNet_v0_4, self).__init__()
+        super(RCCNet_v0_5, self).__init__()
 
-        weights = models.RegNet_Y_3_2GF_Weights.DEFAULT if train else None
-        self.backbone = models.regnet_y_3_2gf(weights=weights)
+        weights = models.RegNet_Y_8GF_Weights.DEFAULT if train else None
+        self.backbone = models.regnet_y_8gf(weights=weights)
 
-        fc_channels = self.backbone.fc.in_features
         del self.backbone.fc
-        self.backbone.fc = nn.Linear(fc_channels, 1)
-
-        if train:
-            nn.init.kaiming_normal_(self.backbone.fc.weight)
-            nn.init.zeros_(self.backbone.fc.bias)
+        self.avgpool = nn.AdaptiveAvgPool1d(1)
 
     def forward(self, x: Tensor) -> Tensor:
         """
@@ -38,6 +33,13 @@ class RCCNet_v0_4(nn.Module):
         """
 
         x = self.backbone.forward(x)
+        x = self.backbone.stem(x)
+        x = self.backbone.trunk_output(x)
+
+        x = self.backbone.avgpool(x)
+        x = x.flatten(start_dim=1)
+        x = self.avgpool(x)
+
         x.squeeze_(1)
 
         return x
@@ -58,7 +60,7 @@ class RCCNet_v0_4(nn.Module):
 
         img_ts = img_ts.unsqueeze_(0)
 
-        angle_ts = self.backbone.forward(img_ts)
+        angle_ts = self.forward(img_ts)
         angle = angle_ts.cpu().item()
 
         return angle

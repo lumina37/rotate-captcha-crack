@@ -9,7 +9,7 @@ from PIL import Image
 
 from rotate_captcha_crack.common import device
 from rotate_captcha_crack.logging import RCCLogger
-from rotate_captcha_crack.model import RCCNet_v0_4, WhereIsMyModel
+from rotate_captcha_crack.model import RCCNet_v0_5, WhereIsMyModel
 from rotate_captcha_crack.utils import process_captcha
 
 logger = RCCLogger()
@@ -21,7 +21,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--index", "-i", type=int, default=-1, help="Use which index")
 opts = parser.parse_args()
 
-model = RCCNet_v0_4(train=False)
+model = RCCNet_v0_5(train=False)
 model_path = WhereIsMyModel(model).with_index(opts.index).model_dir / "best.pth"
 model.load_state_dict(torch.load(str(model_path)))
 model = model.to(device=device)

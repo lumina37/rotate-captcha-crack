@@ -9,7 +9,7 @@ from rotate_captcha_crack.dataset import ImgTsSeqFromPath, RCCDataset, from_goog
 from rotate_captcha_crack.helper import default_num_workers
 from rotate_captcha_crack.loss import RotationLoss
 from rotate_captcha_crack.lr import LRManager
-from rotate_captcha_crack.model import RCCNet_v0_4
+from rotate_captcha_crack.model import RCCNet_v0_5
 from rotate_captcha_crack.trainer import Trainer
 from rotate_captcha_crack.utils import slice_from_range
 from rotate_captcha_crack.visualizer import visualize_train
@@ -46,7 +46,7 @@ if __name__ == "__main__":
         drop_last=True,
     )
 
-    model = RCCNet_v0_4()
+    model = RCCNet_v0_5()
     model = model.to(device)
 
     lr = 0.0004

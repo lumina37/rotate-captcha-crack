@@ -14,7 +14,7 @@ CNN预测图片旋转角度，可用于破解百度旋转验证码
 | ----------- | ----------------- | ------------ | ------------------------ | ---------- |
 | RotNet      | ResNet50          | 交叉熵       | **1.1548°**              | 92.7       |
 | RotNetR     | RegNetY 3.2GFLOPs | 交叉熵       | **1.3089°**              | 69.8       |
-| RCCNet_v0_4 | RegNetY 3.2GFLOPs | MSE+余弦修正 | 44.8499°                 | 70.8       |
+| RCCNet_v0_5 | RegNetY 3.2GFLOPs | MSE+余弦修正 | 44.8499°                 | 70.8       |
 
 注：
 - `RotNet`为[`d4nst/RotNet`](https://github.com/d4nst/RotNet/blob/master/train/train_street_view.py)的PyTorch实现
@@ -57,7 +57,7 @@ pip install .
 
 下载[Release](https://github.com/Starry-OvO/rotate-captcha-crack/releases)中的压缩包并解压到`./models`文件夹下
 
-文件目录结构类似`./models/RCCNet_v0_4/230228_20_07_25_000/best.pth`
+文件目录结构类似`./models/RCCNet_v0_5/230228_20_07_25_000/best.pth`
 
 本项目仍处于beta阶段，模型名称会频繁发生变更，因此出现任何`FileNotFoundError`请先尝试用git回退到对应的tag
 
