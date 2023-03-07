@@ -26,13 +26,14 @@ def to_tensor(img: Image) -> Tensor:
         img (Image): PIL image
 
     Returns:
-        Tensor: (dtype=uint8, range=[0,255])
+        Tensor: (dtype=uint8, range=[0,255], extra=guaranteed to be contiguous)
     """
 
     img = img.convert('RGB')
     img_ts = torch.from_numpy(np.array(img))
     img_ts = img_ts.view(img.height, img.width, 3)
     img_ts = img_ts.permute(2, 0, 1)
+    img_ts = img_ts.contiguous()
 
     return img_ts
 
