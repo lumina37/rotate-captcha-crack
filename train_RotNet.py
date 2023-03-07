@@ -50,13 +50,13 @@ if __name__ == "__main__":
     model = RotNet(cls_num)
     model = model.to(device)
 
-    lr = 0.001
+    lr = 0.0008
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
     scheduler = torch.optim.lr_scheduler.LinearLR(optimizer, start_factor=1.0, total_iters=1)
     lr = LRManager(lr, scheduler, optimizer)
     loss = CrossEntropyLoss()
 
-    epochs = 48
+    epochs = 16
     steps = 256
     trainer = Trainer(model, train_dataloader, val_dataloader, lr, loss, epochs, steps)
     ### Custom configuration area ###

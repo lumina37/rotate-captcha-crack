@@ -50,7 +50,7 @@ if __name__ == "__main__":
     model = RotNetR(cls_num)
     model = model.to(device)
 
-    lr = 0.001
+    lr = 0.0008
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
     scheduler = torch.optim.lr_scheduler.LinearLR(optimizer, start_factor=0.05, total_iters=6)
     lr = LRManager(lr, scheduler, optimizer)

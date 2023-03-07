@@ -12,7 +12,7 @@ Three kinds of models are implemented, as shown below.
 
 | Name        | Backbone          | Loss                       | Cross-Domain Loss (less is better) | Size (MB) |
 | ----------- | ----------------- | -------------------------- | ---------------------------------- | --------- |
-| RotNet      | ResNet50          | CrossEntropy               | **1.3002°**                        | 92.7      |
+| RotNet      | ResNet50          | CrossEntropy               | **1.1548°**                        | 92.7      |
 | RotNetR     | RegNetY 3.2GFLOPs | CrossEntropy               | **1.3089°**                        | 69.8      |
 | RCCNet_v0_4 | RegNetY 3.2GFLOPs | MSE with Cosine-Correction | 44.8499°                           | 70.8      |
 
