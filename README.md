@@ -102,13 +102,13 @@ python server.py
 ### 训练
 
 ```bash
-python train_RotNet.py
+python train_RotNetR.py
 ```
 
 ### 在测试集上验证模型
 
 ```bash
-python test_RotNet.py
+python test_RotNetR.py
 ```
 
 ## 设计细节

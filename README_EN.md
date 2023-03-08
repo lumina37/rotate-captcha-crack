@@ -102,13 +102,13 @@ python server.py
 ### Train
 
 ```bash
-python train_RotNet.py
+python train_RotNetR.py
 ```
 
 ### Validate the Model on Test Set
 
 ```bash
-python test.py
+python test_RotNetR.py
 ```
 
 ## Details of Design
