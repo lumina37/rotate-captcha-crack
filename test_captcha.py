@@ -14,7 +14,7 @@ if __name__ == "__main__":
     opts = parser.parse_args()
 
     with torch.no_grad():
-        model = RotNetR(cls_num=180, train=False)
+        model = RotNetR(train=False, cls_num=180)
         model_path = WhereIsMyModel(model).with_index(opts.index).model_dir / "best.pth"
         print(f"Use model: {model_path}")
         model.load_state_dict(torch.load(str(model_path)))

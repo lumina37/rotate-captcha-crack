@@ -50,14 +50,17 @@ if __name__ == "__main__":
     model = RotNetR(cls_num)
     model = model.to(device)
 
-    lr = 0.0008
-    optimizer = torch.optim.Adam(model.parameters(), lr=lr)
-    scheduler = torch.optim.lr_scheduler.LinearLR(optimizer, start_factor=0.05, total_iters=6)
+    lr = 0.01
+    momentum = 0.9
+    epochs = 64
+    steps = 128
+    optimizer = torch.optim.SGD(model.parameters(), lr=lr, momentum=momentum)
+    scheduler = torch.optim.lr_scheduler.OneCycleLR(
+        optimizer, max_lr=lr, pct_start=0.25, epochs=epochs, steps_per_epoch=steps
+    )
     lr = LRManager(lr, scheduler, optimizer)
     loss = CrossEntropyLoss()
 
-    epochs = 16
-    steps = 256
     trainer = Trainer(model, train_dataloader, val_dataloader, lr, loss, epochs, steps)
     ### Custom configuration area ###
     #################################

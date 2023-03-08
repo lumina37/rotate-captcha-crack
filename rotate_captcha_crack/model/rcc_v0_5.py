@@ -15,8 +15,8 @@ class RCCNet_v0_5(nn.Module):
     def __init__(self, train: bool = True) -> None:
         super(RCCNet_v0_5, self).__init__()
 
-        weights = models.RegNet_Y_8GF_Weights.DEFAULT if train else None
-        self.backbone = models.regnet_y_8gf(weights=weights)
+        weights = models.RegNet_Y_3_2GF_Weights.DEFAULT if train else None
+        self.backbone = models.regnet_y_3_2gf(weights=weights)
 
         del self.backbone.fc
         self.avgpool = nn.AdaptiveAvgPool1d(1)
@@ -32,7 +32,6 @@ class RCCNet_v0_5(nn.Module):
             Tensor: predict result ([N]=[batch_size], dtype=float32, range=[0.0,1.0))
         """
 
-        x = self.backbone.forward(x)
         x = self.backbone.stem(x)
         x = self.backbone.trunk_output(x)
 
