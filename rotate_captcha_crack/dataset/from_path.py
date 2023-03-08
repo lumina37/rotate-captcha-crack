@@ -29,7 +29,7 @@ class ImgTsSeqFromPath(TypeImgTsSeq):
     def __getitem__(self, idx: int) -> Tensor:
         img_path = self.img_paths[idx]
 
-        img = Image.open(img_path, formats=('JPEG', 'PNG', 'WEBP', 'TIFF'))
+        img = Image.open(img_path, formats=('JPEG', 'PNG', 'WEBP'))
         img_ts = to_tensor(img)
 
         return img_ts
