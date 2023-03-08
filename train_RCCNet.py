@@ -50,13 +50,15 @@ if __name__ == "__main__":
     model = model.to(device)
 
     lr = 0.0004
+    epochs = 64
+    steps = 128
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
-    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, patience=4, min_lr=lr / 1e4)
-    lr = LRManager(lr, scheduler, optimizer).with_val_loss()
+    scheduler = torch.optim.lr_scheduler.OneCycleLR(
+        optimizer, max_lr=lr, pct_start=0.25, epochs=epochs, steps_per_epoch=steps
+    )
+    lr = LRManager(lr, scheduler, optimizer)
     loss = RotationLoss(lambda_cos=0.24, exponent=2)
 
-    epochs = 16
-    steps = 128
     trainer = Trainer(model, train_dataloader, val_dataloader, lr, loss, epochs, steps)
     ### Custom configuration area ###
     #################################
