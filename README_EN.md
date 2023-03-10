@@ -6,7 +6,7 @@ Predict the rotation angle of given picture through CNN. It can be used for rota
 
 Test result:
 
-![test_result](https://user-images.githubusercontent.com/48282276/221872572-7dfc7fcc-5bda-43e8-bee7-3a55ffd6e8a9.png)
+![test_result](https://user-images.githubusercontent.com/48282276/224320691-a8eefd23-392b-4580-a729-7869fa237eaa.png)
 
 Three kinds of models are implemented, as shown below.
 
@@ -14,13 +14,13 @@ Three kinds of models are implemented, as shown below.
 | ----------- | ----------------- | -------------------------- | ---------------------------------- | --------- |
 | RotNet      | ResNet50          | CrossEntropy               | 1.1548°                            | 92.7      |
 | RotNetR     | RegNetY 3.2GFLOPs | CrossEntropy               | 1.2825°                            | 69.8      |
-| RCCNet_v0_5 | RegNetY 3.2GFLOPs | MSE with Cosine-Correction | 44.8499°                           | 70.8      |
+| RCCNet_v0_5 | RegNetY 3.2GFLOPs | MSE with Cosine-Correction | 42.7774°                           | 68.7      |
 
-Note:
-- RotNet is the implementation of [`d4nst/RotNet`](https://github.com/d4nst/RotNet/blob/master/train/train_street_view.py) over PyTorch.
-- `RotNetR` is based on `RotNet`. It just renew the backbone and reduce the class number to 180. It's average prediction error is `1.2825°`, obtained by 64 epochs of training (2hours) on the [Google Street View](https://www.crcv.ucf.edu/data/GMCP_Geolocalization/) dataset.
-- About the Cross-Domain Test: [Google Street View](https://www.crcv.ucf.edu/data/GMCP_Geolocalization/) and [Landscape-Dataset](https://github.com/yuweiming70/Landscape-Dataset) for training, and Captcha Pictures from Baidu for testing (special thx to @xiangbei1997)
-- The captcha picture used in the demo above comes from [RotateCaptchaBreak](https://github.com/chencchen/RotateCaptchaBreak/tree/master/data/baiduCaptcha)
+RotNet is the implementation of [`d4nst/RotNet`](https://github.com/d4nst/RotNet/blob/master/train/train_street_view.py) over PyTorch. `RotNetR` is based on `RotNet`. I just renewed its backbone and reduce its class number to 180. It's average prediction error is `1.2825°`, obtained by 64 epochs of training (2 hours) on the [Google Street View](https://www.crcv.ucf.edu/data/GMCP_Geolocalization/) dataset. Presently the performance of `RCCNet_v0_5` is far weaker than the other two. I suggest you use `RotNetR` anyway.
+
+About the Cross-Domain Test: [Google Street View](https://www.crcv.ucf.edu/data/GMCP_Geolocalization/) and [Landscape-Dataset](https://github.com/yuweiming70/Landscape-Dataset) for training, and Captcha Pictures from Baidu for testing (special thx to @xiangbei1997)
+
+The captcha picture used in the demo above comes from [RotateCaptchaBreak](https://github.com/chencchen/RotateCaptchaBreak/tree/master/data/baiduCaptcha)
 
 ## Try it!
 
