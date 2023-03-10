@@ -22,7 +22,6 @@ if __name__ == "__main__":
         model.eval()
 
         img = Image.open("datasets/tieba/1615096444.jpg")
-        img = img.convert('RGB')
         img_ts = process_captcha(img)
         img_ts = img_ts.to(device=device)
 

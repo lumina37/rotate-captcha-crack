@@ -93,7 +93,7 @@ python server.py
 
 ### 准备数据集
 
-+ 我这里直接扒的谷歌街景和[Landscape-Dataset](https://github.com/yuweiming70/Landscape-Dataset)，你也可以自己收集一些风景照并放到一个文件夹里，图像没有尺寸要求
++ 我这里直接扒的[谷歌街景](https://www.crcv.ucf.edu/data/GMCP_Geolocalization/)和[Landscape-Dataset](https://github.com/yuweiming70/Landscape-Dataset)，你也可以自己收集一些风景照并放到一个文件夹里，图像没有尺寸要求
 
 + 在`train.py`里配置`dataset_root`变量指向装有图片的文件夹
 

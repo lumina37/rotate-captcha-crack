@@ -62,6 +62,6 @@ class RotNetR(nn.Module):
         img_ts = img_ts.unsqueeze_(0)
 
         onehot_ts = self.backbone.forward(img_ts)
-        angle = float(onehot_ts.argmax(1).cpu().item()) / self.cls_num
+        angle = float(onehot_ts.cpu().argmax(1).item()) / self.cls_num
 
         return angle
