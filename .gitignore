@@ -3,7 +3,7 @@
 !.gitignore
 !LICENSE
 !README.md
-!README_EN.md
+!README_zh-cn.md
 
 !pyproject.toml
 
