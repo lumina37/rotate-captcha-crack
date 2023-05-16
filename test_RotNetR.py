@@ -6,7 +6,7 @@ from torch import Tensor
 from torch.utils.data import DataLoader
 
 from rotate_captcha_crack.common import device
-from rotate_captcha_crack.criterion import dist_between_onehot
+from rotate_captcha_crack.criterion import dist_onehot
 from rotate_captcha_crack.dataset import ImgTsSeqFromPath, ValDataset
 from rotate_captcha_crack.helper import default_num_workers
 from rotate_captcha_crack.model import RotNetR, WhereIsMyModel
@@ -44,7 +44,7 @@ if __name__ == '__main__':
 
             predict: Tensor = model(source)
 
-            digree_diff = dist_between_onehot(predict, target) * 360
+            digree_diff = dist_onehot(predict, target) * predict.shape[1]
             total_degree_diff += digree_diff
 
             batch_count += 1

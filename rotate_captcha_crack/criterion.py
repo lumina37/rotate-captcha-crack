@@ -53,25 +53,25 @@ def dist_between_angles_(lhs: Tensor, rhs: Tensor) -> float:
     return loss
 
 
-def dist_between_onehot(lhs: Tensor, rhs: Tensor) -> float:
+def dist_onehot(one_hot: Tensor, angles: Tensor) -> float:
     """
-    calculate the average distance between two one-hot array
+    calculate the average distance between one-hot array and angle array
 
     Args:
-        lhs (Tensor): lhs tensor ([N,C]=[undefined,cls_num), dtype=float32, range=[0.0,1.0))
-        rhs (Tensor): rhs tensor ([N]=[undefined], dtype=long, range=[0,cls_num))
+        one_hot (Tensor): one_hot tensor ([N,C]=[undefined,cls_num), dtype=float32, range=[0.0,1.0))
+        angles (Tensor): angle tensor ([N]=[undefined], dtype=float32, range=[0.0,1.0))
 
     Returns:
         float: average distance. range=[0.0,1.0)
 
     Note:
-        Multiply it by 360° to obtain dist in degrees.
+        Multiply it by `cls_num` to obtain dist in degrees.
     """
 
-    cls_num = lhs.nelement()
-    lhs = lhs.argmax(1).to(dtype=torch.float32).div_(cls_num)
-    rhs = rhs.to(dtype=torch.float32).div_(cls_num)
+    cls_num = one_hot.shape[1]
+    one_hot_angles = one_hot.argmax(1).to(dtype=torch.float32).div_(cls_num)
+    angles = angles.clone()
 
-    loss = dist_between_angles_(lhs, rhs)
+    loss = dist_between_angles_(one_hot_angles, angles)
 
     return loss

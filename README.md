@@ -10,15 +10,15 @@ Test result:
 
 Three kinds of models are implemented, as shown below.
 
-| Name        | Backbone          | Loss                       | Cross-Domain Loss (less is better) | Size (MB) |
-| ----------- | ----------------- | -------------------------- | ---------------------------------- | --------- |
-| RotNet      | ResNet50          | CrossEntropy               | 1.1548°                            | 92.7      |
-| RotNetR     | RegNetY 3.2GFLOPs | CrossEntropy               | 1.2825°                            | 69.8      |
-| RCCNet_v0_5 | RegNetY 3.2GFLOPs | MSE with Cosine-Correction | 42.7774°                           | 68.7      |
+| Name        | Backbone          | Cross-Domain Loss (less is better) | Params  | FLOPs  |
+| ----------- | ----------------- | ---------------------------------- | ------- | ------ |
+| RotNet      | ResNet50          | 71.7920°                           | 24.246M | 4.132G |
+| RotNetR     | RegNetY 3.2GFLOPs | 19.1594°                           | 18.468M | 3.223G |
+| RCCNet_v0_5 | RegNetY 3.2GFLOPs | 42.7774°                           | 17.923M | 3.223G |
 
-RotNet is the implementation of [`d4nst/RotNet`](https://github.com/d4nst/RotNet/blob/master/train/train_street_view.py) over PyTorch. `RotNetR` is based on `RotNet`. I just renewed its backbone and reduce its class number to 180. It's average prediction error is `1.2825°`, obtained by 64 epochs of training (2 hours) on the [Google Street View](https://www.crcv.ucf.edu/data/GMCP_Geolocalization/) dataset. Presently the performance of `RCCNet_v0_5` is far weaker than the other two. I suggest you use `RotNetR` anyway.
+RotNet is the implementation of [`d4nst/RotNet`](https://github.com/d4nst/RotNet/blob/master/train/train_street_view.py) over PyTorch. `RotNetR` is based on `RotNet`. I just renewed its backbone and reduce its class number to 180. It's average prediction error is `19.1594°`, obtained by 64 epochs of training (2 hours) on the [Google Street View](https://www.crcv.ucf.edu/data/GMCP_Geolocalization/) dataset.
 
-About the Cross-Domain Test: [Google Street View](https://www.crcv.ucf.edu/data/GMCP_Geolocalization/) and [Landscape-Dataset](https://github.com/yuweiming70/Landscape-Dataset) for training, and Captcha Pictures from Baidu for testing (special thx to @xiangbei1997)
+About the Cross-Domain Test: [Google Street View](https://www.crcv.ucf.edu/data/GMCP_Geolocalization/) and [Landscape-Dataset](https://github.com/yuweiming70/Landscape-Dataset) for training, and Captcha Pictures from Baidu for testing (thanks to @xiangbei1997)
 
 The captcha picture used in the demo above comes from [RotateCaptchaBreak](https://github.com/chencchen/RotateCaptchaBreak/tree/master/data/baiduCaptcha)
 
