@@ -7,7 +7,7 @@ from PIL.Image import Image
 from torch import Tensor
 from torchvision.transforms import Normalize
 from torchvision.transforms import functional as F
-from torchvision.transforms import functional_tensor as F_t
+from torchvision.transforms.functional import F_t
 
 from ..const import DEFAULT_TARGET_SIZE, SQRT2
 
