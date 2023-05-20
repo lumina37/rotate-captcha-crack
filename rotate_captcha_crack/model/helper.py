@@ -38,7 +38,7 @@ class WhereIsMyModel(object):
         init with task index
 
         Args:
-            task_index (Optional[int], optional): index of task. -1 leads to the last index. Defaults to -1.
+            task_index (int, optional): index of task. -1 leads to the last index. Defaults to -1.
 
         Raises:
             FileNotFoundError

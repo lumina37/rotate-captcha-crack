@@ -28,7 +28,7 @@ The captcha picture used in the demo above comes from [RotateCaptchaBreak](https
 
 + GPU supporting CUDA10+ (mem>=4G for training)
 
-+ Python>=3.8 <3.11
++ Python>=3.8 <3.12
 
 + PyTorch>=1.11
 
