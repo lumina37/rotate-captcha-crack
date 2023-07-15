@@ -2,13 +2,13 @@
 
 [中文](README_zh-cn.md) | English
 
-Predict the rotation angle of given picture through CNN. It can be used for rotate-captcha cracking.
+Predict the rotation angle of given picture through CNN. This project can be used for rotate-captcha cracking.
 
 Test result:
 
 ![test_result](https://user-images.githubusercontent.com/48282276/224320691-a8eefd23-392b-4580-a729-7869fa237eaa.png)
 
-Three kinds of models are implemented, as shown below.
+Three kinds of model are implemented, as shown in the table below.
 
 | Name        | Backbone          | Cross-Domain Loss (less is better) | Params  | FLOPs  |
 | ----------- | ----------------- | ---------------------------------- | ------- | ------ |
@@ -16,9 +16,9 @@ Three kinds of models are implemented, as shown below.
 | RotNetR     | RegNetY 3.2GFLOPs | 19.1594°                           | 18.468M | 3.223G |
 | RCCNet_v0_5 | RegNetY 3.2GFLOPs | 42.7774°                           | 17.923M | 3.223G |
 
-RotNet is the implementation of [`d4nst/RotNet`](https://github.com/d4nst/RotNet/blob/master/train/train_street_view.py) over PyTorch. `RotNetR` is based on `RotNet`. I just renewed its backbone and reduce its class number to 180. It's average prediction error is `19.1594°`, obtained by 64 epochs of training (2 hours) on the [Google Street View](https://www.crcv.ucf.edu/data/GMCP_Geolocalization/) dataset.
+RotNet is the implementation of [`d4nst/RotNet`](https://github.com/d4nst/RotNet/blob/master/train/train_street_view.py) over PyTorch. `RotNetR` is based on `RotNet`, with `RegNet` as its backbone and class number of 180. The average prediction error is `19.1594°`, obtained by 64 epochs of training (2 hours) on the [Google Street View](https://www.crcv.ucf.edu/data/GMCP_Geolocalization/) dataset.
 
-About the Cross-Domain Test: [Google Street View](https://www.crcv.ucf.edu/data/GMCP_Geolocalization/) and [Landscape-Dataset](https://github.com/yuweiming70/Landscape-Dataset) for training, and Captcha Pictures from Baidu for testing (thanks to @xiangbei1997)
+The Cross-Domain Test uses [Google Street View](https://www.crcv.ucf.edu/data/GMCP_Geolocalization/) and [Landscape-Dataset](https://github.com/yuweiming70/Landscape-Dataset) for training, and Captcha Pictures from Baidu (thanks to @xiangbei1997) for testing.
 
 The captcha picture used in the demo above comes from [RotateCaptchaBreak](https://github.com/chencchen/RotateCaptchaBreak/tree/master/data/baiduCaptcha)
 
@@ -55,11 +55,11 @@ pip install .
 
 ### Download the Pretrained Models
 
-Download the zip files in [Release](https://github.com/Starry-OvO/rotate-captcha-crack/releases) and unzip them to the `./models` dir.
+Download the `*.zip` files in [Release](https://github.com/Starry-OvO/rotate-captcha-crack/releases) and unzip them all to the `./models` dir.
 
 The directory structure will be like `./models/RCCNet_v0_5/230228_20_07_25_000/best.pth`
 
-The models' names will change frequently as the project is still in beta status. So, if any `FileNotFoundError` occurs, please try to rollback to the corresponding tag first.
+The names of models will change frequently as the project is still in beta status. So, if any `FileNotFoundError` occurs, please try to rollback to the corresponding tag first.
 
 ### Test the Rotation Effect by a Single Captcha Picture
 
@@ -115,7 +115,7 @@ python test_RotNetR.py
 
 Most of the rotate-captcha cracking methods are based on [`d4nst/RotNet`](https://github.com/d4nst/RotNet), with `ResNet50` as its backbone. `RotNet` treat the angle prediction as a classification task with 360 classes, then use `CrossEntropy` to compute the loss.
 
-Yet `CrossEntropy` will bring a sizeable metric distance of about $358°$ between $1°$ and $359°$, clearly defies common sense, it should be a small value like $2°$. Meanwhile, the [`angle_error_regression`](https://github.com/d4nst/RotNet/blob/a56ea59818bbdd76d4dd8d83b8bbbaae6a802310/utils.py#L30-L36) given by [d4nst/RotNet](https://github.com/d4nst/RotNet) is less effective. That's because when dealing with outliers, the gradient will lead to a non-convergence result. You can easily understand this through the subsequent comparison between loss functions.
+Yet `CrossEntropy` will bring a significant metric distance of about $358°$ between $1°$ and $359°$, clearly defies common sense, it should be a small value like $2°$. Meanwhile, the [`angle_error_regression`](https://github.com/d4nst/RotNet/blob/a56ea59818bbdd76d4dd8d83b8bbbaae6a802310/utils.py#L30-L36) proposed by [d4nst/RotNet](https://github.com/d4nst/RotNet) is less effective. That's because when dealing with outliers, the gradient leads to a non-convergence result. You can easily understand this through the subsequent comparison between loss functions.
 
 My regression loss function `RotationLoss` is based on `MSELoss`, with an extra cosine-correction to decrease the metric distance between $±k*360°$.
 
@@ -128,4 +128,8 @@ The loss function is derivable and *almost* convex over the entire $\mathbb{R}$.
 
 Finally, let's take a look at the figure of two loss functions:
 
-![loss](https://user-images.githubusercontent.com/48282276/223087577-fe054521-36c4-4665-9132-2ca7dd2270f8.png)
+<center>
+
+![loss](https://github.com/Starry-OvO/rotate-captcha-crack/assets/48282276/1dd9e0b4-e40d-4205-8500-14cf27e187dd)
+
+</center>
