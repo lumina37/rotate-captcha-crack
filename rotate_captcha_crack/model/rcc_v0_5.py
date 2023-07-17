@@ -23,8 +23,6 @@ class RCCNet_v0_5(nn.Module):
 
     def forward(self, x: Tensor) -> Tensor:
         """
-        forward
-
         Args:
             x (Tensor): img_tensors ([N,C,H,W]=[batch_size,3,224,224], dtype=float32, range=[0.0,1.0))
 
@@ -45,7 +43,7 @@ class RCCNet_v0_5(nn.Module):
 
     def predict(self, img_ts: Tensor) -> float:
         """
-        predict the counter clockwise rotation angle
+        Predict the counter clockwise rotation angle.
 
         Args:
             img_ts (Tensor): img_tensor ([C,H,W]=[3,224,224], dtype=float32, range=[0.0,1.0))

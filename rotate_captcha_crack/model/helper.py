@@ -11,7 +11,7 @@ DT_FMT_STR = DT_SPLIT_CHAR.join(["%y%m%d", "%H", "%M", "%S"])
 
 class WhereIsMyModel(object):
     """
-    help you find out your model
+    Help you find your model.
 
     Args:
         model (Module): the model you wanna use
@@ -35,7 +35,7 @@ class WhereIsMyModel(object):
 
     def with_index(self, task_index: int = -1) -> "WhereIsMyModel":
         """
-        init with task index
+        Init with task index.
 
         Args:
             task_index (int, optional): index of task. -1 leads to the last index. Defaults to -1.
@@ -78,7 +78,7 @@ class WhereIsMyModel(object):
 
     def with_name(self, task_name: str) -> "WhereIsMyModel":
         """
-        init with task name
+        Init with task name.
 
         Args:
             task_name (str): name of task

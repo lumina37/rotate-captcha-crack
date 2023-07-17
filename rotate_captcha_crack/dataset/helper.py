@@ -20,7 +20,7 @@ DEFAULT_NORM = Normalize(
 
 def to_tensor(img: Image) -> Tensor:
     """
-    convert PIL image to C3U8 tensor
+    Convert PIL image to tensor of type `C3U8`.
 
     Args:
         img (Image): PIL image
@@ -39,7 +39,7 @@ def to_tensor(img: Image) -> Tensor:
 
 def to_square(src: Tensor) -> Tensor:
     """
-    crop the tensor into square shape
+    Crop the tensor into square shape.
 
     Args:
         src (Tensor): tensor
@@ -71,7 +71,7 @@ def to_square(src: Tensor) -> Tensor:
 
 def rotate_by_factor(src: Tensor, angle_factor: float) -> Tensor:
     """
-    rotate a square tensor
+    Rotate a square tensor.
 
     Args:
         src (Tensor): square tensor
@@ -95,7 +95,7 @@ def rotate_by_factor(src: Tensor, angle_factor: float) -> Tensor:
 
 def rotate_square(src: Tensor, angle_factor: float) -> Tensor:
     """
-    rotate a square tensor without any extra border
+    Rotate a square tensor without making any extra border.
 
     Args:
         src (Tensor): square tensor
@@ -126,7 +126,7 @@ def rotate_square(src: Tensor, angle_factor: float) -> Tensor:
 
 def square_resize(src: Tensor, target_size: int = DEFAULT_TARGET_SIZE) -> Tensor:
     """
-    resize a tensor to square shape
+    Resize a tensor into square shape.
 
     Args:
         src (Tensor): tensor ([C,H,W]=[ud,H,H])
@@ -143,7 +143,7 @@ def square_resize(src: Tensor, target_size: int = DEFAULT_TARGET_SIZE) -> Tensor
 
 def u8_to_float32(src: Tensor) -> Tensor:
     """
-    convert tensor dtype from uint8 to float32
+    Convert the dtype of tensor from uint8 to float32.
 
     Args:
         src (Tensor): tensor (dtype=uint8, range=[0,255])
@@ -159,7 +159,7 @@ def u8_to_float32(src: Tensor) -> Tensor:
 
 def from_img(src: Tensor, angle_factor: float, target_size: int = DEFAULT_TARGET_SIZE) -> Tensor:
     """
-    generate rotated square tensor from general image
+    Generate rotated square tensor from general tensor.
 
     - crop the tensor into square shape
     - then rotate it without any extra border
@@ -168,7 +168,7 @@ def from_img(src: Tensor, angle_factor: float, target_size: int = DEFAULT_TARGET
     Args:
         src (Tensor): tensor (dtype=uint8, range=[0,255])
         angle_factor (float): angle factor in [0.0,1.0). 1.0 leads to an entire cycle.
-        target_size (int, optional): target size. Defaults to DEFAULT_TARGET_SIZE.
+        target_size (int, optional): target size. Defaults to `DEFAULT_TARGET_SIZE`.
 
     Returns:
         Tensor: tensor ([C,H,W]=[src,target_size,target_size], dtype=float32, range=[0.0,1.0))
@@ -184,7 +184,7 @@ def from_img(src: Tensor, angle_factor: float, target_size: int = DEFAULT_TARGET
 
 def strip_border(src: Tensor) -> Tensor:
     """
-    strip the border out of the middle circle
+    Strip the border out of the middle circle.
 
     Args:
         src (Tensor): square tensor with border
@@ -203,14 +203,14 @@ def strip_border(src: Tensor) -> Tensor:
 
 def from_captcha(src: Tensor, angle_factor: float, target_size: int = DEFAULT_TARGET_SIZE) -> Tensor:
     """
-    generate rotated square tensor from captcha image which has border
+    Generate rotated square tensor from square captcha image tensor with border.
 
-    - rotate it without any extra border
+    - rotate it without making any extra border
     - then strip the border
-    - then resize it to the target size
+    - then resize it into the target size
 
     Args:
-        src (Tensor): square tensor ([C,H,W]=[ud,H,H], dtype=uint8, range=[0,255])
+        src (Tensor): square captcha image tensor ([C,H,W]=[ud,H,H], dtype=uint8, range=[0,255])
         angle_factor (float): angle factor in [0.0,1.0). 1.0 leads to an entire cycle.
         target_size (int, optional): target size. Defaults to DEFAULT_TARGET_SIZE.
 

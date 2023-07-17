@@ -14,12 +14,12 @@ TypeRCCItem = Tuple[Tensor, Tensor]
 
 class RCCDataset(Dataset[TypeRCCItem]):
     """
-    dataset for RCCNet
+    Dataset for RCCNet.
 
     Args:
         imgseq (TypeImgSeq): upstream dataset
-        target_size (int, optional): output img size. Defaults to DEFAULT_TARGET_SIZE.
-        norm (Normalize, optional): normalize policy. Defaults to DEFAULT_NORM.
+        target_size (int, optional): output img size. Defaults to `DEFAULT_TARGET_SIZE`.
+        norm (Normalize, optional): normalize policy. Defaults to `DEFAULT_NORM`.
 
     Methods:
         - `def __len__(self) -> int:` length of the dataset

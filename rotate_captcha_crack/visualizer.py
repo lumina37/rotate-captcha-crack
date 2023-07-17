@@ -10,7 +10,7 @@ from .const import CKPT_PATH, FIGURE_PATH
 
 def visualize_train(model_dir: Path) -> None:
     """
-    visualize the training process and save figures
+    Visualize the training process and save figures.
 
     Args:
         model_dir (int): visualize target

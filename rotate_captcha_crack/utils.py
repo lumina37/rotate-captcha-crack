@@ -12,7 +12,7 @@ _T = TypeVar('_T')
 
 def slice_from_range(seq: Sequence[_T], _range: Tuple[float, float]) -> Sequence[_T]:
     """
-    slice a sequence from given range
+    Slice sequence following the given range.
 
     Args:
         seq (Sequence[_T]): parent sequence
@@ -34,12 +34,12 @@ def slice_from_range(seq: Sequence[_T], _range: Tuple[float, float]) -> Sequence
 
 def process_captcha(img: Image, target_size: int = DEFAULT_TARGET_SIZE, norm: Normalize = DEFAULT_NORM) -> Tensor:
     """
-    convert a captcha image into tensor
+    Convert captcha image into tensor.
 
     Args:
         img (Image): captcha image (square with border)
-        target_size (int, optional): target size. Defaults to DEFAULT_TARGET_SIZE.
-        norm (Normalize, optional): normalize policy. Defaults to DEFAULT_NORM.
+        target_size (int, optional): target size. Defaults to `DEFAULT_TARGET_SIZE`.
+        norm (Normalize, optional): normalize policy. Defaults to `DEFAULT_NORM`.
 
     Returns:
         Tensor: tensor ([C,H,W]=[3,target_size,target_size], dtype=float32, range=[0.0,1.0))

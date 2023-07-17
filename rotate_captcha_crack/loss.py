@@ -18,7 +18,7 @@ class RotationLoss(Module):
 
     def forward(self, predict: Tensor, target: Tensor) -> Tensor:
         """
-        calculate the loss between `predict` and `target`
+        Calculate the loss between `predict` and `target`.
 
         Args:
             predict (Tensor): ([N]=[batch_size], dtype=float32, range=[0.0,1.0))

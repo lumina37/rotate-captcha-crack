@@ -7,7 +7,7 @@ HALF_CYCLE = ONE_CYCLE / 2
 
 def dist_between_angles(lhs: Tensor, rhs: Tensor) -> float:
     """
-    calculate the average distance between two angle array
+    Calculate the average distance between two angle array.
 
     Args:
         lhs (Tensor): lhs tensor ([N]=[undefined], dtype=float32, range=[0.0,1.0))
@@ -31,7 +31,7 @@ def dist_between_angles(lhs: Tensor, rhs: Tensor) -> float:
 
 def dist_onehot(one_hot: Tensor, angles: Tensor) -> float:
     """
-    calculate the average distance between one-hot array and angle array
+    Calculate the average distance between one-hot array and angle array.
 
     Args:
         one_hot (Tensor): one_hot tensor ([N,C]=[undefined,cls_num), dtype=float32, range=[0.0,1.0))

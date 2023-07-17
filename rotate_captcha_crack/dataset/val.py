@@ -14,7 +14,7 @@ TypeValItem = Tuple[Tensor, Tensor]
 
 class ValDataset(Dataset[TypeValItem]):
     """
-    dataset for validate
+    Dataset for validation.
 
     Args:
         imgseq (TypeImgSeq): upstream dataset

@@ -4,7 +4,7 @@ from typing import List
 
 def from_google_streetview(root: Path) -> List[Path]:
     """
-    get image paths from Google StreetView Dataset
+    Get image paths from Google StreetView Dataset.
 
     Args:
         root (Path):  image directory
