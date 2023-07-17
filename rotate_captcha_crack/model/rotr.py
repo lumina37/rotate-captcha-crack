@@ -11,7 +11,7 @@ class RotNetR(nn.Module):
         train (bool, optional): True to load the pretrained parameters. Defaults to True.
 
     Note:
-        impl: `rotnet_street_view_resnet50` in https://github.com/d4nst/RotNet but use `RegNet_Y_3_2GF` as its backbone
+        impl: `rotnet_street_view_resnet50` in https://github.com/d4nst/RotNet but with `RegNet_Y_3_2GF` as its backbone
     """
 
     def __init__(self, cls_num: int = DEFAULT_CLS_NUM, train: bool = True) -> None:
