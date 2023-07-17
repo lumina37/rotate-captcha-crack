@@ -130,7 +130,7 @@ def square_resize(src: Tensor, target_size: int = DEFAULT_TARGET_SIZE) -> Tensor
 
     Args:
         src (Tensor): tensor ([C,H,W]=[ud,H,H])
-        target_size (int, optional): target size. Defaults to DEFAULT_TARGET_SIZE.
+        target_size (int, optional): target size. Defaults to `DEFAULT_TARGET_SIZE`.
 
     Returns:
         Tensor: tensor ([C,H,W]=[src,target_size,target_size])
@@ -212,7 +212,7 @@ def from_captcha(src: Tensor, angle_factor: float, target_size: int = DEFAULT_TA
     Args:
         src (Tensor): square captcha image tensor ([C,H,W]=[ud,H,H], dtype=uint8, range=[0,255])
         angle_factor (float): angle factor in [0.0,1.0). 1.0 leads to an entire cycle.
-        target_size (int, optional): target size. Defaults to DEFAULT_TARGET_SIZE.
+        target_size (int, optional): target size. Defaults to `DEFAULT_TARGET_SIZE`.
 
     Returns:
         Tensor: tensor ([C,H,W]=[src,target_size,target_size], dtype=float32, range=[0.0,1.0))
