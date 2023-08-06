@@ -26,9 +26,9 @@ The captcha picture used in the demo above comes from [RotateCaptchaBreak](https
 
 ### Prepare
 
-+ GPU supporting CUDA10+ (mem>=4G for training)
++ Device supporting CUDA10+ (mem>=4G for training)
 
-+ Python>=3.8 <3.12
++ Python>=3.8,<3.12
 
 + PyTorch>=1.11
 
@@ -40,7 +40,7 @@ cd ./rotate-captcha-crack
 pip install .
 ```
 
-**DONT** miss the `.` after `install`
+**DO NOT** miss the `.` after `install`
 
 + Or, if you prefer `venv`
 
@@ -128,8 +128,8 @@ The loss function is derivable and *almost* convex over the entire $\mathbb{R}$.
 
 Finally, let's take a look at the figure of two loss functions:
 
-<center>
+<p align="center">
 
 ![loss](https://github.com/Starry-OvO/rotate-captcha-crack/assets/48282276/1dd9e0b4-e40d-4205-8500-14cf27e187dd)
 
-</center>
+</p>
