@@ -9,12 +9,12 @@ from ..const import DEFAULT_TARGET_SIZE
 from .helper import DEFAULT_NORM, from_img
 from .typing import TypeImgTsSeq
 
-TypeRegItem = Tuple[Tensor, Tensor]
+TypeRCCItem = Tuple[Tensor, Tensor]
 
 
-class RegDataset(Dataset[TypeRegItem]):
+class RCCDataset(Dataset[TypeRCCItem]):
     """
-    Dataset for regression.
+    Dataset for RCCNet (regression).
 
     Args:
         imgseq (TypeImgSeq): upstream dataset
@@ -23,7 +23,7 @@ class RegDataset(Dataset[TypeRegItem]):
 
     Methods:
         - `def __len__(self) -> int:` length of the dataset
-        - `def __getitem__(self, idx: int) -> TypeRegItem:` get square img_ts and angle_ts
+        - `def __getitem__(self, idx: int) -> TypeRCCItem:` get square img_ts and angle_ts
             ([C,H,W]=[3,target_size,target_size], dtype=float32, range=[0.0,1.0)), ([N]=[1], dtype=float32, range=[0.0,1.0))
     """
 
@@ -51,7 +51,7 @@ class RegDataset(Dataset[TypeRegItem]):
     def __len__(self) -> int:
         return self.size
 
-    def __getitem__(self, idx: int) -> TypeRegItem:
+    def __getitem__(self, idx: int) -> TypeRCCItem:
         img_ts = self.imgseq[idx]
         angle_ts = self.angles[idx]
 

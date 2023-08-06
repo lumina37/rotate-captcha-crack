@@ -5,6 +5,7 @@ DEFAULT_LOG_DIR = './log'
 LOG_FILE_SUFFIX = '.log'
 
 CKPT_PATH = "ckpt"
+LOG_PATH = "log"
 FIGURE_PATH = "figs"
 
 DEFAULT_TARGET_SIZE = 224

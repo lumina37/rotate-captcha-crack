@@ -6,7 +6,7 @@ from torch.nn import CrossEntropyLoss
 from torch.utils.data import DataLoader
 
 from rotate_captcha_crack.common import device
-from rotate_captcha_crack.dataset import ClsDataset, ImgTsSeqFromPath, from_google_streetview
+from rotate_captcha_crack.dataset import ImgTsSeqFromPath, RotDataset, from_google_streetview
 from rotate_captcha_crack.helper import default_num_workers
 from rotate_captcha_crack.lr import LRManager
 from rotate_captcha_crack.model import RotNetR
@@ -28,9 +28,9 @@ if __name__ == "__main__":
     img_paths = from_google_streetview(dataset_root)
     cls_num = 180
     train_img_paths = slice_from_range(img_paths, (0.0, 0.98))
-    train_dataset = ClsDataset(ImgTsSeqFromPath(train_img_paths), cls_num=cls_num)
+    train_dataset = RotDataset(ImgTsSeqFromPath(train_img_paths), cls_num=cls_num)
     val_img_paths = slice_from_range(img_paths, (0.98, 1.0))
-    val_dataset = ClsDataset(ImgTsSeqFromPath(val_img_paths), cls_num=cls_num)
+    val_dataset = RotDataset(ImgTsSeqFromPath(val_img_paths), cls_num=cls_num)
 
     num_workers = default_num_workers()
     train_dataloader = DataLoader(

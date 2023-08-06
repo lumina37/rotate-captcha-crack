@@ -5,7 +5,7 @@ import torch
 from torch.utils.data import DataLoader
 
 from rotate_captcha_crack.common import device
-from rotate_captcha_crack.dataset import ImgTsSeqFromPath, RegDataset, from_google_streetview
+from rotate_captcha_crack.dataset import ImgTsSeqFromPath, RCCDataset, from_google_streetview
 from rotate_captcha_crack.helper import default_num_workers
 from rotate_captcha_crack.loss import RotationLoss
 from rotate_captcha_crack.lr import LRManager
@@ -27,9 +27,9 @@ if __name__ == "__main__":
 
     img_paths = from_google_streetview(dataset_root)
     train_img_paths = slice_from_range(img_paths, (0.0, 0.98))
-    train_dataset = RegDataset(ImgTsSeqFromPath(train_img_paths))
+    train_dataset = RCCDataset(ImgTsSeqFromPath(train_img_paths))
     val_img_paths = slice_from_range(img_paths, (0.98, 1.0))
-    val_dataset = RegDataset(ImgTsSeqFromPath(val_img_paths))
+    val_dataset = RCCDataset(ImgTsSeqFromPath(val_img_paths))
 
     num_workers = default_num_workers()
     train_dataloader = DataLoader(

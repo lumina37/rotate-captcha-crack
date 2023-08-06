@@ -159,9 +159,7 @@ class Trainer(object):
             self.best_val_loss = sys.maxsize
             self.last_epoch = 0
             self.t_cost = 0.0
-
             (self.finder.model_dir / CKPT_PATH).mkdir(0o755, exist_ok=True)
-            (self.finder.model_dir / LOG_PATH).mkdir(0o755, exist_ok=True)
 
         for epoch_idx in range(self.last_epoch, self.epochs):
             start_t = time.perf_counter()
