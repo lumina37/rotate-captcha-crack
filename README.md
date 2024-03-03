@@ -7,6 +7,7 @@ Predict the rotation angle of given picture through CNN. This project can be use
 Test result:
 
 ![test_result](https://user-images.githubusercontent.com/48282276/224320691-a8eefd23-392b-4580-a729-7869fa237eaa.png)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FStarry-OvO%2Frotate-captcha-crack.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FStarry-OvO%2Frotate-captcha-crack?ref=badge_shield)
 
 Three kinds of model are implemented, as shown in the table below.
 
@@ -133,3 +134,7 @@ Finally, let's take a look at the figure of two loss functions:
 ![loss](https://github.com/Starry-OvO/rotate-captcha-crack/assets/48282276/1dd9e0b4-e40d-4205-8500-14cf27e187dd)
 
 </p>
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FStarry-OvO%2Frotate-captcha-crack.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FStarry-OvO%2Frotate-captcha-crack?ref=badge_large)
