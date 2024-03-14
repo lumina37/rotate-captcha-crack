@@ -17,7 +17,7 @@ if __name__ == '__main__':
     opts = parser.parse_args()
 
     with torch.no_grad():
-        dataset_root = Path("./datasets/use_img")
+        dataset_root = Path("./datasets/captcha")
 
         img_paths = list(dataset_root.glob('*.png'))
         test_dataset = ValDataset(ImgTsSeqFromPath(img_paths))

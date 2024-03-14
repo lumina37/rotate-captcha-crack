@@ -23,7 +23,7 @@ if __name__ == "__main__":
 
     #################################
     ### Custom configuration area ###
-    dataset_root = Path("E:/Dataset/Streetview/data/data")
+    dataset_root = Path("D:/Dataset/Streetview/data/data")
 
     img_paths = from_google_streetview(dataset_root)
     cls_num = 180
