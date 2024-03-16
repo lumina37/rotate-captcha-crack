@@ -1,40 +1,19 @@
 import math
 import random
 
-import numpy as np
-import torch
-from PIL.Image import Image
 from torch import Tensor
 from torchvision.transforms import Normalize
 from torchvision.transforms import functional as F
 from torchvision.transforms.functional import F_t
 
-from ..const import DEFAULT_TARGET_SIZE, SQRT2
+from ...const import DEFAULT_TARGET_SIZE, SQRT2
+from .totensor import u8_to_float32
 
 DEFAULT_NORM = Normalize(
     mean=[0.485, 0.456, 0.406],
     std=[0.229, 0.224, 0.225],
     inplace=True,
 )
-
-
-def to_tensor(img: Image) -> Tensor:
-    """
-    Convert PIL image to tensor of type `C3U8`.
-
-    Args:
-        img (Image): PIL image
-
-    Returns:
-        Tensor: (dtype=uint8, range=[0,255])
-    """
-
-    img = img.convert('RGB')
-    img_ts = torch.from_numpy(np.array(img))
-    img_ts = img_ts.view(img.height, img.width, 3)
-    img_ts = img_ts.permute(2, 0, 1)
-
-    return img_ts
 
 
 def to_square(src: Tensor) -> Tensor:
@@ -75,7 +54,7 @@ def rotate_by_factor(src: Tensor, angle_factor: float) -> Tensor:
 
     Args:
         src (Tensor): square tensor
-        angle_factor (float): angle factor in [0.0,1.0). 1.0 leads to an entire cycle.
+        angle_factor (float): angle factor in [0.0,1.0). 1.0 means an entire cycle.
 
     Returns:
         Tensor: rotated tensor ([C,H,W]=[src,src,src])
@@ -99,7 +78,7 @@ def rotate_square(src: Tensor, angle_factor: float) -> Tensor:
 
     Args:
         src (Tensor): square tensor
-        angle_factor (float): angle factor in [0.0,1.0). 1.0 leads to an entire cycle.
+        angle_factor (float): angle factor in [0.0,1.0). 1.0 means an entire cycle.
 
     Returns:
         Tensor: rotated square tensor ([C,H,W]=[src,src_size/(sin(a)+cos(a)),H])
@@ -126,7 +105,7 @@ def rotate_square(src: Tensor, angle_factor: float) -> Tensor:
 
 def square_resize(src: Tensor, target_size: int = DEFAULT_TARGET_SIZE) -> Tensor:
     """
-    Resize a tensor into square shape.
+    Resize a square tensor into another square shape.
 
     Args:
         src (Tensor): tensor ([C,H,W]=[ud,H,H])
@@ -136,24 +115,10 @@ def square_resize(src: Tensor, target_size: int = DEFAULT_TARGET_SIZE) -> Tensor
         Tensor: tensor ([C,H,W]=[src,target_size,target_size])
     """
 
+    src_size, src_w = src.shape[-2:]
+    assert src_size == src_w
+
     dst = F_t.resize(src, [target_size, target_size], antialias=True)
-
-    return dst
-
-
-def u8_to_float32(src: Tensor) -> Tensor:
-    """
-    Convert the dtype of tensor from uint8 to float32.
-
-    Args:
-        src (Tensor): tensor (dtype=uint8, range=[0,255])
-
-    Returns:
-        Tensor: tensor ([C,H,W]=[src,src,src], dtype=float32, range=[0.0,1.0))
-    """
-
-    dst = src.to(dtype=torch.float32).div_(255)
-
     return dst
 
 
@@ -167,7 +132,7 @@ def from_img(src: Tensor, angle_factor: float, target_size: int = DEFAULT_TARGET
 
     Args:
         src (Tensor): tensor (dtype=uint8, range=[0,255])
-        angle_factor (float): angle factor in [0.0,1.0). 1.0 leads to an entire cycle.
+        angle_factor (float): angle factor in [0.0,1.0). 1.0 means an entire cycle.
         target_size (int, optional): target size. Defaults to `DEFAULT_TARGET_SIZE`.
 
     Returns:
@@ -190,14 +155,13 @@ def strip_border(src: Tensor) -> Tensor:
         src (Tensor): square tensor with border
 
     Returns:
-        Tensor: striped tensor ([C,H,W]=[src,src_size/sqrt(2.0),H])
+        Tensor: striped tensor ([C,H,W]=[src,src_size/sqrt(2),H])
     """
 
     src_size, src_w = src.shape[-2:]
     assert src_size == src_w
 
     dst = F.center_crop(src, src_size / SQRT2)
-
     return dst
 
 

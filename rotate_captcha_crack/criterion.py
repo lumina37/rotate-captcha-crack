@@ -41,7 +41,7 @@ def dist_onehot(one_hot: Tensor, angles: Tensor) -> float:
         float: average distance. range=[0.0,1.0)
 
     Note:
-        Multiply it by `cls_num` to obtain dist in degrees.
+        Multiply it by `cls_num` to obtain distance in degrees.
     """
 
     cls_num = one_hot.shape[1]

@@ -1,32 +1,32 @@
-from typing import Sequence, Tuple, TypeVar
+from typing import Sequence, TypeVar
 
 from PIL.Image import Image
 from torch import Tensor
 from torchvision.transforms import Normalize
 
 from .const import DEFAULT_TARGET_SIZE
-from .dataset.helper import DEFAULT_NORM, square_resize, strip_border, to_tensor, u8_to_float32
+from .dataset.midware import DEFAULT_NORM, path_to_tensor, square_resize, strip_border, u8_to_float32
 
-_T = TypeVar('_T')
+TSeq = TypeVar('TSeq', bound=Sequence)
 
 
-def slice_from_range(seq: Sequence[_T], _range: Tuple[float, float]) -> Sequence[_T]:
+def slice_from_range(seq: TSeq, range_: tuple[float, float]) -> TSeq:
     """
     Slice sequence following the given range.
 
     Args:
-        seq (Sequence[_T]): parent sequence
-        _range (Tuple[float, float]): select which part of the sequence. Use (0.0,0.5) to select the first half
+        seq (TSeq): parent sequence
+        range_ (tuple[float, float]): select which part of the sequence. Use (0.0,0.5) to select the first half
 
     Returns:
-        Sequence[_T]: sliced sequence
+        TSeq: sliced sequence
     """
 
     length = len(seq)
 
-    start = int(_range[0] * length)
+    start = int(range_[0] * length)
     assert start >= 0
-    end = int(_range[1] * length)
+    end = int(range_[1] * length)
     assert end >= 0
 
     return seq[start:end]
@@ -46,7 +46,7 @@ def process_captcha(img: Image, target_size: int = DEFAULT_TARGET_SIZE, norm: No
     """
 
     img = img.convert('RGB')
-    img_ts = to_tensor(img)
+    img_ts = path_to_tensor(img)
     img_ts = strip_border(img_ts)
     img_ts = u8_to_float32(img_ts)
     img_ts = square_resize(img_ts, target_size)

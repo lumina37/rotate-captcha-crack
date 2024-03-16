@@ -6,7 +6,9 @@ from torch.nn import CrossEntropyLoss
 from torch.utils.data import DataLoader
 
 from rotate_captcha_crack.common import device
-from rotate_captcha_crack.dataset import ImgTsSeqFromPath, RotDataset, from_google_streetview
+from rotate_captcha_crack.const import DEFAULT_CLS_NUM
+from rotate_captcha_crack.dataset import google_street_view
+from rotate_captcha_crack.dataset.midware import CircularSmoothLabel, Rotator, path_to_tensor
 from rotate_captcha_crack.helper import default_num_workers
 from rotate_captcha_crack.lr import LRManager
 from rotate_captcha_crack.model import RotNetR
@@ -25,12 +27,14 @@ if __name__ == "__main__":
     ### Custom configuration area ###
     dataset_root = Path("D:/Dataset/Streetview/data/data")
 
-    img_paths = from_google_streetview(dataset_root)
-    cls_num = 180
+    img_paths = google_street_view.get_paths(dataset_root)
+    cls_num = DEFAULT_CLS_NUM
+    labelling = CircularSmoothLabel(cls_num)
+
     train_img_paths = slice_from_range(img_paths, (0.0, 0.98))
-    train_dataset = RotDataset(ImgTsSeqFromPath(train_img_paths), cls_num=cls_num)
+    train_dataset = train_img_paths | path_to_tensor | Rotator(cls_num) | labelling | tuple
     val_img_paths = slice_from_range(img_paths, (0.98, 1.0))
-    val_dataset = RotDataset(ImgTsSeqFromPath(val_img_paths), cls_num=cls_num)
+    val_dataset = val_img_paths | path_to_tensor | Rotator(cls_num) | labelling | tuple
 
     num_workers = default_num_workers()
     train_dataloader = DataLoader(

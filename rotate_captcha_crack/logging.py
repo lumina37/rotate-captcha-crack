@@ -8,8 +8,6 @@ from .const import DEFAULT_LOG_DIR, LOG_FILE_SUFFIX
 logging.addLevelName(logging.FATAL, "FATAL")
 logging.addLevelName(logging.WARN, "WARN")
 
-logging.logThreads = False
-logging.logMultiprocessing = False
 logging.raiseExceptions = False
 logging.Formatter.default_msec_format = '%s.%03d'
 

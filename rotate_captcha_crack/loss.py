@@ -5,10 +5,8 @@ from torch.nn import Module
 
 class RotationLoss(Module):
     """
-    Optimized MSELoss. Including a cosine correction to reduce the distance between 0 and 1.
-
-    Note:
-        $$ \\mathcal{L}(dist) = {dist}^{2} + \\lambda_{cos} (1 - \\cos(2\\pi*{dist})) $$
+    Optimized MSELoss. Including a cosine correction to reduce the distance between 0 and 1. \\
+    $$ \\mathcal{L}(dist) = {dist}^{2} + \\lambda_{cos} (1 - \\cos(2\\pi*{dist})) $$
     """
 
     def __init__(self, lambda_cos: float = 0.24, exponent: float = 2.0) -> None:
