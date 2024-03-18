@@ -79,7 +79,7 @@ class CircularSmoothLabel:
     """
 
     cls_num: int = DEFAULT_CLS_NUM
-    std: float = 0.5
+    std: float = 1.0
     normal_dist: Tensor = dcs.field(default=None, init=False)
 
     def __post_init__(self) -> None:
