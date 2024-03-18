@@ -18,8 +18,10 @@ class FnWrap(Generic[TArg, TRet]):
         fn (Callable[[TArg], TRet]): a pure function
 
     Example:
-        `precomposed_funcs = FnWrap(func00) | func01 | func02` \\
-        `another_funcs = FnWrap(func10) | precomposed_funcs | func12`
+        ```
+        precomposed_funcs = FnWrap(func00) | func01 | func02
+        another_funcs = FnWrap(func10) | precomposed_funcs | func12
+        ```
     """
 
     def __init__(self, fn: Callable[[TArg], TRet]) -> None:
@@ -42,6 +44,22 @@ TypeFnWrap = TypeVar('TypeFnWrap', bound=FnWrap)
 
 
 class IteratorRoot(Iterator[TRet]):
+    """
+    Iterator supporting pipeline operator `|`.
+
+    Args:
+        iterator (Iterator[TRet]): base iterator
+
+    Example:
+        ```
+        path_filter = lambda p: p if p.startswith('cat') else None
+        path_iterator = IteratorRoot(path_iterator)
+        new_path_iterator = root_iterator | path_filter
+        for cat_path in new_iterator:
+            # do something
+        ```
+    """
+
     def __init__(self, iterator: Iterator[TRet]) -> None:
         self.iterator = iterator
         self.fns = []
@@ -74,6 +92,24 @@ class IteratorRoot(Iterator[TRet]):
 
 
 class SequenceRoot(Sequence[TRet]):
+    """
+    Sequence supporting pipeline operator `|`.
+    The functions will only be applied after you call `__getitem__`, which is also called *lazy execution*.
+
+    Args:
+        sequence (Sequence[TRet]): base sequence
+
+    Example:
+        ```
+        from torchvision.transforms.functional import rgb_to_grayscale
+
+        images = SequenceRoot(images)
+        gray_images = images | rgb_to_grayscale
+        for image in gray_images:
+            # do something
+        ```
+    """
+
     def __init__(self, sequence: Sequence[TRet]) -> None:
         self.sequence = sequence
         self.fns = []
