@@ -8,7 +8,7 @@ from torch.utils.data import DataLoader
 from rotate_captcha_crack.common import device
 from rotate_captcha_crack.const import DEFAULT_CLS_NUM
 from rotate_captcha_crack.dataset import google_street_view
-from rotate_captcha_crack.dataset.midware import CircularSmoothLabel, Rotator, path_to_tensor
+from rotate_captcha_crack.dataset.midware import DEFAULT_NORM, CircularSmoothLabel, Rotator, path_to_tensor
 from rotate_captcha_crack.helper import default_num_workers
 from rotate_captcha_crack.lr import LRManager
 from rotate_captcha_crack.model import RotNetR
@@ -32,9 +32,9 @@ if __name__ == "__main__":
     labelling = CircularSmoothLabel(cls_num)
 
     train_img_paths = slice_from_range(img_paths, (0.0, 0.98))
-    train_dataset = train_img_paths | path_to_tensor | Rotator(cls_num) | labelling | tuple
+    train_dataset = train_img_paths | path_to_tensor | Rotator(cls_num) | DEFAULT_NORM | labelling | tuple
     val_img_paths = slice_from_range(img_paths, (0.98, 1.0))
-    val_dataset = val_img_paths | path_to_tensor | Rotator(cls_num) | labelling | tuple
+    val_dataset = val_img_paths | path_to_tensor | Rotator(cls_num) | DEFAULT_NORM | labelling | tuple
 
     num_workers = default_num_workers()
     train_dataloader = DataLoader(

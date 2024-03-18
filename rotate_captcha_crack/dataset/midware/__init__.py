@@ -8,6 +8,7 @@ from .imgproc import (
     strip_border,
     to_square,
 )
-from .labels import CircularSmoothLabel, OnehotLabel
+from .labels import CircularSmoothLabel, OnehotLabel, ScalarLabel
+from .normalizer import DEFAULT_NORM, norm_wrapper
 from .rotator import Rotator
 from .totensor import path_to_tensor, pil_to_tensor, u8_to_float32

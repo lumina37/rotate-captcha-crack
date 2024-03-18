@@ -32,6 +32,32 @@ class ImgWithLabel[TLabel]:
 
 
 @dcs.dataclass
+class OnehotLabel:
+    """
+    Convert the scalar `angle_factor` label to one-hot label, which is commonly used for CrossEntropyLoss.
+
+    Args:
+        cls_num (int, optional): divide into how many classes. Default to `DEFAULT_CLS_NUM`.
+
+    Methods:
+        - `self(data: ImgWithLabel[float]) -> ImgWithLabel[Tensor]` \\
+            `ret.img` is the same as `data.img`, this function won't modify the image tensor.
+            `data.label` is the angle factor (float, range=[0.0,1.0)), where 1.0 means an entire cycle.
+            `ret.label` is the one-hot label ([C]=[1], dtype=float32, range=[0.0,cls_num)).
+    """
+
+    cls_num: int = DEFAULT_CLS_NUM
+
+    def __call__(self, data: ImgWithLabel[float]) -> ImgWithLabel[Tensor]:
+        label_idx = data.label * self.cls_num
+        label_ts = torch.tensor(label_idx)
+        return ImgWithLabel(data.img, label_ts)
+
+
+ScalarLabel = OnehotLabel
+
+
+@dcs.dataclass
 class CircularSmoothLabel:
     """
     Convert the scalar `angle_factor` label to CSL (Circular Smooth Label), which is an optimized label for CrossEntropyLoss.
@@ -69,27 +95,4 @@ class CircularSmoothLabel:
         label_ts = self.normal_dist.clone()
         label_ts = torch.roll(label_ts, shifts=round(shift), dims=0)
 
-        return ImgWithLabel(data.img, label_ts)
-
-
-@dcs.dataclass
-class OnehotLabel:
-    """
-    Convert the scalar `angle_factor` label to one-hot label, which is commonly used for CrossEntropyLoss.
-
-    Args:
-        cls_num (int, optional): divide into how many classes. Default to `DEFAULT_CLS_NUM`.
-
-    Methods:
-        - `self(data: ImgWithLabel[float]) -> ImgWithLabel[Tensor]` \\
-            `ret.img` is the same as `data.img`, this function won't modify the image tensor.
-            `data.label` is the angle factor (float, range=[0.0,1.0)), where 1.0 means an entire cycle.
-            `ret.label` is the one-hot label ([C]=[1], dtype=float32, range=[0.0,cls_num)).
-    """
-
-    cls_num: int = DEFAULT_CLS_NUM
-
-    def __call__(self, data: ImgWithLabel[float]) -> ImgWithLabel[Tensor]:
-        label_idx = data.label * self.cls_num
-        label_ts = torch.tensor(label_idx)
         return ImgWithLabel(data.img, label_ts)
