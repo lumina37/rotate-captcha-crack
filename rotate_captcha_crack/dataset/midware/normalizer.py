@@ -9,6 +9,17 @@ from .labels import ImgWithLabel
 
 @dcs.dataclass
 class NormWrapper[TLabel]:
+    """
+    Wrapper of `torchvision.transforms.Normalize`.
+    Convert any `(Tensor) -> Tensor` into `(ImgWithLabel) -> ImgWithLabel`.
+
+    Args:
+        norm (Callable[[Tensor], Tensor]): the inner normalizer
+
+    Returns:
+        ImgWithLabel[TLabel]: image tensor with label
+    """
+
     norm: Callable[[Tensor], Tensor]
 
     def __call__(self, data: ImgWithLabel[TLabel]) -> ImgWithLabel[TLabel]:
