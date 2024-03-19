@@ -32,9 +32,9 @@ if __name__ == "__main__":
     labelling = CircularSmoothLabel(cls_num)
 
     train_img_paths = slice_from_range(img_paths, (0.0, 0.98))
-    train_dataset = train_img_paths | path_to_tensor | Rotator(cls_num) | DEFAULT_NORM | labelling | tuple
+    train_dataset = train_img_paths | path_to_tensor | Rotator() | DEFAULT_NORM | labelling | tuple
     val_img_paths = slice_from_range(img_paths, (0.98, 1.0))
-    val_dataset = val_img_paths | path_to_tensor | Rotator(cls_num) | DEFAULT_NORM | labelling | tuple
+    val_dataset = val_img_paths | path_to_tensor | Rotator() | DEFAULT_NORM | labelling | tuple
 
     num_workers = default_num_workers()
     train_dataloader = DataLoader(

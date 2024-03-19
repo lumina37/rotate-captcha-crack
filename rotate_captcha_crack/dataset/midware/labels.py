@@ -32,6 +32,24 @@ class ImgWithLabel[TLabel]:
 
 
 @dcs.dataclass
+class ScalarLabel:
+    """
+    Simply convert the scalar into a tensor, which is commonly used for L1/MSELoss.
+
+    Methods:
+        - `self(data: ImgWithLabel[float]) -> ImgWithLabel[Tensor]` \\
+            `ret.img` is the same as `data.img`, this function won't modify the image tensor.
+            `data.label` is the angle factor (float, range=[0.0,1.0)), where 1.0 means an entire cycle.
+            `ret.label` is the angle factor in tensor ([C]=[1], dtype=float32, range=[0.0,1.0)).
+    """
+
+    def __call__(self, data: ImgWithLabel[float]) -> ImgWithLabel[Tensor]:
+        label_idx = data.label * self.cls_num
+        label_ts = torch.tensor(label_idx)
+        return ImgWithLabel(data.img, label_ts)
+
+
+@dcs.dataclass
 class OnehotLabel:
     """
     Convert the scalar `angle_factor` label to one-hot label, which is commonly used for CrossEntropyLoss.
@@ -52,9 +70,6 @@ class OnehotLabel:
         label_idx = data.label * self.cls_num
         label_ts = torch.tensor(label_idx)
         return ImgWithLabel(data.img, label_ts)
-
-
-ScalarLabel = OnehotLabel
 
 
 @dcs.dataclass

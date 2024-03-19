@@ -6,10 +6,10 @@ from torch import Tensor
 from torch.utils.data import DataLoader
 
 from rotate_captcha_crack.common import device
-from rotate_captcha_crack.const import DEFAULT_CLS_NUM
 from rotate_captcha_crack.criterion import dist_onehot
 from rotate_captcha_crack.dataset.midware import DEFAULT_NORM, Rotator, ScalarLabel, path_to_tensor
 from rotate_captcha_crack.dataset.paths.helper import glob_imgs
+from rotate_captcha_crack.dataset.pipeline import SequenceRoot
 from rotate_captcha_crack.helper import default_num_workers
 from rotate_captcha_crack.model import RotNet, WhereIsMyModel
 
@@ -21,11 +21,10 @@ if __name__ == '__main__':
     with torch.no_grad():
         dataset_root = Path("./datasets/captcha")
 
-        img_paths = list(glob_imgs(dataset_root))
-        cls_num = DEFAULT_CLS_NUM
-        labelling = ScalarLabel(cls_num)
+        img_paths = SequenceRoot(list(glob_imgs(dataset_root)))
+        cls_num = 180
 
-        test_dataset = img_paths | path_to_tensor | Rotator(cls_num) | DEFAULT_NORM | labelling | tuple
+        test_dataset = img_paths | path_to_tensor | Rotator() | DEFAULT_NORM | ScalarLabel() | tuple
         test_dataloader = DataLoader(
             test_dataset,
             batch_size=128,
@@ -33,7 +32,7 @@ if __name__ == '__main__':
             drop_last=True,
         )
 
-        model = RotNet(train=False)
+        model = RotNet(cls_num=cls_num, train=False)
         model_path = WhereIsMyModel(model).with_index(opts.index).model_dir / "best.pth"
         print(f"Use model: {model_path}")
         model.load_state_dict(torch.load(str(model_path)))

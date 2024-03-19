@@ -10,6 +10,7 @@ from rotate_captcha_crack.const import DEFAULT_CLS_NUM
 from rotate_captcha_crack.criterion import dist_between_angles
 from rotate_captcha_crack.dataset.midware import DEFAULT_NORM, Rotator, ScalarLabel, path_to_tensor
 from rotate_captcha_crack.dataset.paths.helper import glob_imgs
+from rotate_captcha_crack.dataset.pipeline import SequenceRoot
 from rotate_captcha_crack.helper import default_num_workers
 from rotate_captcha_crack.model import RCCNet_v0_5, WhereIsMyModel
 
@@ -21,11 +22,10 @@ if __name__ == '__main__':
     with torch.no_grad():
         dataset_root = Path("./datasets/captcha")
 
-        img_paths = list(glob_imgs(dataset_root))
+        img_paths = SequenceRoot(list(glob_imgs(dataset_root)))
         cls_num = DEFAULT_CLS_NUM
-        labelling = ScalarLabel(cls_num)
 
-        test_dataset = img_paths | path_to_tensor | Rotator(cls_num) | DEFAULT_NORM | labelling | tuple
+        test_dataset = img_paths | path_to_tensor | Rotator() | DEFAULT_NORM | ScalarLabel() | tuple
         test_dataloader = DataLoader(
             test_dataset,
             batch_size=128,
