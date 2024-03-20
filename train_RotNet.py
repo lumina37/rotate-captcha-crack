@@ -6,7 +6,6 @@ from torch.nn import CrossEntropyLoss
 from torch.utils.data import DataLoader
 
 from rotate_captcha_crack.common import device
-from rotate_captcha_crack.const import DEFAULT_CLS_NUM
 from rotate_captcha_crack.dataset import google_street_view
 from rotate_captcha_crack.dataset.midware import DEFAULT_NORM, CircularSmoothLabel, Rotator, path_to_tensor
 from rotate_captcha_crack.helper import default_num_workers
@@ -28,7 +27,7 @@ if __name__ == "__main__":
     dataset_root = Path("D:/Dataset/Streetview/data/data")
 
     img_paths = google_street_view.get_paths(dataset_root)
-    cls_num = DEFAULT_CLS_NUM
+    cls_num = 360
     labelling = CircularSmoothLabel(cls_num)
 
     train_img_paths = slice_from_range(img_paths, (0.0, 0.98))

@@ -2,6 +2,7 @@ import argparse
 from pathlib import Path
 
 import torch
+from torch.nn import SmoothL1Loss
 from torch.utils.data import DataLoader
 
 from rotate_captcha_crack.common import device
@@ -9,7 +10,6 @@ from rotate_captcha_crack.const import DEFAULT_CLS_NUM
 from rotate_captcha_crack.dataset import google_street_view
 from rotate_captcha_crack.dataset.midware import DEFAULT_NORM, Rotator, ScalarLabel, path_to_tensor
 from rotate_captcha_crack.helper import default_num_workers
-from rotate_captcha_crack.loss import RotationLoss
 from rotate_captcha_crack.lr import LRManager
 from rotate_captcha_crack.model import RCCNet_v0_5
 from rotate_captcha_crack.trainer import Trainer
@@ -62,7 +62,7 @@ if __name__ == "__main__":
         optimizer, max_lr=lr, pct_start=0.25, epochs=epochs, steps_per_epoch=steps
     )
     lr = LRManager(lr, scheduler, optimizer)
-    loss = RotationLoss(lambda_cos=0.24, exponent=2)
+    loss = SmoothL1Loss()
 
     trainer = Trainer(model, train_dataloader, val_dataloader, lr, loss, epochs, steps)
     ### Custom configuration area ###

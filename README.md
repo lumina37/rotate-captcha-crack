@@ -10,13 +10,13 @@ Test result:
 
 Three kinds of model are implemented, as shown in the table below.
 
-| Name        | Backbone          | Cross-Domain Loss (less is better) | Params  | FLOPs  |
-| ----------- | ----------------- | ---------------------------------- | ------- | ------ |
-| RotNet      | ResNet50          | 71.7920°                           | 24.246M | 4.132G |
-| RotNetR     | RegNetY 3.2GFLOPs | 19.1594°                           | 18.468M | 3.223G |
-| RCCNet_v0_5 | RegNetY 3.2GFLOPs | 42.7774°                           | 17.923M | 3.223G |
+| Name        | Backbone          | Cross-Domain Loss (less is better) | Params  | MACs  |
+| ----------- | ----------------- | ---------------------------------- | ------- | ----- |
+| RotNet      | ResNet50          | 75.6512°                           | 24.246M | 4.09G |
+| RotNetR     | RegNetY 3.2GFLOPs | 15.1818°                           | 18.117M | 3.18G |
+| RCCNet_v0_5 | RegNetY 3.2GFLOPs | 56.8515°                           | 20.212M | 3.18G |
 
-RotNet is the implementation of [`d4nst/RotNet`](https://github.com/d4nst/RotNet/blob/master/train/train_street_view.py) over PyTorch. `RotNetR` is based on `RotNet`, with `RegNet` as its backbone and class number of 180. The average prediction error is `19.1594°`, obtained by 64 epochs of training (2 hours) on the [Google Street View](https://www.crcv.ucf.edu/data/GMCP_Geolocalization/) dataset.
+RotNet is the implementation of [`d4nst/RotNet`](https://github.com/d4nst/RotNet/blob/master/train/train_street_view.py) over PyTorch. `RotNetR` is based on `RotNet`, with `RegNet` as its backbone and class number of 128. The average prediction error is `15.1818°`, obtained by 64 epochs of training (3 hours) on the [Google Street View](https://www.crcv.ucf.edu/data/GMCP_Geolocalization/) dataset.
 
 The Cross-Domain Test uses [Google Street View](https://www.crcv.ucf.edu/data/GMCP_Geolocalization/) and [Landscape-Dataset](https://github.com/yuweiming70/Landscape-Dataset) for training, and Captcha Pictures from Baidu (thanks to @xiangbei1997) for testing.
 
@@ -34,30 +34,31 @@ The captcha picture used in the demo above comes from [RotateCaptchaBreak](https
 
 + Clone the repository and install all requiring dependencies
 
+You should manully install PyTorch with CUDA first. See [this tutorial](https://pytorch.org/get-started/locally/).
+
+If you prefer `conda`: The following steps will create a virtual env under the working directory. You can also use a named env.
+
 ```shell
-git clone --depth=1 https://github.com/Starry-OvO/rotate-captcha-crack.git
+git clone https://github.com/Starry-OvO/rotate-captcha-crack.git -b v0.5.0 --depth=1
 cd ./rotate-captcha-crack
-pip install .
+conda create -p .conda
+conda activate ./.conda
+conda install matplotlib tqdm tomli
+# conda install pytorch torchvision pytorch-cuda=12.1 -c pytorch -c nvidia  # Just an example
 ```
 
-**DO NOT** miss the `.` after `install`
-
-+ Or, if you prefer `venv`
+Or if you prefer `pip`. Remember to use the pip inside your virtual env.
 
 ```shell
-git clone --depth=1 https://github.com/Starry-OvO/rotate-captcha-crack.git
-python -m venv ./rotate-captcha-crack --system-site-packages
-cd ./rotate-captcha-crack
-# Choose the proper script to acivate venv according to your shell type. e.g. `./Script/active*`
-python -m pip install -U pip
-pip install .
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
+pip install -e .
 ```
 
 ### Download the Pretrained Models
 
 Download the `*.zip` files in [Release](https://github.com/Starry-OvO/rotate-captcha-crack/releases) and unzip them all to the `./models` dir.
 
-The directory structure will be like `./models/RCCNet_v0_5/230228_20_07_25_000/best.pth`
+The directory structure will be like `./models/RotNetR/230228_20_07_25_000/best.pth`
 
 The names of models will change frequently as the project is still in beta status. So, if any `FileNotFoundError` occurs, please try to rollback to the corresponding tag first.
 
@@ -77,6 +78,12 @@ python test_captcha.py
 pip install aiohttp httpx[cli]
 ```
 
+or
+
+```shell
+conda install aiohttp httpx[cli]
+```
+
 + Launch server
   
 ```shell
@@ -86,7 +93,7 @@ python server.py
 + Another Shell to Send Images
 
 ```shell
- httpx -m POST http://127.0.0.1:4396 -f img ./test.jpg
+httpx -m POST http://127.0.0.1:4396 -f img ./test.jpg
 ```
 
 ## Train Your Own Model
@@ -113,23 +120,8 @@ python test_RotNetR.py
 
 ## Details of Design
 
-Most of the rotate-captcha cracking methods are based on [`d4nst/RotNet`](https://github.com/d4nst/RotNet), with `ResNet50` as its backbone. `RotNet` treat the angle prediction as a classification task with 360 classes, then use `CrossEntropy` to compute the loss.
+Most of the rotate-captcha cracking methods are based on [`d4nst/RotNet`](https://github.com/d4nst/RotNet), with `ResNet50` as its backbone. `RotNet` treat the angle prediction as a classification task with 360 classes, then use cross entropy to compute the loss.
 
-Yet `CrossEntropy` will bring a significant metric distance of about $358°$ between $1°$ and $359°$, clearly defies common sense, it should be a small value like $2°$. Meanwhile, the [`angle_error_regression`](https://github.com/d4nst/RotNet/blob/a56ea59818bbdd76d4dd8d83b8bbbaae6a802310/utils.py#L30-L36) proposed by [d4nst/RotNet](https://github.com/d4nst/RotNet) is less effective. That's because when dealing with outliers, the gradient leads to a non-convergence result. You can easily understand this through the subsequent comparison between loss functions.
+Yet `CrossEntropyLoss` over one-hot labels will bring a uniform metric distance between any angles (e.g. $\mathrm{dist}(1°, 2°) = \mathrm{dist}(1°, 180°)$), clearly defies our common sense. *[Arbitrary-Oriented Object Detection with Circular Smooth Label (ECCV'20)](https://www.researchgate.net/profile/Xue-Yang-69/publication/343636147_Arbitrary-Oriented_Object_Detection_with_Circular_Smooth_Label/links/5f46456b458515b7295797fd/Arbitrary-Oriented-Object-Detection-with-Circular-Smooth-Label.pdf)* introduces an interesting trick, by smoothing the one-hot label, e.g. `[0,1,0,0] -> [0.1,0.8,0.1,0]`, CSL provides a loss measurement closer to our intuition, such that $\mathrm{dist}(1°,180°) \gt \mathrm{dist}(1°,3°)$.
 
-My regression loss function `RotationLoss` is based on `MSELoss`, with an extra cosine-correction to decrease the metric distance between $±k*360°$.
-
-$$ \mathcal{L}(dist) = {dist}^{2} + \lambda_{cos} (1 - \cos(2\pi*{dist})) $$
-
-Why `MSELoss` here? Because the `label` generated by 
-self-supervised method is guaranteed not to contain any outliers. So our design does not need to consider the outliers. Also, `MSELoss` won't break the derivability of loss function.
-
-The loss function is derivable and *almost* convex over the entire $\mathbb{R}$. Why say *almost*? Because there will be local minimum at $predict = \pm 1$ when $\lambda_{cos} \gt 0.25$.
-
-Finally, let's take a look at the figure of two loss functions:
-
-<p align="center">
-
-![loss](https://github.com/Starry-OvO/rotate-captcha-crack/assets/48282276/1dd9e0b4-e40d-4205-8500-14cf27e187dd)
-
-</p>
+Meanwhile, the [`angle_error_regression`](https://github.com/d4nst/RotNet/blob/a56ea59818bbdd76d4dd8d83b8bbbaae6a802310/utils.py#L30-L36) proposed by [d4nst/RotNet](https://github.com/d4nst/RotNet) is less effective. That's because when dealing with outliers, the gradient leads to a non-convergence result. It's better to use a `SmoothL1Loss` for regression.

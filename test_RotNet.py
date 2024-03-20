@@ -22,7 +22,7 @@ if __name__ == '__main__':
         dataset_root = Path("./datasets/captcha")
 
         img_paths = SequenceRoot(list(glob_imgs(dataset_root)))
-        cls_num = 180
+        cls_num = 360
 
         test_dataset = img_paths | path_to_tensor | Rotator() | DEFAULT_NORM | ScalarLabel() | tuple
         test_dataloader = DataLoader(

@@ -44,8 +44,7 @@ class ScalarLabel:
     """
 
     def __call__(self, data: ImgWithLabel[float]) -> ImgWithLabel[Tensor]:
-        label_idx = data.label * self.cls_num
-        label_ts = torch.tensor(label_idx)
+        label_ts = torch.tensor(data.label)
         return ImgWithLabel(data.img, label_ts)
 
 
@@ -90,7 +89,7 @@ class CircularSmoothLabel:
     Reference:
         CrossEntropyLoss ensures a uniform distance between each labels, e.g. $dist(1°,180°) \\eq dist(1°,3°)$, which solves the circular issue. \\
         Based on that, *[Arbitrary-Oriented Object Detection with Circular Smooth Label (ECCV'20)](https://www.researchgate.net/profile/Xue-Yang-69/publication/343636147_Arbitrary-Oriented_Object_Detection_with_Circular_Smooth_Label/links/5f46456b458515b7295797fd/Arbitrary-Oriented-Object-Detection-with-Circular-Smooth-Label.pdf)* introduces a further improvement, by smoothing the one-hot label, e.g. `[0,1,0,0] -> [0.1,0.8,0.1,0]`, CSL provides a loss measurement closer to our intuition, \\
-        such that $dist(1°,180°) \\gt dist(1°,3°)$.
+        such that $\\mathrm{dist}(1°,180°) \\gt \\mathrm{dist}(1°,3°)$.
     """
 
     cls_num: int = DEFAULT_CLS_NUM
