@@ -3,6 +3,7 @@ from typing import Generic, Protocol, SupportsIndex, TypeVar, overload, runtime_
 
 TArg = TypeVar('TArg', contravariant=True)  # Arg Type
 TRet = TypeVar('TRet', covariant=True)  # Return Type
+NewTRet = TypeVar('NewTRet', covariant=True)  # New Return Type
 
 
 @runtime_checkable
@@ -32,7 +33,7 @@ class FnWrap(Generic[TArg, TRet]):
             item = fn(item)
         return item
 
-    def __or__[NewRT](self, rhs: Callable[[TRet], NewRT]) -> "FnWrap[TArg, NewRT]":
+    def __or__(self, rhs: Callable[[TRet], NewTRet]) -> "FnWrap[TArg, NewTRet]":
         if isinstance(rhs, HasFns):
             self.fns += rhs.fns
         else:
@@ -64,7 +65,7 @@ class IteratorRoot(Iterator[TRet]):
         self.iterator = iterator
         self.fns = []
 
-    def __or__[NewTRet](self, fn: Callable[[TRet], NewTRet]) -> "IteratorRoot[NewTRet]":
+    def __or__(self, fn: Callable[[TRet], NewTRet]) -> "IteratorRoot[NewTRet]":
         if isinstance(fn, HasFns):
             self.fns += fn.fns
         else:
@@ -114,7 +115,7 @@ class SequenceRoot(Sequence[TRet]):
         self.sequence = sequence
         self.fns = []
 
-    def __or__[NewTRet](self, fn: Callable[[TRet], NewTRet]) -> "SequenceRoot[NewTRet]":
+    def __or__(self, fn: Callable[[TRet], NewTRet]) -> "SequenceRoot[NewTRet]":
         if isinstance(fn, HasFns):
             self.fns += fn.fns
         else:

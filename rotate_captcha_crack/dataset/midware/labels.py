@@ -1,15 +1,18 @@
 import dataclasses as dcs
 import math
 from collections.abc import Iterator
+from typing import TypeVar
 
 import torch
 from torch import Tensor
 
 from ...const import DEFAULT_CLS_NUM
 
+TLabel = TypeVar('TLabel')
+
 
 @dcs.dataclass
-class ImgWithLabel[TLabel]:
+class ImgWithLabel:
     """
     Container of an image tensor and its label.
 
