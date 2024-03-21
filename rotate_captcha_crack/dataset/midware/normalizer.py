@@ -1,14 +1,17 @@
 import dataclasses as dcs
 from collections.abc import Callable
+from typing import Generic, TypeVar
 
 from torch import Tensor
 from torchvision.transforms import Normalize
 
 from .labels import ImgWithLabel
 
+TLabel = TypeVar('TLabel')
+
 
 @dcs.dataclass
-class NormWrapper[TLabel]:
+class NormWrapper(Generic[TLabel]):
     """
     Wrapper of `torchvision.transforms.Normalize`.
     Convert any `(Tensor) -> Tensor` into `(ImgWithLabel) -> ImgWithLabel`.

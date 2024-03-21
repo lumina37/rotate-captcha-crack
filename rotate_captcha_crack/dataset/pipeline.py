@@ -44,7 +44,7 @@ class FnWrap(Generic[TArg, TRet]):
 TypeFnWrap = TypeVar('TypeFnWrap', bound=FnWrap)
 
 
-class IteratorRoot(Iterator[TRet]):
+class IteratorRoot(Generic[TRet], Iterator[TRet]):
     """
     Iterator supporting pipeline operator `|`.
 

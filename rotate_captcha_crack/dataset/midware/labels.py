@@ -1,7 +1,7 @@
 import dataclasses as dcs
 import math
 from collections.abc import Iterator
-from typing import TypeVar
+from typing import Generic, TypeVar, Union
 
 import torch
 from torch import Tensor
@@ -12,7 +12,7 @@ TLabel = TypeVar('TLabel')
 
 
 @dcs.dataclass
-class ImgWithLabel:
+class ImgWithLabel(Generic[TLabel]):
     """
     Container of an image tensor and its label.
 
@@ -30,7 +30,7 @@ class ImgWithLabel:
     img: Tensor
     label: TLabel
 
-    def __iter__(self) -> Iterator[Tensor, TLabel]:
+    def __iter__(self) -> Iterator[Union[Tensor, TLabel]]:
         return iter((self.img, self.label))
 
 
