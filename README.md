@@ -41,7 +41,7 @@ cd ./rotate-captcha-crack
 
 + Install all requiring dependencies.
 
-This project strongly suggest you to use [`rye`](https://rye-up.com/) for package management. Run the following commands if you already have `rye`:
+This project strongly suggest you to use [`rye`](https://rye-up.com/) for package management. Run the following commands if you already have the `rye`:
 
 ```shell
 rye pin 3.12
@@ -76,17 +76,11 @@ The names of models will change frequently as the project is still in beta statu
 
 If no GUI is presented, try to change the debugging behavior from showing images to saving them.
 
-With `rye`:
-
 ```shell
 rye run python test_captcha.py
 ```
 
-or with others:
-
-```shell
-python test_captcha.py
-```
+If you do not have the `rye`, just strip the prefix `rye run`.
 
 ### Use HTTP Server
 
@@ -112,30 +106,14 @@ pip install -e .[server]
 
 + Launch server
 
-With `rye`:
-
 ```shell
 rye run python server.py
 ```
 
-or with others:
-
-```shell
-python server.py
-```
-
 + Another Shell to Send Images
-
-With rye:
 
 ```shell
 rye run httpx -m POST http://127.0.0.1:4396 -f img ./test.jpg
-```
-
-or with others:
-
-```shell
-httpx -m POST http://127.0.0.1:4396 -f img ./test.jpg
 ```
 
 ## Train Your Own Model
@@ -150,11 +128,16 @@ httpx -m POST http://127.0.0.1:4396 -f img ./test.jpg
 
 ### Train
 
-Run the `train_RotNetR.py`.
+
+```shell
+rye run python train_RotNetR.py
+```
 
 ### Validate the Model on Test Set
 
-Run the `test_RotNetR.py`.
+```shell
+rye run python test_RotNetR.py
+```
 
 ## Details of Design
 

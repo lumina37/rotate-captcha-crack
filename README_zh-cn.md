@@ -76,17 +76,11 @@ pip install -e .
 
 如果你的系统没有GUI，尝试把debug方法从显示图像改成保存图像。
 
-使用`rye`：
-
 ```shell
 rye run python test_captcha.py
 ```
 
-或者使用其他：
-
-```shell
-python test_captcha.py
-```
+如果你没有安装`rye`的话，去掉前缀的`rye run`即可。
 
 ### 使用http服务端
 
@@ -126,16 +120,8 @@ python server.py
 
 + 另开一命令行窗口发送图像
 
-使用`rye`：
-
 ```shell
 rye run httpx -m POST http://127.0.0.1:4396 -f img ./test.jpg
-```
-
-或者使用其他：
-
-```shell
-httpx -m POST http://127.0.0.1:4396 -f img ./test.jpg
 ```
 
 ## 训练新模型
@@ -150,11 +136,15 @@ httpx -m POST http://127.0.0.1:4396 -f img ./test.jpg
 
 ### 训练
 
-运行`train_RotNetR.py`
+```shell
+rye run python train_RotNetR.py
+```
 
 ### 在测试集上验证模型
 
-运行`test_RotNetR.py`
+```shell
+rye run python test_RotNetR.py
+```
 
 ## 相关文章
 

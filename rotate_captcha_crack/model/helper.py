@@ -120,12 +120,12 @@ class WhereIsMyModel:
 
         if self._task_name is None:
             start_dt_str = datetime.now().strftime(DT_FMT_STR)
-            dt_perfix_len = len(start_dt_str) + 1
+            dt_prefix_len = len(start_dt_str) + 1
 
             models_dir = Path(const.MODELS_DIR) / self._model_name
             try:
                 *_, last_dir = models_dir.iterdir()
-                last_index_str = last_dir.name[dt_perfix_len:]
+                last_index_str = last_dir.name[dt_prefix_len:]
                 last_idx = int(last_index_str)
                 task_index = last_idx + 1
             except (ValueError, OSError):
