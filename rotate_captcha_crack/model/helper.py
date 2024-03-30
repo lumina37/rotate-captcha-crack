@@ -9,7 +9,7 @@ DT_SPLIT_CHAR = '_'
 DT_FMT_STR = DT_SPLIT_CHAR.join(["%y%m%d", "%H", "%M", "%S"])
 
 
-class WhereIsMyModel(object):
+class WhereIsMyModel:
     """
     Help you find your model.
 
@@ -60,7 +60,7 @@ class WhereIsMyModel(object):
             try:
                 *_, model_dir = models_dir.iterdir()
             except ValueError:
-                raise FileNotFoundError(f"{models_dir} is empty")
+                raise FileNotFoundError(f"{models_dir} is empty") from None
 
         else:
             model_dir = None

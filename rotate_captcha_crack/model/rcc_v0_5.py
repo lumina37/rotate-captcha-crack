@@ -13,7 +13,7 @@ class RCCNet_v0_5(nn.Module):
     """
 
     def __init__(self, train: bool = True) -> None:
-        super(RCCNet_v0_5, self).__init__()
+        super().__init__()
 
         weights = models.RegNet_Y_3_2GF_Weights.DEFAULT if train else None
         self.backbone = models.regnet_y_3_2gf(weights=weights)

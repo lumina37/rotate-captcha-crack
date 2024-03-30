@@ -18,7 +18,7 @@ def visualize_train(model_dir: Path) -> None:
 
     checkpoint_dir = model_dir / CKPT_PATH
 
-    with open(checkpoint_dir / "last.json", 'r', encoding='utf-8') as f:
+    with open(checkpoint_dir / "last.json", encoding='utf-8') as f:
         variables = json.load(f)
         last_epoch = variables['last_epoch']
 

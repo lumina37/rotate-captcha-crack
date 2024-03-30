@@ -10,7 +10,7 @@ class RotationLoss(Module):
     """
 
     def __init__(self, lambda_cos: float = 0.24, exponent: float = 2.0) -> None:
-        super(RotationLoss, self).__init__()
+        super().__init__()
         self.lambda_cos = lambda_cos
         self.exponent = exponent
 

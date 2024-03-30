@@ -16,7 +16,7 @@ from .lr import TypeLRManager
 from .model import WhereIsMyModel
 
 
-class Trainer(object):
+class Trainer:
     """
     Entry point for training.
 
