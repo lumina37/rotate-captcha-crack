@@ -32,22 +32,32 @@ The captcha picture used in the demo above comes from [RotateCaptchaBreak](https
 
 + PyTorch>=1.11
 
-+ Clone the repository and install all requiring dependencies
-
-You should manully install PyTorch with CUDA first. See [this tutorial](https://pytorch.org/get-started/locally/).
-
-If you prefer `conda`: The following steps will create a virtual env under the working directory. You can also use a named env.
++ Clone the repository.
 
 ```shell
-git clone https://github.com/Starry-OvO/rotate-captcha-crack.git -b v0.5.0 --depth=1
+git clone https://github.com/Starry-OvO/rotate-captcha-crack.git --depth=1
 cd ./rotate-captcha-crack
+```
+
++ Install all requiring dependencies.
+
+This project strongly suggest you to use [`rye`](https://rye-up.com/) for package management. Run the following commands if you already have `rye`:
+
+```shell
+rye pin 3.12
+rye sync
+```
+
+Or, if you prefer `conda`: The following steps will create a virtual env under the working directory. You can also use a named env.
+
+```shell
 conda create -p .conda
 conda activate ./.conda
 conda install matplotlib tqdm tomli
-# conda install pytorch torchvision pytorch-cuda=12.1 -c pytorch -c nvidia  # Just an example
+conda install pytorch torchvision pytorch-cuda=12.1 -c pytorch -c nvidia
 ```
 
-Or if you prefer `pip`. Remember to use the pip inside your virtual env.
+Or, if you prefer a direct `pip`:
 
 ```shell
 pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
@@ -66,7 +76,15 @@ The names of models will change frequently as the project is still in beta statu
 
 If no GUI is presented, try to change the debugging behavior from showing images to saving them.
 
-```bash
+With `rye`:
+
+```shell
+rye run python test_captcha.py
+```
+
+or with others:
+
+```shell
 python test_captcha.py
 ```
 
@@ -74,23 +92,47 @@ python test_captcha.py
 
 + Install extra dependencies
 
+With `rye`:
+
 ```shell
-pip install aiohttp httpx[cli]
+rye sync --features=server
 ```
 
-or
+or with `conda`:
 
 ```shell
 conda install aiohttp httpx[cli]
 ```
 
+or with `pip`:
+
+```shell
+pip install -e .[server]
+```
+
 + Launch server
-  
+
+With `rye`:
+
+```shell
+rye run python server.py
+```
+
+or with others:
+
 ```shell
 python server.py
 ```
 
 + Another Shell to Send Images
+
+With rye:
+
+```shell
+rye run httpx -m POST http://127.0.0.1:4396 -f img ./test.jpg
+```
+
+or with others:
 
 ```shell
 httpx -m POST http://127.0.0.1:4396 -f img ./test.jpg
@@ -108,15 +150,11 @@ httpx -m POST http://127.0.0.1:4396 -f img ./test.jpg
 
 ### Train
 
-```bash
-python train_RotNetR.py
-```
+Run the `train_RotNetR.py`.
 
 ### Validate the Model on Test Set
 
-```bash
-python test_RotNetR.py
-```
+Run the `test_RotNetR.py`.
 
 ## Details of Design
 

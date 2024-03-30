@@ -32,24 +32,32 @@ CNN预测图片旋转角度，可用于破解旋转验证码。
 
 + 确保你的`PyTorch`版本`>=1.11`
 
-+ 拉取代码并安装依赖库
-
-你需要先手动安装CUDA版本的PyTorch。参考[该教程](https://pytorch.org/get-started/locally/)
-
-如果你喜欢用`conda`：以下步骤会在项目文件夹下创建一个虚拟环境。你也可以使用具名环境。
++ 拉取代码
 
 ```shell
-git clone https://github.com/Starry-OvO/rotate-captcha-crack.git -b v0.5.0 --depth=1
+git clone https://github.com/Starry-OvO/rotate-captcha-crack.git --depth=1
 cd ./rotate-captcha-crack
+```
+
++ 安装依赖
+
+强烈推荐使用[`rye`](https://rye-up.com/)作为包管理工具。如果你已经安装了`rye`，请执行以下命令：
+
+```shell
+rye pin 3.12
+rye sync
+```
+
+或者，如果你喜欢用`conda`：以下步骤会在项目文件夹下创建一个虚拟环境。你也可以使用具名环境。
+
+```shell
 conda create -p .conda
 conda activate ./.conda
 conda install matplotlib tqdm tomli
-# conda install pytorch torchvision pytorch-cuda=12.1 -c pytorch -c nvidia  # 只是一个例子
+conda install pytorch torchvision pytorch-cuda=12.1 -c pytorch -c nvidia
 ```
 
-注意不要漏了`install`后面那个`.`
-
-或者，如果你喜欢使用`pip`：记得使用虚拟环境中的`pip`
+或者，如果你喜欢直接使用`pip`：
 
 ```shell
 pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
@@ -68,7 +76,15 @@ pip install -e .
 
 如果你的系统没有GUI，尝试把debug方法从显示图像改成保存图像。
 
-```bash
+使用`rye`：
+
+```shell
+rye run python test_captcha.py
+```
+
+或者使用其他：
+
+```shell
 python test_captcha.py
 ```
 
@@ -76,23 +92,47 @@ python test_captcha.py
 
 + 安装额外依赖
 
+使用`rye`：
+
+```shell
+rye sync --features=server
+```
+
+或者使用`conda`：
+
 ```shell
 conda install aiohttp httpx[cli]
 ```
 
-或者
+或者使用`pip`：
 
 ```shell
-pip install aiohttp httpx[cli]
+pip install -e .[server]
 ```
 
 + 运行服务端
+
+使用`rye`：
+
+```shell
+rye run python server.py
+```
+
+或者使用其他：
 
 ```shell
 python server.py
 ```
 
 + 另开一命令行窗口发送图像
+
+使用`rye`：
+
+```shell
+rye run httpx -m POST http://127.0.0.1:4396 -f img ./test.jpg
+```
+
+或者使用其他：
 
 ```shell
 httpx -m POST http://127.0.0.1:4396 -f img ./test.jpg
@@ -110,15 +150,11 @@ httpx -m POST http://127.0.0.1:4396 -f img ./test.jpg
 
 ### 训练
 
-```bash
-python train_RotNetR.py
-```
+运行`train_RotNetR.py`
 
 ### 在测试集上验证模型
 
-```bash
-python test_RotNetR.py
-```
+运行`test_RotNetR.py`
 
 ## 相关文章
 
