@@ -41,8 +41,27 @@ target-version = "py38"
 quote-style = "preserve"
 
 [tool.ruff.lint]
-select = ["W", "E", "F", "I", "UP", "YTT", "A", "B", "C4", "PIE", "PT", "PERF", "FURB"]
-ignore = ["E402", "E501"]
+select = [
+    "F",
+    "E",
+    "W",
+    "I",
+    "UP",
+    "YTT",
+    "ASYNC",
+    "B",
+    "A",
+    "COM",
+    "C4",
+    "FA",
+    "PIE",
+    "PT",
+    "RSE",
+    "NPY",
+    "PERF",
+    "FURB",
+]
+ignore = ["E402", "E501", "COM812"]
 
 [tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["F401"]

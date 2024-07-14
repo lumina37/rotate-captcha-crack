@@ -1,7 +1,9 @@
+from __future__ import annotations
+
 import dataclasses as dcs
 import math
 from collections.abc import Iterator
-from typing import Generic, TypeVar, Union
+from typing import Generic, TypeVar
 
 import torch
 from torch import Tensor
@@ -30,7 +32,7 @@ class ImgWithLabel(Generic[TLabel]):
     img: Tensor
     label: TLabel
 
-    def __iter__(self) -> Iterator[Union[Tensor, TLabel]]:
+    def __iter__(self) -> Iterator[Tensor | TLabel]:
         return iter((self.img, self.label))
 
 

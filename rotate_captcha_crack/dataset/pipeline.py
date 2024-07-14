@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from collections.abc import Callable, Iterator, Sequence
 from typing import Generic, Protocol, SupportsIndex, TypeVar, overload, runtime_checkable
 
@@ -33,7 +35,7 @@ class FnWrap(Generic[TArg, TRet]):
             item = fn(item)
         return item
 
-    def __or__(self, rhs: Callable[[TRet], NewTRet]) -> "FnWrap[TArg, NewTRet]":
+    def __or__(self, rhs: Callable[[TRet], NewTRet]) -> FnWrap[TArg, NewTRet]:
         if isinstance(rhs, HasFns):
             self.fns += rhs.fns
         else:
@@ -65,7 +67,7 @@ class IteratorRoot(Generic[TRet], Iterator[TRet]):
         self.iterator = iterator
         self.fns = []
 
-    def __or__(self, fn: Callable[[TRet], NewTRet]) -> "IteratorRoot[NewTRet]":
+    def __or__(self, fn: Callable[[TRet], NewTRet]) -> IteratorRoot[NewTRet]:
         if isinstance(fn, HasFns):
             self.fns += fn.fns
         else:
@@ -115,7 +117,7 @@ class SequenceRoot(Sequence[TRet]):
         self.sequence = sequence
         self.fns = []
 
-    def __or__(self, fn: Callable[[TRet], NewTRet]) -> "SequenceRoot[NewTRet]":
+    def __or__(self, fn: Callable[[TRet], NewTRet]) -> SequenceRoot[NewTRet]:
         if isinstance(fn, HasFns):
             self.fns += fn.fns
         else:
@@ -129,7 +131,7 @@ class SequenceRoot(Sequence[TRet]):
     def __getitem__(self, idx: SupportsIndex) -> TRet: ...
 
     @overload
-    def __getitem__(self, idx: slice) -> "SequenceRoot[TRet]": ...
+    def __getitem__(self, idx: slice) -> SequenceRoot[TRet]: ...
 
     def __getitem__(self, idx):
         if isinstance(idx, slice):

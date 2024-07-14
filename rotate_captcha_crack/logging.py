@@ -1,7 +1,8 @@
+from __future__ import annotations
+
 import logging
 import sys
 from pathlib import Path
-from typing import Optional
 
 from .const import DEFAULT_LOG_DIR, LOG_FILE_SUFFIX
 
@@ -18,7 +19,7 @@ class RCCLogger(logging.Logger):
         log_dir (Path, optional): Where to save the log file. Use default dir if None. Defaults to None.
     """
 
-    def __init__(self, log_dir: Optional[Path] = None) -> None:
+    def __init__(self, log_dir: Path | None = None) -> None:
         script_name = Path(sys.argv[0]).stem
         super().__init__(script_name)
 
