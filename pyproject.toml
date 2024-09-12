@@ -1,9 +1,9 @@
 [project]
-urls = { Repository = "https://github.com/Starry-OvO/rotate-captcha-crack" }
+urls = { Repository = "https://github.com/lumina37/rotate-captcha-crack" }
 name = "rotate-captcha-crack"
 readme = "README.md"
 requires-python = ">=3.8,<3.13"
-authors = [{ name = "Starry-OvO", email = "starry.qvq@gmail.com" }]
+authors = [{ name = "lumina37", email = "starry.qvq@gmail.com" }]
 dependencies = [
     "matplotlib>=3.4,<4",
     "tqdm>=4,<5",

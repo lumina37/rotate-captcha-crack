@@ -35,7 +35,7 @@ The captcha picture used in the demo above comes from [RotateCaptchaBreak](https
 + Clone the repository.
 
 ```shell
-git clone https://github.com/Starry-OvO/rotate-captcha-crack.git --depth=1
+git clone https://github.com/lumina37/rotate-captcha-crack.git --depth=1
 cd ./rotate-captcha-crack
 ```
 
@@ -66,7 +66,7 @@ pip install -e .
 
 ### Download the Pretrained Models
 
-Download the `*.zip` files in [Release](https://github.com/Starry-OvO/rotate-captcha-crack/releases) and unzip them all to the `./models` dir.
+Download the `*.zip` files in [Release](https://github.com/lumina37/rotate-captcha-crack/releases) and unzip them all to the `./models` dir.
 
 The directory structure will be like `./models/RotNetR/230228_20_07_25_000/best.pth`
 

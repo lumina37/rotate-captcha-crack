@@ -1,6 +1,6 @@
 # Rotate-Captcha-Crack
 
-中文 | [English](https://github.com/Starry-OvO/rotate-captcha-crack)
+中文 | [English](https://github.com/lumina37/rotate-captcha-crack)
 
 CNN预测图片旋转角度，可用于破解旋转验证码。
 
@@ -35,7 +35,7 @@ CNN预测图片旋转角度，可用于破解旋转验证码。
 + 拉取代码
 
 ```shell
-git clone https://github.com/Starry-OvO/rotate-captcha-crack.git --depth=1
+git clone https://github.com/lumina37/rotate-captcha-crack.git --depth=1
 cd ./rotate-captcha-crack
 ```
 
@@ -66,7 +66,7 @@ pip install -e .
 
 ### 下载预训练模型
 
-下载[Release](https://github.com/Starry-OvO/rotate-captcha-crack/releases)中的压缩包并解压到`./models`文件夹下。
+下载[Release](https://github.com/lumina37/rotate-captcha-crack/releases)中的压缩包并解压到`./models`文件夹下。
 
 文件目录结构类似`./models/RotNetR/230228_20_07_25_000/best.pth`。
 
