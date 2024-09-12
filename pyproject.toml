@@ -17,14 +17,11 @@ dynamic = ["version"]
 server = ["aiohttp", "httpx[cli]"]
 
 [build-system]
-requires = ["setuptools"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
-[tool.setuptools.packages.find]
-where = ["."]
-
-[tool.setuptools.dynamic]
-version = { attr = "rotate_captcha_crack.__version__.__version__" }
+[tool.hatch.version]
+path = "rotate_captcha_crack/__version__.py"
 
 [tool.rye]
 managed = true
