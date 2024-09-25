@@ -19,7 +19,7 @@ if __name__ == "__main__":
         model = RotNetR(cls_num=cls_num, train=False)
         model_path = WhereIsMyModel(model).with_index(opts.index).model_dir / "best.pth"
         print(f"Use model: {model_path}")
-        model.load_state_dict(torch.load(str(model_path)))
+        model.load_state_dict(torch.load(model_path, weights_only=True))
         model = model.to(device=device)
         model.eval()
 

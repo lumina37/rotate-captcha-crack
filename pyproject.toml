@@ -2,7 +2,7 @@
 urls = { Repository = "https://github.com/lumina37/rotate-captcha-crack" }
 name = "rotate-captcha-crack"
 readme = "README.md"
-requires-python = ">=3.8,<3.13"
+requires-python = ">=3.9,<3.13"
 authors = [{ name = "lumina37", email = "starry.qvq@gmail.com" }]
 dependencies = [
     "matplotlib>=3.4,<4",
@@ -28,7 +28,7 @@ managed = true
 
 [[tool.rye.sources]]
 name = "pytorch"
-url = "https://download.pytorch.org/whl/cu121/"
+url = "https://download.pytorch.org/whl/cu124/"
 
 [tool.ruff]
 line-length = 120

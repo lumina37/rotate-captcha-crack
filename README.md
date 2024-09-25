@@ -26,11 +26,11 @@ The captcha picture used in the demo above comes from [RotateCaptchaBreak](https
 
 ### Prepare
 
-+ Device supporting CUDA10+ (mem>=4G for training)
++ Device supporting CUDA11+ (mem>=4G for training)
 
 + Python>=3.8,<3.13
 
-+ PyTorch>=1.11
++ PyTorch>=2.0
 
 + Clone the repository.
 
