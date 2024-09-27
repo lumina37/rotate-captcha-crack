@@ -28,7 +28,7 @@ CNN预测图片旋转角度，可用于破解旋转验证码。
 
 + 支持CUDA11+的计算设备（如需训练则显存还需要不少于4G）
 
-+ 确保你的`Python`版本`>=3.8,<3.13`
++ 确保你的`Python`版本`>=3.9,<3.13`
 
 + 确保你的`PyTorch`版本`>=2.0`
 
@@ -54,13 +54,13 @@ rye sync
 conda create -p .conda
 conda activate ./.conda
 conda install matplotlib tqdm tomli
-conda install pytorch torchvision pytorch-cuda=12.1 -c pytorch -c nvidia
+conda install pytorch torchvision pytorch-cuda=12.4 -c pytorch -c nvidia
 ```
 
 或者，如果你喜欢直接使用`pip`：
 
 ```shell
-pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cu124
 pip install -e .
 ```
 
@@ -95,7 +95,7 @@ rye sync --features=server
 或者使用`conda`：
 
 ```shell
-conda install aiohttp httpx[cli]
+conda install aiohttp
 ```
 
 或者使用`pip`：
@@ -120,8 +120,16 @@ python server.py
 
 + 另开一命令行窗口发送图像
 
+使用curl:
+
 ```shell
-rye run httpx -m POST http://127.0.0.1:4396 -f img ./test.jpg
+curl -X POST --data-binary @test.jpg http://127.0.0.1:4396
+```
+
+或使用Windows PowerShell:
+
+```shell
+Invoke-RestMethod -Uri http://127.0.0.1:4396 -Method Post -InFile test.jpg
 ```
 
 ## 训练新模型

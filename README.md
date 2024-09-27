@@ -28,7 +28,7 @@ The captcha picture used in the demo above comes from [RotateCaptchaBreak](https
 
 + Device supporting CUDA11+ (mem>=4G for training)
 
-+ Python>=3.8,<3.13
++ Python>=3.9,<3.13
 
 + PyTorch>=2.0
 
@@ -54,13 +54,13 @@ Or, if you prefer `conda`: The following steps will create a virtual env under t
 conda create -p .conda
 conda activate ./.conda
 conda install matplotlib tqdm tomli
-conda install pytorch torchvision pytorch-cuda=12.1 -c pytorch -c nvidia
+conda install pytorch torchvision pytorch-cuda=12.4 -c pytorch -c nvidia
 ```
 
 Or, if you prefer a direct `pip`:
 
 ```shell
-pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cu124
 pip install -e .
 ```
 
@@ -95,7 +95,7 @@ rye sync --features=server
 or with `conda`:
 
 ```shell
-conda install aiohttp httpx[cli]
+conda install aiohttp
 ```
 
 or with `pip`:
@@ -112,8 +112,16 @@ rye run python server.py
 
 + Another Shell to Send Images
 
+Use curl:
+
 ```shell
-rye run httpx -m POST http://127.0.0.1:4396 -f img ./test.jpg
+curl -X POST --data-binary @test.jpg http://127.0.0.1:4396
+```
+
+Or use Windows PowerShell:
+
+```shell
+Invoke-RestMethod -Uri http://127.0.0.1:4396 -Method Post -InFile test.jpg
 ```
 
 ## Train Your Own Model
@@ -141,8 +149,8 @@ rye run python test_RotNetR.py
 
 ## Details of Design
 
-Most of the rotate-captcha cracking methods are based on [`d4nst/RotNet`](https://github.com/d4nst/RotNet), with `ResNet50` as its backbone. `RotNet` treat the angle prediction as a classification task with 360 classes, then use cross entropy to compute the loss.
+Most of the rotate-captcha cracking methods are based on [`d4nst/RotNet`](https://github.com/d4nst/RotNet), with `ResNet50` as its backbone. `RotNet` regards the angle prediction as a classification task with 360 classes, then uses cross entropy to compute the loss.
 
-Yet `CrossEntropyLoss` over one-hot labels will bring a uniform metric distance between any angles (e.g. $\mathrm{dist}(1°, 2°) = \mathrm{dist}(1°, 180°)$ ), clearly defies our common sense. *[Arbitrary-Oriented Object Detection with Circular Smooth Label (ECCV'20)](https://www.researchgate.net/profile/Xue-Yang-69/publication/343636147_Arbitrary-Oriented_Object_Detection_with_Circular_Smooth_Label/links/5f46456b458515b7295797fd/Arbitrary-Oriented-Object-Detection-with-Circular-Smooth-Label.pdf)* introduces an interesting trick, by smoothing the one-hot label, e.g. `[0,1,0,0] -> [0.1,0.8,0.1,0]`, CSL provides a loss measurement closer to our intuition, such that $\mathrm{dist}(1°,180°) \gt \mathrm{dist}(1°,3°)$.
+Yet `CrossEntropyLoss` with one-hot labels will bring a uniform metric distance between all angles (e.g. $\mathrm{dist}(1°, 2°) = \mathrm{dist}(1°, 180°)$ ), clearly defies the common sense. *[Arbitrary-Oriented Object Detection with Circular Smooth Label (ECCV'20)](https://www.researchgate.net/publication/343636147_Arbitrary-Oriented_Object_Detection_with_Circular_Smooth_Label)* introduces an interesting trick, by smoothing the one-hot label, e.g. `[0,1,0,0] -> [0.1,0.8,0.1,0]`, CSL provides a loss measurement closer to our intuition, such that $\mathrm{dist}(1°,180°) \gt \mathrm{dist}(1°,3°)$.
 
 Meanwhile, the [`angle_error_regression`](https://github.com/d4nst/RotNet/blob/a56ea59818bbdd76d4dd8d83b8bbbaae6a802310/utils.py#L30-L36) proposed by [d4nst/RotNet](https://github.com/d4nst/RotNet) is less effective. That's because when dealing with outliers, the gradient leads to a non-convergence result. It's better to use a `SmoothL1Loss` for regression.

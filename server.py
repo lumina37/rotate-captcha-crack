@@ -8,6 +8,7 @@ from aiohttp import web
 from PIL import Image
 
 from rotate_captcha_crack.common import device
+from rotate_captcha_crack.const import DEFAULT_CLS_NUM
 from rotate_captcha_crack.logging import RCCLogger
 from rotate_captcha_crack.model import RotNetR, WhereIsMyModel
 from rotate_captcha_crack.utils import process_captcha
@@ -21,21 +22,20 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--index", "-i", type=int, default=-1, help="Use which index")
 opts = parser.parse_args()
 
-model = RotNetR(cls_num=180, train=False)
+cls_num = DEFAULT_CLS_NUM
+model = RotNetR(cls_num=cls_num, train=False)
 model_path = WhereIsMyModel(model).with_index(opts.index).model_dir / "best.pth"
-model.load_state_dict(torch.load(str(model_path)))
+model.load_state_dict(torch.load(model_path, weights_only=True))
 model = model.to(device=device)
 model.eval()
 
 
 @routes.post('/')
-async def hello(request: web.Request):
-    resp = {'err': {'code': 0, 'msg': 'success'}}
+async def handler(request: web.Request):
+    resp = {'err': {'code': 0}}
 
     try:
-        multipart = await request.multipart()
-        img_part = await multipart.next()
-        img_bytes = await img_part.read()
+        img_bytes = await request.read()
         img = Image.open(io.BytesIO(img_bytes))
 
         with torch.no_grad():
