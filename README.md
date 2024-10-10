@@ -10,13 +10,12 @@ Test result:
 
 Three kinds of model are implemented, as shown in the table below.
 
-| Name        | Backbone          | Cross-Domain Loss (less is better) | Params  | MACs  |
-| ----------- | ----------------- | ---------------------------------- | ------- | ----- |
-| RotNet      | ResNet50          | 75.6512°                           | 24.246M | 4.09G |
-| RotNetR     | RegNetY 3.2GFLOPs | 15.1818°                           | 18.117M | 3.18G |
-| RCCNet_v0_5 | RegNetY 3.2GFLOPs | 56.8515°                           | 20.212M | 3.18G |
+| Name    | Backbone    | Cross-Domain Loss (less is better) | Params  | MACs  |
+| ------- | ----------- | ---------------------------------- | ------- | ----- |
+| RotNet  | ResNet50    | 75.6512°                           | 24.246M | 4.09G |
+| RotNetR | yolo11n-cls | 15.1818°                           | 18.117M | 3.18G |
 
-RotNet is the implementation of [`d4nst/RotNet`](https://github.com/d4nst/RotNet/blob/master/train/train_street_view.py) over PyTorch. `RotNetR` is based on `RotNet`, with `RegNet` as its backbone and class number of 128. The average prediction error is `15.1818°`, obtained by 64 epochs of training (3 hours) on the [Google Street View](https://www.crcv.ucf.edu/data/GMCP_Geolocalization/) dataset.
+RotNet is the implementation of [`d4nst/RotNet`](https://github.com/d4nst/RotNet/blob/master/train/train_street_view.py) over PyTorch. `RotNetR` is based on `RotNet`, with [`yolo11n-cls`](https://docs.ultralytics.com/tasks/classify/) as its backbone and class number of 128. The average prediction error is `15.1818°`, obtained by 64 epochs of training (3 hours) on the [Google Street View](https://www.crcv.ucf.edu/data/GMCP_Geolocalization/) dataset.
 
 The Cross-Domain Test uses [Google Street View](https://www.crcv.ucf.edu/data/GMCP_Geolocalization/) and [Landscape-Dataset](https://github.com/yuweiming70/Landscape-Dataset) for training, and Captcha Pictures from Baidu (thanks to @xiangbei1997) for testing.
 
@@ -26,7 +25,7 @@ The captcha picture used in the demo above comes from [RotateCaptchaBreak](https
 
 ### Prepare
 
-+ Device supporting CUDA11+ (mem>=4G for training)
++ Computing device with mem>=8G for training
 
 + Python>=3.9,<3.13
 
@@ -35,18 +34,19 @@ The captcha picture used in the demo above comes from [RotateCaptchaBreak](https
 + Clone the repository.
 
 ```shell
-git clone https://github.com/lumina37/rotate-captcha-crack.git --depth=1
+git clone https://github.com/lumina37/rotate-captcha-crack.git --depth 1
 cd ./rotate-captcha-crack
 ```
 
 + Install all requiring dependencies.
 
-This project strongly suggest you to use [`rye`](https://rye-up.com/) for package management. Run the following commands if you already have the `rye`:
+This project strongly suggest you to use [`uv`](https://docs.astral.sh/uv/) for package management. Run the following commands if you already have `uv`:
 
 ```shell
-rye pin 3.12
-rye sync
+uv pip install .
 ```
+
+The dependency resolution strategy of `uv` might have some [issue](https://github.com/astral-sh/uv/issues/7202), so `uv sync` is not recommended for environment setup.
 
 Or, if you prefer `conda`: The following steps will create a virtual env under the working directory. You can also use a named env.
 
@@ -54,14 +54,14 @@ Or, if you prefer `conda`: The following steps will create a virtual env under t
 conda create -p .conda
 conda activate ./.conda
 conda install matplotlib tqdm tomli
-conda install pytorch torchvision pytorch-cuda=12.4 -c pytorch -c nvidia
+conda install pytorch torchvision pytorch-cuda=12.4 ultralytics -c pytorch -c nvidia -c conda-forge
 ```
 
 Or, if you prefer a direct `pip`:
 
 ```shell
 pip install torch torchvision --index-url https://download.pytorch.org/whl/cu124
-pip install -e .
+pip install .
 ```
 
 ### Download the Pretrained Models
@@ -77,19 +77,23 @@ The names of models will change frequently as the project is still in beta statu
 If no GUI is presented, try to change the debugging behavior from showing images to saving them.
 
 ```shell
-rye run python test_captcha.py
+uv run test_captcha.py
 ```
 
-If you do not have the `rye`, just strip the prefix `rye run`.
+If you do not have `uv`, please use:
+
+```shell
+python test_captcha.py
+```
 
 ### Use HTTP Server
 
 + Install extra dependencies
 
-With `rye`:
+With `uv`:
 
 ```shell
-rye sync --features=server
+uv pip install .[server]
 ```
 
 or with `conda`:
@@ -101,13 +105,19 @@ conda install aiohttp
 or with `pip`:
 
 ```shell
-pip install -e .[server]
+pip install .[server]
 ```
 
 + Launch server
 
 ```shell
-rye run python server.py
+uv run server.py
+```
+
+If you do not have `uv`, just use:
+
+```shell
+python server.py
 ```
 
 + Another Shell to Send Images
@@ -121,7 +131,7 @@ curl -X POST --data-binary @test.jpg http://127.0.0.1:4396
 Or use Windows PowerShell:
 
 ```shell
-Invoke-RestMethod -Uri http://127.0.0.1:4396 -Method Post -InFile test.jpg
+irm -Uri http://127.0.0.1:4396 -Method Post -InFile test.jpg
 ```
 
 ## Train Your Own Model
@@ -138,13 +148,13 @@ Invoke-RestMethod -Uri http://127.0.0.1:4396 -Method Post -InFile test.jpg
 
 
 ```shell
-rye run python train_RotNetR.py
+uv run train_RotNetR.py
 ```
 
 ### Validate the Model on Test Set
 
 ```shell
-rye run python test_RotNetR.py
+uv run test_RotNetR.py
 ```
 
 ## Details of Design

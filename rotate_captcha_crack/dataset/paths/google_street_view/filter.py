@@ -1,7 +1,7 @@
 from pathlib import Path
 
 
-def filter(path: Path) -> Path:
+def filter_ggstreet(path: Path) -> Path:
     """
     Filter the path with viewid = 0 (duplicated main view) or 5 (upward view).
 

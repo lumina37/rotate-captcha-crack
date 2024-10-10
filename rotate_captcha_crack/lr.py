@@ -6,11 +6,9 @@ from torch.optim.optimizer import Optimizer
 
 
 class TypeLRManager(Protocol):
-    def state_dict(self) -> dict:
-        ...
+    def state_dict(self) -> dict: ...
 
-    def load_state_dict(self, d: dict) -> None:
-        ...
+    def load_state_dict(self, d: dict) -> None: ...
 
     @property
     def lr(self) -> float:

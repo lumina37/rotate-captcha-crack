@@ -7,13 +7,18 @@ from torch.utils.data import DataLoader
 
 from rotate_captcha_crack.common import device
 from rotate_captcha_crack.criterion import dist_onehot
-from rotate_captcha_crack.dataset.midware import DEFAULT_NORM, Rotator, ScalarLabel, path_to_tensor
+from rotate_captcha_crack.dataset.midware import (
+    DEFAULT_NORM,
+    Rotator,
+    ScalarLabel,
+    path_to_tensor,
+)
 from rotate_captcha_crack.dataset.paths.helper import glob_imgs
-from rotate_captcha_crack.dataset.pipeline import SequenceRoot
+from rotate_captcha_crack.dataset.pipe import SeqSupportsPipe
 from rotate_captcha_crack.helper import default_num_workers
 from rotate_captcha_crack.model import RotNet, WhereIsMyModel
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--index", "-i", type=int, default=-1, help="Use which index")
     opts = parser.parse_args()
@@ -21,10 +26,10 @@ if __name__ == '__main__':
     with torch.no_grad():
         dataset_root = Path("./datasets/captcha")
 
-        img_paths = SequenceRoot(list(glob_imgs(dataset_root)))
+        img_paths = list(glob_imgs(dataset_root))
         cls_num = 360
 
-        test_dataset = img_paths | path_to_tensor | Rotator() | DEFAULT_NORM | ScalarLabel() | tuple
+        test_dataset = img_paths | SeqSupportsPipe() | path_to_tensor | Rotator() | DEFAULT_NORM | ScalarLabel() | tuple
         test_dataloader = DataLoader(
             test_dataset,
             batch_size=128,

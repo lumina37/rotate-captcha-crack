@@ -4,17 +4,27 @@ from pathlib import Path
 import torch
 from torch.nn import CrossEntropyLoss
 from torch.utils.data import DataLoader
+from torchvision.transforms import Normalize
 
 from rotate_captcha_crack.common import device
 from rotate_captcha_crack.const import DEFAULT_CLS_NUM
 from rotate_captcha_crack.dataset import google_street_view
-from rotate_captcha_crack.dataset.midware import DEFAULT_NORM, CircularSmoothLabel, Rotator, path_to_tensor
+from rotate_captcha_crack.dataset.midware import CircularSmoothLabel, NormWrapper, Rotator, path_to_tensor
+from rotate_captcha_crack.dataset.pipe import SeqSupportsPipe
 from rotate_captcha_crack.helper import default_num_workers
 from rotate_captcha_crack.lr import LRManager
 from rotate_captcha_crack.model import RotNetR
 from rotate_captcha_crack.trainer import Trainer
 from rotate_captcha_crack.utils import slice_from_range
 from rotate_captcha_crack.visualizer import visualize_train
+
+NORMALIZER = NormWrapper(
+    Normalize(
+        mean=[0.0, 0.0, 0.0],
+        std=[1.0, 1.0, 1.0],
+        inplace=True,
+    )
+)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -25,16 +35,16 @@ if __name__ == "__main__":
 
     #################################
     ### Custom configuration area ###
-    dataset_root = Path("D:/Dataset/Streetview/data/data")
+    dataset_root = Path("E:/dataset/streetview/data")
 
     img_paths = google_street_view.get_paths(dataset_root)
     cls_num = DEFAULT_CLS_NUM
     labelling = CircularSmoothLabel(cls_num)
 
     train_img_paths = slice_from_range(img_paths, (0.0, 0.98))
-    train_dataset = train_img_paths | path_to_tensor | Rotator() | DEFAULT_NORM | labelling | tuple
+    train_dataset = train_img_paths | SeqSupportsPipe() | path_to_tensor | Rotator() | NORMALIZER | labelling | tuple
     val_img_paths = slice_from_range(img_paths, (0.98, 1.0))
-    val_dataset = val_img_paths | path_to_tensor | Rotator() | DEFAULT_NORM | labelling | tuple
+    val_dataset = val_img_paths | SeqSupportsPipe() | path_to_tensor | Rotator() | NORMALIZER | labelling | tuple
 
     num_workers = default_num_workers()
     train_dataloader = DataLoader(

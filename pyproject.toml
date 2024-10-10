@@ -4,13 +4,7 @@ name = "rotate-captcha-crack"
 readme = "README.md"
 requires-python = ">=3.9,<3.13"
 authors = [{ name = "lumina37", email = "starry.qvq@gmail.com" }]
-dependencies = [
-    "matplotlib>=3.4,<4",
-    "tqdm>=4,<5",
-    "tomli>=2.0.0,<3;python_version<'3.11'",
-    "torch>=2.0",
-    "torchvision>=0.15.0",
-]
+dependencies = ["torch", "torchvision", "ultralytics", "matplotlib", "tomli;python_version<'3.11'"]
 dynamic = ["version"]
 
 [project.optional-dependencies]
@@ -23,12 +17,17 @@ build-backend = "hatchling.build"
 [tool.hatch.version]
 path = "rotate_captcha_crack/__version__.py"
 
-[tool.rye]
+[tool.uv]
 managed = true
 
-[[tool.rye.sources]]
+[tool.uv.sources]
+torch = { index = "pytorch" }
+torchvision = { index = "pytorch" }
+
+[[tool.uv.index]]
 name = "pytorch"
-url = "https://download.pytorch.org/whl/cu124/"
+url = "https://download.pytorch.org/whl/cu124"
+explicit = true
 
 [tool.ruff]
 line-length = 120

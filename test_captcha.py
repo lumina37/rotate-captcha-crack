@@ -24,7 +24,7 @@ if __name__ == "__main__":
         model.eval()
 
         img = Image.open("datasets/tieba/1615096444.jpg")
-        img_ts = process_captcha(img)
+        img_ts = process_captcha(img, target_size=384)
         img_ts = img_ts.to(device=device)
 
         predict = model.predict(img_ts)
