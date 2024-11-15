@@ -64,7 +64,7 @@ if __name__ == "__main__":
     model = RotNetR(cls_num)
     model = model.to(device)
 
-    lr = 0.01
+    lr = 0.05
     momentum = 0.9
     epochs = 64
     steps = 128

@@ -15,7 +15,7 @@ CNN预测图片旋转角度，可用于破解旋转验证码。
 | RotNet  | ResNet50    | 75.6512°                 | 24.246M | 4.09G |
 | RotNetR | yolo11n-cls | 15.1818°                 | 18.117M | 3.18G |
 
-`RotNet`为[`d4nst/RotNet`](https://github.com/d4nst/RotNet/blob/master/train/train_street_view.py)的PyTorch实现。`RotNetR`仅在`RotNet`的基础上将backbone替换为[`yolo11n-cls`](https://docs.ultralytics.com/tasks/classify/)，并将分类数减少至128。其在[谷歌街景数据集](https://www.crcv.ucf.edu/data/GMCP_Geolocalization/)上训练64个epoch（耗时3小时）得到的平均预测误差为`15.1818°`。
+`RotNet`为[`d4nst/RotNet`](https://github.com/d4nst/RotNet/blob/master/train/train_street_view.py)的PyTorch实现。`RotNetR`仅在`RotNet`的基础上将backbone替换为[`yolo11s-cls`](https://docs.ultralytics.com/tasks/classify/)，并将分类数减少至128。其在[谷歌街景数据集](https://www.crcv.ucf.edu/data/GMCP_Geolocalization/)上训练64个epoch（耗时3小时）得到的平均预测误差为`15.1818°`。
 
 跨域测试使用[谷歌街景](https://www.crcv.ucf.edu/data/GMCP_Geolocalization/)/[Landscape-Dataset](https://github.com/yuweiming70/Landscape-Dataset)作为训练集，百度验证码作为测试集（感谢@xiangbei1997）。
 
