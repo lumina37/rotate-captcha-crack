@@ -48,14 +48,14 @@ if __name__ == "__main__":
     num_workers = default_num_workers()
     train_dataloader = DataLoader(
         train_dataset,
-        batch_size=64,
+        batch_size=16,
         num_workers=num_workers,
         shuffle=True,
         drop_last=True,
     )
     val_dataloader = DataLoader(
         val_dataset,
-        batch_size=64,
+        batch_size=16,
         num_workers=num_workers,
         drop_last=True,
     )

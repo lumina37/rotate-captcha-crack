@@ -20,7 +20,7 @@ class RotNetR(nn.Module):
         self.cls_num = cls_num
 
         yolo_model = YOLO("yolo11s-cls.pt")
-        self.model = yolo_model.model.model
+        self.model: nn.Module = yolo_model.model.model
 
         classify_layer = self.model[-1]
         fc_channels = classify_layer.linear.in_features
