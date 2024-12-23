@@ -40,14 +40,14 @@ if __name__ == "__main__":
     num_workers = default_num_workers()
     train_dataloader = DataLoader(
         train_dataset,
-        batch_size=64,
+        batch_size=128,
         num_workers=num_workers,
         shuffle=True,
         drop_last=True,
     )
     val_dataloader = DataLoader(
         val_dataset,
-        batch_size=64,
+        batch_size=128,
         num_workers=num_workers,
         drop_last=True,
     )
@@ -61,7 +61,7 @@ if __name__ == "__main__":
     lr = LRManager(lr, scheduler, optimizer)
     loss = CrossEntropyLoss()
 
-    epochs = 16
+    epochs = 128
     steps = 256
     trainer = Trainer(model, train_dataloader, val_dataloader, lr, loss, epochs, steps)
     ### Custom configuration area ###

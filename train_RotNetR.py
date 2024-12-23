@@ -41,14 +41,14 @@ if __name__ == "__main__":
     num_workers = default_num_workers()
     train_dataloader = DataLoader(
         train_dataset,
-        batch_size=64,
+        batch_size=128,
         num_workers=num_workers,
         shuffle=True,
         drop_last=True,
     )
     val_dataloader = DataLoader(
         val_dataset,
-        batch_size=64,
+        batch_size=128,
         num_workers=num_workers,
         drop_last=True,
     )
@@ -58,8 +58,8 @@ if __name__ == "__main__":
 
     lr = 0.001
     momentum = 0.9
-    epochs = 64
-    steps = 128
+    epochs = 128
+    steps = 256
 
     pgroups = [], [], []  # optimizer parameter groups
     bn = tuple(v for k, v in torch.nn.__dict__.items() if "Norm" in k)  # normalization layers, i.e. BatchNorm2d()
