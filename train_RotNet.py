@@ -4,7 +4,6 @@ from pathlib import Path
 import torch
 from torch.nn import CrossEntropyLoss
 from torch.utils.data import DataLoader
-from torchvision.transforms import Normalize
 
 from rotate_captcha_crack.common import device
 from rotate_captcha_crack.dataset import google_street_view

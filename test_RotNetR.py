@@ -20,7 +20,7 @@ if __name__ == "__main__":
     opts = parser.parse_args()
 
     with torch.no_grad():
-        dataset_root = Path("./datasets/captcha")
+        dataset_root = Path("../data/captcha")
 
         img_paths = list(glob_imgs(dataset_root))
         cls_num = DEFAULT_CLS_NUM

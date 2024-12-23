@@ -11,7 +11,7 @@ class RotNetR(nn.Module):
         train (bool, optional): True to load the pretrained parameters. Defaults to True.
 
     Note:
-        impl: [`rotnet_street_view_resnet50`](https://github.com/d4nst/RotNet) but with [`yolo11l-cls`](https://docs.ultralytics.com/tasks/classify/) as its backbone
+        impl: [`rotnet_street_view_resnet50`](https://github.com/d4nst/RotNet) but with [`yolo11x-cls`](https://docs.ultralytics.com/tasks/classify/) as its backbone
     """
 
     def __init__(self, cls_num: int = DEFAULT_CLS_NUM, train: bool = True) -> None:
@@ -19,7 +19,7 @@ class RotNetR(nn.Module):
 
         self.cls_num = cls_num
 
-        yolo_model = YOLO("yolo11l-cls.pt")
+        yolo_model = YOLO("yolo11x-cls.pt")
         self.model: nn.Module = yolo_model.model.model
 
         classify_layer = self.model[-1]
