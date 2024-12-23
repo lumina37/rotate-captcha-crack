@@ -9,7 +9,7 @@ from rotate_captcha_crack.common import device
 from rotate_captcha_crack.const import DEFAULT_CLS_NUM
 from rotate_captcha_crack.criterion import dist_onehot
 from rotate_captcha_crack.dataset.midware import DEFAULT_NORM, Rotator, ScalarLabel, path_to_tensor
-from rotate_captcha_crack.dataset.paths.helper import glob_imgs
+from rotate_captcha_crack.dataset.paths import glob_imgs
 from rotate_captcha_crack.dataset.pipe import SeqSupportsPipe
 from rotate_captcha_crack.helper import default_num_workers
 from rotate_captcha_crack.model import RotNetR, WhereIsMyModel

@@ -29,7 +29,7 @@ if __name__ == "__main__":
     ### Custom configuration area ###
     dataset_root = Path("../data/unlabeled2017")
 
-    img_paths = glob_imgs(dataset_root)
+    img_paths = list(glob_imgs(dataset_root))
     cls_num = DEFAULT_CLS_NUM
     labelling = CircularSmoothLabel(cls_num)
 
