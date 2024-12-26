@@ -11,7 +11,7 @@ class RotNetR(nn.Module):
         train (bool, optional): True to load the pretrained parameters. Defaults to True.
 
     Note:
-        impl: [`rotnet_street_view_resnet50`](https://github.com/d4nst/RotNet) but with [`RegNet_Y_8GF`](https://arxiv.org/abs/2101.00590) as its backbone
+        impl: [`rotnet_street_view_resnet50`](https://github.com/d4nst/RotNet) but with [`RegNet_Y_3_2GF`](https://arxiv.org/abs/2101.00590) as its backbone
     """
 
     def __init__(self, cls_num: int = DEFAULT_CLS_NUM, train: bool = True) -> None:
@@ -19,8 +19,8 @@ class RotNetR(nn.Module):
 
         self.cls_num = cls_num
 
-        weights = models.RegNet_Y_8GF_Weights.DEFAULT if train else None
-        self.backbone = models.regnet_y_8gf(weights=weights)
+        weights = models.RegNet_Y_3_2GF_Weights.DEFAULT if train else None
+        self.backbone = models.regnet_y_3_2gf(weights=weights)
 
         fc_channels = self.backbone.fc.in_features
         self.backbone.fc = nn.Linear(fc_channels, cls_num)

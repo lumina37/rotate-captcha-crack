@@ -10,12 +10,12 @@ Test result:
 
 Three kinds of model are implemented, as shown in the table below.
 
-| Name    | Backbone    | Cross-Domain Loss (less is better) | Params  | MACs  |
-| ------- | ----------- | ---------------------------------- | ------- | ----- |
-| RotNet  | ResNet50    | 75.6512°                           | 24.246M | 4.09G |
-| RotNetR | yolo11n-cls | 15.1818°                           | 18.117M | 3.18G |
+| Name    | Backbone       | Cross-Domain Loss (less is better) | Params  | MACs  |
+| ------- | -------------- | ---------------------------------- | ------- | ----- |
+| RotNet  | ResNet50       | 75.6512°                           | 24.246M | 4.09G |
+| RotNetR | RegNet_Y_3_2GF | 15.1818°                           | 18.117M | 3.18G |
 
-RotNet is the implementation of [`d4nst/RotNet`](https://github.com/d4nst/RotNet/blob/master/train/train_street_view.py) over PyTorch. `RotNetR` is based on `RotNet`, with [`yolo11s-cls`](https://docs.ultralytics.com/tasks/classify/) as its backbone and class number of 128. The average prediction error is `15.1818°`, obtained by 64 epochs of training (3 hours) on the [Google Street View](https://www.crcv.ucf.edu/data/GMCP_Geolocalization/) dataset.
+RotNet is the implementation of [`d4nst/RotNet`](https://github.com/d4nst/RotNet/blob/master/train/train_street_view.py) over PyTorch. `RotNetR` is based on `RotNet`, with [`RegNet_Y_3_2GF`](https://arxiv.org/abs/2101.00590) as its backbone and class number of 128. The average prediction error is `15.1818°`, obtained by 64 epochs of training (3 hours) on the [Google Street View](https://www.crcv.ucf.edu/data/GMCP_Geolocalization/) dataset.
 
 The Cross-Domain Test uses [Google Street View](https://www.crcv.ucf.edu/data/GMCP_Geolocalization/) and [Landscape-Dataset](https://github.com/yuweiming70/Landscape-Dataset) for training, and Captcha Pictures from Baidu (thanks to @xiangbei1997) for testing.
 
