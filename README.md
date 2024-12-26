@@ -25,7 +25,7 @@ The captcha picture used in the demo above comes from [RotateCaptchaBreak](https
 
 ### Prepare
 
-+ Computing device with mem>=8G for training
++ CUDA device with mem>=16G for training
 
 + Python>=3.9,<3.13
 
