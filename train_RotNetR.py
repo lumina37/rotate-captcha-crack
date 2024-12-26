@@ -10,11 +10,10 @@ from rotate_captcha_crack.const import DEFAULT_CLS_NUM
 from rotate_captcha_crack.dataset.midware import DEFAULT_NORM, CircularSmoothLabel, Rotator, path_to_tensor
 from rotate_captcha_crack.dataset.paths import glob_imgs
 from rotate_captcha_crack.dataset.pipe import SeqSupportsPipe
-from rotate_captcha_crack.helper import default_num_workers
 from rotate_captcha_crack.lr import LRManager
 from rotate_captcha_crack.model import RotNetR
 from rotate_captcha_crack.trainer import Trainer
-from rotate_captcha_crack.utils import slice_from_range
+from rotate_captcha_crack.utils import default_num_workers, slice_from_range
 from rotate_captcha_crack.visualizer import visualize_train
 
 if __name__ == "__main__":

@@ -15,7 +15,7 @@ class RotNetR(nn.Module):
     """
 
     def __init__(self, cls_num: int = DEFAULT_CLS_NUM, train: bool = True) -> None:
-        super(RotNetR, self).__init__()
+        super().__init__()
 
         self.cls_num = cls_num
 

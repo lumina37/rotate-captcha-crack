@@ -1,14 +1,35 @@
 from __future__ import annotations
 
+import os
+from pathlib import Path
 from typing import Sequence, TypeVar
 
+import torch
 from PIL.Image import Image
-from torch import Tensor
+from torch import Tensor, nn
 
 from .const import DEFAULT_TARGET_SIZE
 from .dataset.midware import DEFAULT_NORM, NormWrapper, pil_to_tensor, square_resize, strip_border, u8_to_float32
 
 TSeq = TypeVar('TSeq', bound=Sequence)
+
+
+def default_num_workers() -> int:
+    if (cpu_count := os.cpu_count()) is None:
+        worker_num = 0
+    else:
+        cpu_count = cpu_count >> 1
+        if cpu_count > 1:
+            # reserve 1 core for other apps
+            worker_num = cpu_count - 1
+        else:
+            worker_num = 0
+
+    return worker_num
+
+
+def get_state_dict(path: Path) -> nn.Module:
+    return torch.load(path, map_location='cpu', weights_only=True)
 
 
 def slice_from_range(seq: TSeq, range_: tuple[float, float]) -> TSeq:

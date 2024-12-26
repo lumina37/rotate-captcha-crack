@@ -11,8 +11,8 @@ from rotate_captcha_crack.criterion import dist_onehot
 from rotate_captcha_crack.dataset.midware import DEFAULT_NORM, Rotator, ScalarLabel, path_to_tensor
 from rotate_captcha_crack.dataset.paths import glob_imgs
 from rotate_captcha_crack.dataset.pipe import SeqSupportsPipe
-from rotate_captcha_crack.helper import default_num_workers
 from rotate_captcha_crack.model import RotNetR, WhereIsMyModel
+from rotate_captcha_crack.utils import default_num_workers, get_state_dict
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -36,7 +36,7 @@ if __name__ == "__main__":
         model = RotNetR(cls_num=cls_num, train=False)
         model_path = WhereIsMyModel(model).with_index(opts.index).model_dir / "best.pth"
         print(f"Use model: {model_path}")
-        model.load_state_dict(torch.load(model_path, weights_only=True))
+        model.load_state_dict(get_state_dict(model_path))
         model.to(device=device)
         model.eval()
 

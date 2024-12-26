@@ -6,7 +6,7 @@ from PIL import Image
 from rotate_captcha_crack.common import device
 from rotate_captcha_crack.const import DEFAULT_CLS_NUM
 from rotate_captcha_crack.model import RotNetR, WhereIsMyModel
-from rotate_captcha_crack.utils import process_captcha
+from rotate_captcha_crack.utils import get_state_dict, process_captcha
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -18,7 +18,7 @@ if __name__ == "__main__":
         model = RotNetR(cls_num=cls_num, train=False)
         model_path = WhereIsMyModel(model).with_index(opts.index).model_dir / "best.pth"
         print(f"Use model: {model_path}")
-        model.load_state_dict(torch.load(model_path, weights_only=True))
+        model.load_state_dict(get_state_dict(model_path))
         model = model.to(device=device)
         model.eval()
 

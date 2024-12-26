@@ -13,9 +13,9 @@ CNN预测图片旋转角度，可用于破解旋转验证码。
 | 名称    | Backbone       | 跨域测试误差（越小越好） | 参数量  | MACs  |
 | ------- | -------------- | ------------------------ | ------- | ----- |
 | RotNet  | ResNet50       | 75.6512°                 | 24.246M | 4.09G |
-| RotNetR | RegNet_Y_3_2GF | 15.1818°                 | 18.117M | 3.18G |
+| RotNetR | RegNet_Y_3_2GF | 7.1818°                  | 18.117M | 3.18G |
 
-`RotNet`为[`d4nst/RotNet`](https://github.com/d4nst/RotNet/blob/master/train/train_street_view.py)的PyTorch实现。`RotNetR`仅在`RotNet`的基础上将backbone替换为[`RegNet_Y_3_2GF`](https://arxiv.org/abs/2101.00590)，并将分类数减少至128。其在[谷歌街景数据集](https://www.crcv.ucf.edu/data/GMCP_Geolocalization/)上训练64个epoch（耗时3小时）得到的平均预测误差为`15.1818°`。
+`RotNet`为[`d4nst/RotNet`](https://github.com/d4nst/RotNet/blob/master/train/train_street_view.py)的PyTorch实现。`RotNetR`仅在`RotNet`的基础上将backbone替换为[`RegNet_Y_3_2GF`](https://arxiv.org/abs/2101.00590)，并将分类数减少至128。其在[COCO 2017 (Unlabeled) 数据集](https://pan.baidu.com/s/1iAZmJkaq_raJdKJDVLe6rQ?pwd=fsn9)上训练128个epoch（耗时3.4小时）得到的平均预测误差为`7.1818°`。
 
 跨域测试使用[谷歌街景](https://www.crcv.ucf.edu/data/GMCP_Geolocalization/)/[Landscape-Dataset](https://github.com/yuweiming70/Landscape-Dataset)作为训练集，百度验证码作为测试集（感谢@xiangbei1997）。
 
@@ -25,7 +25,7 @@ CNN预测图片旋转角度，可用于破解旋转验证码。
 
 ### 准备环境
 
-+ 内存大小不少于16G的CUDA设备
++ 内存大小不少于16G的CUDA设备（如显存不足请酌减batch size）
 
 + 确保你的`Python`版本`>=3.9,<3.13`
 
