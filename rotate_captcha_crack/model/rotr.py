@@ -23,12 +23,11 @@ class RotNetR(nn.Module):
         self.backbone = models.regnet_y_8gf(weights=weights)
 
         fc_channels = self.backbone.fc.in_features
-        del self.backbone.fc
-        self.fc = nn.Linear(fc_channels, cls_num)
+        self.backbone.fc = nn.Linear(fc_channels, cls_num)
 
         if train:
-            nn.init.kaiming_normal_(self.fc.weight)
-            nn.init.zeros_(self.fc.bias)
+            nn.init.kaiming_normal_(self.backbone.fc.weight)
+            nn.init.zeros_(self.backbone.fc.bias)
 
     def forward(self, x: Tensor) -> Tensor:
         """
@@ -40,7 +39,6 @@ class RotNetR(nn.Module):
         """
 
         x = self.backbone.forward(x)
-        x = self.fc.forward(x)
 
         return x
 
