@@ -1,6 +1,5 @@
 import argparse
 
-import matplotlib.pyplot as plt
 import torch
 from PIL import Image
 
@@ -23,8 +22,8 @@ if __name__ == "__main__":
         model = model.to(device=device)
         model.eval()
 
-        img = Image.open("datasets/tieba/1615096444.jpg")
-        img_ts = process_captcha(img, target_size=384)
+        img = Image.open("../data/tieba/1615096444.jpg")
+        img_ts = process_captcha(img, target_size=224)
         img_ts = img_ts.to(device=device)
 
         predict = model.predict(img_ts)
@@ -34,6 +33,4 @@ if __name__ == "__main__":
     img = img.rotate(
         -degree, resample=Image.Resampling.BILINEAR, fillcolor=(255, 255, 255)
     )  # use neg degree to recover the img
-    plt.figure("debug")
-    plt.imshow(img)
-    plt.show()
+    img.save("debug.jpg")

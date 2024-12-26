@@ -74,11 +74,11 @@ The names of models will change frequently as the project is still in beta statu
 
 ### Test the Rotation Effect by a Single Captcha Picture
 
-If no GUI is presented, try to change the debugging behavior from showing images to saving them.
-
 ```shell
 uv run test_captcha.py
 ```
+
+Open `./debug.jpg` to check the result.
 
 If you do not have `uv`, please use:
 

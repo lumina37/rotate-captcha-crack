@@ -74,11 +74,11 @@ pip install .
 
 ### 输入一个验证码图像并查看旋转效果
 
-如果你的系统没有GUI，尝试把debug方法从显示图像改成保存图像。
-
 ```shell
 uv run test_captcha.py
 ```
+
+打开`./debug.jpg`查看结果。
 
 如果你没有安装`uv`的话，请使用：
 
