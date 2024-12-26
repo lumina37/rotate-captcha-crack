@@ -25,7 +25,7 @@ The captcha picture used in the demo above comes from [RotateCaptchaBreak](https
 
 ### Prepare
 
-+ CUDA device with mem>=16G for training
++ CUDA device with mem>=16G for training (reduce the batch size if necessary)
 
 + Python>=3.9,<3.13
 
@@ -54,7 +54,7 @@ Or, if you prefer `conda`: The following steps will create a virtual env under t
 conda create -p .conda
 conda activate ./.conda
 conda install matplotlib tqdm tomli
-conda install pytorch torchvision pytorch-cuda=12.4 -c pytorch -c nvidia -c conda-forge
+conda install pytorch torchvision pytorch-cuda=12.4 -c pytorch -c nvidia
 ```
 
 Or, if you prefer a direct `pip`:
