@@ -54,7 +54,7 @@ Or, if you prefer `conda`: The following steps will create a virtual env under t
 conda create -p .conda
 conda activate ./.conda
 conda install matplotlib tqdm tomli
-conda install pytorch torchvision pytorch-cuda=12.4 ultralytics -c pytorch -c nvidia -c conda-forge
+conda install pytorch torchvision pytorch-cuda=12.4 -c pytorch -c nvidia -c conda-forge
 ```
 
 Or, if you prefer a direct `pip`:

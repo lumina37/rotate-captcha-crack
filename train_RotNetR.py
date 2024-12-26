@@ -61,15 +61,18 @@ if __name__ == "__main__":
     steps = 256
 
     pgroups = [], [], []  # optimizer parameter groups
-    bn = tuple(v for k, v in torch.nn.__dict__.items() if "Norm" in k)  # normalization layers, i.e. BatchNorm2d()
-    for module_name, module in model.model.named_modules():
+    bn = tuple(v for k, v in torch.nn.__dict__.items() if "Norm" in k)
+    for module_name, module in model.backbone.named_modules():
         for param_name, param in module.named_parameters(recurse=False):
             fullname = f"{module_name}.{param_name}" if module_name else param_name
-            if "bias" in fullname:  # bias (no decay)
+            if "bias" in fullname:
+                # bias (no decay)
                 pgroups[2].append(param)
-            elif isinstance(module, bn):  # weight (no decay)
+            elif isinstance(module, bn):
+                # weight (no decay)
                 pgroups[1].append(param)
-            else:  # weight (with decay)
+            else:
+                # weight (with decay)
                 pgroups[0].append(param)
 
     optimizer = torch.optim.AdamW(pgroups[2], lr=lr, betas=(momentum, 0.999), weight_decay=0.0)

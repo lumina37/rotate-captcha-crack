@@ -54,7 +54,7 @@ uv pip install .
 conda create -p .conda
 conda activate ./.conda
 conda install matplotlib tqdm tomli
-conda install pytorch torchvision pytorch-cuda=12.4 ultralytics -c pytorch -c nvidia -c conda-forge
+conda install pytorch torchvision pytorch-cuda=12.4 -c pytorch -c nvidia -c conda-forge
 ```
 
 或者，如果你喜欢直接使用`pip`：

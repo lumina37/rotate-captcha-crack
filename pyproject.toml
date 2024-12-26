@@ -4,7 +4,7 @@ name = "rotate-captcha-crack"
 readme = "README.md"
 requires-python = ">=3.9,<3.13"
 authors = [{ name = "lumina37", email = "starry.qvq@gmail.com" }]
-dependencies = ["torch", "torchvision", "ultralytics", "matplotlib", "tomli;python_version<'3.11'"]
+dependencies = ["torch", "torchvision", "matplotlib", "tqdm", "tomli;python_version<'3.11'"]
 dynamic = ["version"]
 
 [project.optional-dependencies]
