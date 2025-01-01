@@ -56,8 +56,8 @@ if __name__ == "__main__":
 
     lr = 0.001
     momentum = 0.9
-    epochs = 128
-    steps = 256
+    epochs = 1024
+    steps = 512
 
     pgroups = [], [], []  # optimizer parameter groups
     bn = tuple(v for k, v in torch.nn.__dict__.items() if "Norm" in k)
