@@ -59,8 +59,8 @@ if __name__ == "__main__":
     lr = LRManager(lr, scheduler, optimizer)
     loss = CrossEntropyLoss()
 
-    epochs = 128
-    steps = 256
+    epochs = 1024
+    steps = 512
     trainer = Trainer(model, train_dataloader, val_dataloader, lr, loss, epochs, steps)
     ### Custom configuration area ###
     #################################
