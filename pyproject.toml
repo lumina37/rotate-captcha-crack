@@ -21,11 +21,11 @@ path = "rotate_captcha_crack/__version__.py"
 managed = true
 
 [tool.uv.sources]
-torch = { index = "pytorch" }
-torchvision = { index = "pytorch" }
+torch = [{ index = "pytorch-cu124", marker = "platform_system != 'Darwin'" }]
+torchvision = [{ index = "pytorch-cu124", marker = "platform_system != 'Darwin'" }]
 
 [[tool.uv.index]]
-name = "pytorch"
+name = "pytorch-cu124"
 url = "https://download.pytorch.org/whl/cu124"
 explicit = true
 

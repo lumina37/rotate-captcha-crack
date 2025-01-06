@@ -40,13 +40,11 @@ cd ./rotate-captcha-crack
 
 + Install all requiring dependencies.
 
-This project strongly suggest you to use [`uv`](https://docs.astral.sh/uv/) for package management. Run the following commands if you already have `uv`:
+This project strongly suggest you to use [`uv>=0.5.3`](https://docs.astral.sh/uv/) for package management. Run the following commands if you already have `uv`:
 
 ```shell
-uv pip install .
+uv sync
 ```
-
-The dependency resolution strategy of `uv` might have some [issue](https://github.com/astral-sh/uv/issues/7202), so `uv sync` is not recommended for environment setup.
 
 Or, if you prefer `conda`: The following steps will create a virtual env under the working directory. You can also use a named env.
 

@@ -40,13 +40,11 @@ cd ./rotate-captcha-crack
 
 + 安装依赖
 
-强烈推荐使用[`uv`](https://docs.astral.sh/uv/)作为包管理工具。如果你已经安装了`uv`，请执行以下命令：
+强烈推荐使用[`uv>=0.5.3`](https://docs.astral.sh/uv/)作为包管理工具。如果你已经安装了`uv`，请执行以下命令：
 
 ```shell
-uv pip install .
+uv sync
 ```
-
-由于uv的包依赖解析逻辑可能存在[问题](https://github.com/astral-sh/uv/issues/7202)，因此不推荐使用`uv sync`命令安装依赖。
 
 或者，如果你喜欢用`conda`：以下步骤会在项目文件夹下创建一个虚拟环境。你也可以使用具名环境。
 
