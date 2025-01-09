@@ -13,6 +13,7 @@
 !test_RCCNet.py
 !test_RotNet.py
 !test_RotNetR.py
+!quant_RotNetR.py
 !test_captcha.py
 !server.py
 
