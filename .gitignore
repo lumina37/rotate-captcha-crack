@@ -17,7 +17,7 @@
 !test_captcha.py
 !server.py
 
-!rotate_captcha_crack
-!rotate_captcha_crack/**
+!src
+!src/**
 
 __pycache__

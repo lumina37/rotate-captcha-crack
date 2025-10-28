@@ -1,37 +1,34 @@
 [project]
-urls = { Repository = "https://github.com/lumina37/rotate-captcha-crack" }
 name = "rotate-captcha-crack"
-readme = "README.md"
-requires-python = ">=3.9,<3.13"
+version = "0.6.0a1"
 authors = [{ name = "lumina37", email = "starry.qvq@gmail.com" }]
+urls = { Repository = "https://github.com/lumina37/rotate-captcha-crack" }
 dependencies = ["torch", "torchvision", "matplotlib", "tqdm", "tomli;python_version<'3.11'"]
-dynamic = ["version"]
+requires-python = ">=3.9,<3.14"
+readme = "README.md"
 
 [project.optional-dependencies]
 server = ["aiohttp"]
 
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
-
-[tool.hatch.version]
-path = "rotate_captcha_crack/__version__.py"
+requires = ["uv_build>=0.9.5,<0.10.0"]
+build-backend = "uv_build"
 
 [tool.uv]
 managed = true
 
 [tool.uv.sources]
-torch = [{ index = "pytorch-cu124", marker = "platform_system != 'Darwin'" }]
-torchvision = [{ index = "pytorch-cu124", marker = "platform_system != 'Darwin'" }]
+torch = [{ index = "pytorch-cu128", marker = "platform_system != 'Darwin'" }]
+torchvision = [{ index = "pytorch-cu128", marker = "platform_system != 'Darwin'" }]
 
 [[tool.uv.index]]
-name = "pytorch-cu124"
-url = "https://download.pytorch.org/whl/cu124"
+name = "pytorch-cu128"
+url = "https://download.pytorch.org/whl/cu128"
 explicit = true
 
 [tool.ruff]
 line-length = 120
-target-version = "py38"
+target-version = "py39"
 
 [tool.ruff.format]
 quote-style = "preserve"
@@ -47,17 +44,22 @@ select = [
     "ASYNC",
     "B",
     "A",
-    "COM",
     "C4",
     "FA",
+    "ICN",
+    "LOG",
     "PIE",
     "PT",
+    "Q",
     "RSE",
+    "SLOT",
+    "TC",
+    "PTH",
     "NPY",
     "PERF",
     "FURB",
 ]
-ignore = ["E402", "E501", "COM812"]
+ignore = ["A005", "E402", "E501", "E266", "COM812"]
 
 [tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["F401"]

@@ -27,7 +27,7 @@ The captcha picture used in the demo above comes from [RotateCaptchaBreak](https
 
 + CUDA device with mem>=16G for training (reduce the batch size if necessary)
 
-+ Python>=3.9,<3.13
++ Python>=3.9,<3.14
 
 + PyTorch>=2.0
 
