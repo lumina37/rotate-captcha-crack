@@ -17,7 +17,7 @@ def pil_to_tensor(img: Image.Image) -> Tensor:
         Tensor: (dtype=uint8, range=[0,255])
     """
 
-    img = img.convert('RGB')
+    img = img.convert("RGB")
     img_ts = torch.from_numpy(np.array(img))
     img_ts = img_ts.view(img.height, img.width, 3)
     img_ts = img_ts.permute(2, 0, 1)
@@ -35,7 +35,7 @@ def path_to_tensor(path: Path) -> Tensor:
         Tensor: [C,H,W]=[3,ud,ud], dtype=uint8, range=[0,255]
     """
 
-    img = Image.open(path, formats=('JPEG', 'PNG', 'WEBP'))
+    img = Image.open(path, formats=("JPEG", "PNG", "WEBP"))
     img_ts = pil_to_tensor(img)
     return img_ts
 

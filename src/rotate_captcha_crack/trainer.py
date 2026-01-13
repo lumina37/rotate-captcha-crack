@@ -30,22 +30,22 @@ class Trainer:
     """
 
     __slots__ = [
-        'model',
-        'train_dataloader',
-        'val_dataloader',
-        'lrm',
-        'loss',
-        'epochs',
-        'steps',
-        'finder',
-        'lr_array',
-        'train_loss_array',
-        'val_loss_array',
-        'best_val_loss',
-        'last_epoch',
-        't_cost',
-        '_log',
-        '_is_new_task',
+        "model",
+        "train_dataloader",
+        "val_dataloader",
+        "lrm",
+        "loss",
+        "epochs",
+        "steps",
+        "finder",
+        "lr_array",
+        "train_loss_array",
+        "val_loss_array",
+        "best_val_loss",
+        "last_epoch",
+        "t_cost",
+        "_log",
+        "_is_new_task",
     ]
 
     def __init__(
@@ -105,21 +105,21 @@ class Trainer:
 
         torch.save(
             {
-                'model': self.model.state_dict(),
-                'lrm': self.lrm.state_dict(),
+                "model": self.model.state_dict(),
+                "lrm": self.lrm.state_dict(),
             },
             checkpoint_dir / "last.ckpt",
         )
 
-        with open(checkpoint_dir / "last.json", 'w', encoding='utf-8') as f:
+        with (checkpoint_dir / "last.json").open("w", encoding="utf-8") as f:
             json.dump(
                 {
-                    'best_val_loss': self.best_val_loss,
-                    'last_epoch': self.last_epoch,
-                    't_cost': self.t_cost,
+                    "best_val_loss": self.best_val_loss,
+                    "last_epoch": self.last_epoch,
+                    "t_cost": self.t_cost,
                 },
                 f,
-                separators=(',', ':'),
+                separators=(",", ":"),
             )
 
         np.save(checkpoint_dir / "lr.npy", self.lr_array)
@@ -134,14 +134,14 @@ class Trainer:
         checkpoint_dir = self.finder.model_dir / CKPT_PATH
 
         state_dict = torch.load(checkpoint_dir / "last.ckpt")
-        self.model.load_state_dict(state_dict['model'])
-        self.lrm.load_state_dict(state_dict['lrm'])
+        self.model.load_state_dict(state_dict["model"])
+        self.lrm.load_state_dict(state_dict["lrm"])
 
-        with open(checkpoint_dir / "last.json", 'rb') as f:
+        with (checkpoint_dir / "last.json").open("rb") as f:
             variables = json.load(f)
-            self.best_val_loss = variables['best_val_loss']
-            self.last_epoch = variables['last_epoch']
-            self.t_cost = variables['t_cost']
+            self.best_val_loss = variables["best_val_loss"]
+            self.last_epoch = variables["last_epoch"]
+            self.t_cost = variables["t_cost"]
 
         self.lr_array = np.load(checkpoint_dir / "lr.npy")
         self.train_loss_array = np.load(checkpoint_dir / "train_loss.npy")

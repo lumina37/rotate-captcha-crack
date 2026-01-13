@@ -53,8 +53,8 @@ class LRManagerWithValLoss(TypeLRManager):
         }
 
     def load_state_dict(self, d: dict) -> None:
-        self._scheduler.load_state_dict(d['scheduler'])
-        self._optimizer.load_state_dict(d['optimizer'])
+        self._scheduler.load_state_dict(d["scheduler"])
+        self._optimizer.load_state_dict(d["optimizer"])
 
     @property
     def lr(self) -> float:
@@ -91,8 +91,8 @@ class LRManager(TypeLRManager):
         }
 
     def load_state_dict(self, d: dict) -> None:
-        self._scheduler.load_state_dict(d['scheduler'])
-        self._optimizer.load_state_dict(d['optimizer'])
+        self._scheduler.load_state_dict(d["scheduler"])
+        self._optimizer.load_state_dict(d["optimizer"])
 
     @property
     def lr(self) -> float:

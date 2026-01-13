@@ -1,17 +1,21 @@
 from __future__ import annotations
 
 import os
-from pathlib import Path
-from typing import Sequence, TypeVar
+from collections.abc import Sequence
+from typing import TYPE_CHECKING, TypeVar
 
 import torch
-from PIL.Image import Image
 from torch import Tensor, nn
 
 from .const import DEFAULT_TARGET_SIZE
 from .dataset.midware import DEFAULT_NORM, NormWrapper, pil_to_tensor, square_resize, strip_border, u8_to_float32
 
-TSeq = TypeVar('TSeq', bound=Sequence)
+if TYPE_CHECKING:
+    from pathlib import Path
+
+    from PIL.Image import Image
+
+TSeq = TypeVar("TSeq", bound=Sequence)
 
 
 def default_num_workers() -> int:
@@ -29,7 +33,7 @@ def default_num_workers() -> int:
 
 
 def get_state_dict(path: Path) -> nn.Module:
-    return torch.load(path, map_location='cpu', weights_only=True)
+    return torch.load(path, map_location="cpu", weights_only=True)
 
 
 def slice_from_range(seq: TSeq, range_: tuple[float, float]) -> TSeq:
@@ -67,7 +71,7 @@ def process_captcha(img: Image, target_size: int = DEFAULT_TARGET_SIZE, norm: No
         Tensor: tensor ([C,H,W]=[3,target_size,target_size], dtype=float32, range=[0.0,1.0))
     """
 
-    img = img.convert('RGB')
+    img = img.convert("RGB")
     img_ts = pil_to_tensor(img)
     img_ts = strip_border(img_ts)
     img_ts = u8_to_float32(img_ts)

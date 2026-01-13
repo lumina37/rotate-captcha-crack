@@ -58,8 +58,8 @@ if __name__ == "__main__":
         # model.to(device=device)
         quant_model.eval()
 
-        quant_model.qconfig = torch.ao.quantization.get_default_qat_qconfig('x86')
-        quant_model = torch.ao.quantization.fuse_modules(quant_model, [['conv', 'bn', 'relu']])
+        quant_model.qconfig = torch.ao.quantization.get_default_qat_qconfig("x86")
+        quant_model = torch.ao.quantization.fuse_modules(quant_model, [["conv", "bn", "relu"]])
         quant_model = torch.ao.quantization.prepare_qat(quant_model.train())
 
         lr = 0.001

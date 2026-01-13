@@ -2,15 +2,17 @@ from __future__ import annotations
 
 import dataclasses as dcs
 import math
-from collections.abc import Iterator
-from typing import Generic, TypeVar
+from typing import TYPE_CHECKING, Generic, TypeVar
 
 import torch
 from torch import Tensor
 
 from ...const import DEFAULT_CLS_NUM
 
-TLabel = TypeVar('TLabel')
+if TYPE_CHECKING:
+    from collections.abc import Iterator
+
+TLabel = TypeVar("TLabel")
 
 
 @dcs.dataclass

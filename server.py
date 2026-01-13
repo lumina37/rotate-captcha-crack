@@ -16,7 +16,7 @@ from rotate_captcha_crack.utils import process_captcha
 logger = RCCLogger()
 routes = web.RouteTableDef()
 
-dumps = functools.partial(json.dumps, separators=(',', ':'))
+dumps = functools.partial(json.dumps, separators=(",", ":"))
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--index", "-i", type=int, default=-1, help="Use which index")
@@ -30,9 +30,9 @@ model = model.to(device=device)
 model.eval()
 
 
-@routes.post('/')
+@routes.post("/")
 async def handler(request: web.Request):
-    resp = {'err': {'code': 0}}
+    resp = {"err": {"code": 0}}
 
     try:
         img_bytes = await request.read()
@@ -42,11 +42,11 @@ async def handler(request: web.Request):
             img_ts = process_captcha(img)
             img_ts = img_ts.to(device=device)
             predict = model.predict(img_ts) * 360
-            resp['pred'] = predict
+            resp["pred"] = predict
 
     except Exception as err:
-        resp['err']['code'] = 0x0001
-        resp['err']['msg'] = str(err)
+        resp["err"]["code"] = 0x0001
+        resp["err"]["msg"] = str(err)
         return web.json_response(resp, status=400, dumps=dumps)
 
     return web.json_response(resp, dumps=dumps)

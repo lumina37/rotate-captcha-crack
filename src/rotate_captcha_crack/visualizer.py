@@ -18,9 +18,9 @@ def visualize_train(model_dir: Path) -> None:
 
     checkpoint_dir = model_dir / CKPT_PATH
 
-    with open(checkpoint_dir / "last.json", encoding='utf-8') as f:
+    with (checkpoint_dir / "last.json").open(encoding="utf-8") as f:
         variables = json.load(f)
-        last_epoch = variables['last_epoch']
+        last_epoch = variables["last_epoch"]
 
     lr_array = np.load(checkpoint_dir / "lr.npy")
     train_loss_array = np.load(checkpoint_dir / "train_loss.npy")
@@ -35,20 +35,20 @@ def visualize_train(model_dir: Path) -> None:
     fig, ax = plt.subplots(figsize=(8, 8))
     ax.plot(x, lr_array[:epochs])
     ax.xaxis.set_major_locator(MaxNLocator(integer=True))
-    ax.set_xlabel('epochs')
-    ax.set_title('lr - epochs')
+    ax.set_xlabel("epochs")
+    ax.set_title("lr - epochs")
     fig.savefig(figure_dir / "lr.png")
 
     fig, ax = plt.subplots(figsize=(8, 8))
     ax.plot(x, train_loss_array[:epochs])
     ax.xaxis.set_major_locator(MaxNLocator(integer=True))
-    ax.set_xlabel('epochs')
-    ax.set_title('train_loss - epochs')
+    ax.set_xlabel("epochs")
+    ax.set_title("train_loss - epochs")
     fig.savefig(figure_dir / "train_loss.png")
 
     fig, ax = plt.subplots(figsize=(8, 8))
     ax.plot(x, val_loss_array[:epochs])
     ax.xaxis.set_major_locator(MaxNLocator(integer=True))
-    ax.set_xlabel('epochs')
-    ax.set_title('val_loss - epochs')
+    ax.set_xlabel("epochs")
+    ax.set_title("val_loss - epochs")
     fig.savefig(figure_dir / "val_loss.png")

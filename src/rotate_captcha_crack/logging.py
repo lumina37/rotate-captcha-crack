@@ -7,10 +7,10 @@ from pathlib import Path
 from .const import DEFAULT_LOG_DIR, LOG_FILE_SUFFIX
 
 logging.addLevelName(logging.FATAL, "FATAL")
-logging.addLevelName(logging.WARN, "WARN")
+logging.addLevelName(logging.WARNING, "WARN")
 
 logging.raiseExceptions = False
-logging.Formatter.default_msec_format = '%s.%03d'
+logging.Formatter.default_msec_format = "%s.%03d"
 
 
 class RCCLogger(logging.Logger):
@@ -32,13 +32,13 @@ class RCCLogger(logging.Logger):
             log_dir.mkdir(0o755, parents=True, exist_ok=True)
             log_filepath = (log_dir / script_name).with_suffix(LOG_FILE_SUFFIX)
 
-        file_handler = logging.FileHandler(str(log_filepath), encoding='utf-8')
+        file_handler = logging.FileHandler(str(log_filepath), encoding="utf-8")
         stream_handler = logging.StreamHandler(sys.stdout)
 
         file_handler.setLevel(logging.INFO)
         stream_handler.setLevel(logging.DEBUG)
 
-        formatter = logging.Formatter("<{asctime}> [{levelname}] {message}", style='{')
+        formatter = logging.Formatter("<{asctime}> [{levelname}] {message}", style="{")
         file_handler.setFormatter(formatter)
         stream_handler.setFormatter(formatter)
 

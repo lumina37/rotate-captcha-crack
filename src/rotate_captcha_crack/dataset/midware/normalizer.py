@@ -7,7 +7,7 @@ from torchvision.transforms import Normalize
 
 from .labels import ImgWithLabel
 
-TLabel = TypeVar('TLabel')
+TLabel = TypeVar("TLabel")
 
 
 @dcs.dataclass

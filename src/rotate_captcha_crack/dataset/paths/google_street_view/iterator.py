@@ -1,10 +1,13 @@
 from __future__ import annotations
 
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 from ...pipe import IterSupportsPipe
 from ..helper import glob_imgs
 from .filter import filter_ggstreet
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 
 def get_paths(root: Path) -> list[Path]:

@@ -15,6 +15,6 @@ def filter_ggstreet(path: Path) -> Path:
         Return None if the image path is been filtered
     """
 
-    segs = path.stem.rsplit('_')
+    segs = path.stem.rsplit("_")
     viewid = int(segs[1])
     return None if viewid in [0, 5] else path

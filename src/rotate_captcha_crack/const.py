@@ -1,8 +1,8 @@
 import math
 
-MODELS_DIR = './models'
-DEFAULT_LOG_DIR = './log'
-LOG_FILE_SUFFIX = '.log'
+MODELS_DIR = "./models"
+DEFAULT_LOG_DIR = "./log"
+LOG_FILE_SUFFIX = ".log"
 
 CKPT_PATH = "ckpt"
 LOG_PATH = "log"

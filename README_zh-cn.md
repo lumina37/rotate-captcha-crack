@@ -51,7 +51,7 @@ uv sync
 ```shell
 conda create -p .conda
 conda activate ./.conda
-conda install matplotlib tqdm tomli
+conda install matplotlib tqdm
 conda install pytorch torchvision pytorch-cuda=12.4 -c pytorch -c nvidia
 ```
 

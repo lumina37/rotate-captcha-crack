@@ -5,7 +5,7 @@ from torch.nn import Module
 
 from .. import const
 
-DT_SPLIT_CHAR = '_'
+DT_SPLIT_CHAR = "_"
 DT_FMT_STR = DT_SPLIT_CHAR.join(["%y%m%d", "%H", "%M", "%S"])
 
 
@@ -22,9 +22,9 @@ class WhereIsMyModel:
     """
 
     __slots__ = [
-        '_model_name',
-        '_model_dir',
-        '_task_name',
+        "_model_name",
+        "_model_dir",
+        "_task_name",
     ]
 
     def __init__(self, model: Module) -> None:
