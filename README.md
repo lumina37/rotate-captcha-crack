@@ -52,13 +52,13 @@ Or, if you prefer `conda`: The following steps will create a virtual env under t
 conda create -p .conda
 conda activate ./.conda
 conda install matplotlib tqdm
-conda install pytorch torchvision pytorch-cuda=12.4 -c pytorch -c nvidia
+conda install pytorch torchvision pytorch-cuda=13.0 -c pytorch -c nvidia
 ```
 
 Or, if you prefer a direct `pip`:
 
 ```shell
-pip install torch torchvision --index-url https://download.pytorch.org/whl/cu124
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cu130
 pip install .
 ```
 
