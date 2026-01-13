@@ -2,7 +2,7 @@ import argparse
 from pathlib import Path
 
 import torch
-from torch.nn import CrossEntropyLoss
+from torch.nn import KLDivLoss
 from torch.utils.data import DataLoader
 
 from rotate_captcha_crack.const import DEFAULT_CLS_NUM
@@ -90,7 +90,7 @@ if __name__ == "__main__":
             optimizer, max_lr=lr, pct_start=0.1, epochs=epochs, steps_per_epoch=steps
         )
         lr = LRManager(lr, scheduler, optimizer)
-        loss = CrossEntropyLoss()
+        loss = KLDivLoss()
 
         trainer = Trainer(quant_model, train_dataloader, val_dataloader, lr, loss, epochs, steps)
 

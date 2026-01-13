@@ -1,6 +1,6 @@
 [project]
 name = "rotate-captcha-crack"
-version = "0.6.0a2"
+version = "0.6.0a3"
 authors = [{ name = "lumina37", email = "starry.qvq@gmail.com" }]
 urls = { Repository = "https://github.com/lumina37/rotate-captcha-crack" }
 dependencies = ["torch", "torchvision", "matplotlib", "tqdm"]
