@@ -18,12 +18,12 @@ build-backend = "uv_build"
 managed = true
 
 [tool.uv.sources]
-torch = [{ index = "pytorch-cu130", marker = "platform_system != 'Darwin'" }]
-torchvision = [{ index = "pytorch-cu130", marker = "platform_system != 'Darwin'" }]
+torch = [{ index = "pytorch-cu126", marker = "platform_system != 'Darwin'" }]
+torchvision = [{ index = "pytorch-cu126", marker = "platform_system != 'Darwin'" }]
 
 [[tool.uv.index]]
-name = "pytorch-cu130"
-url = "https://download.pytorch.org/whl/cu130"
+name = "pytorch-cu126"
+url = "https://download.pytorch.org/whl/cu126"
 explicit = true
 
 [tool.ruff]

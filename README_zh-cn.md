@@ -52,13 +52,13 @@ uv sync
 conda create -p .conda
 conda activate ./.conda
 conda install matplotlib tqdm
-conda install pytorch torchvision pytorch-cuda=13.0 -c pytorch -c nvidia
+conda install pytorch torchvision pytorch-cuda=12.6 -c pytorch -c nvidia
 ```
 
 或者，如果你喜欢直接使用`pip`：
 
 ```shell
-pip install torch torchvision --index-url https://download.pytorch.org/whl/cu130
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cu126
 pip install .
 ```
 
