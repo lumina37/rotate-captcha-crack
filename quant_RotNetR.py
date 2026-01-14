@@ -2,13 +2,13 @@ import argparse
 from pathlib import Path
 
 import torch
-from torch.nn import KLDivLoss
 from torch.utils.data import DataLoader
 
 from rotate_captcha_crack.const import DEFAULT_CLS_NUM
 from rotate_captcha_crack.dataset.midware import DEFAULT_NORM, CircularSmoothLabel, Rotator, path_to_tensor
 from rotate_captcha_crack.dataset.paths import glob_imgs
 from rotate_captcha_crack.dataset.pipe import SeqSupportsPipe
+from rotate_captcha_crack.loss import SoftCrossEntropy
 from rotate_captcha_crack.lr import LRManager
 from rotate_captcha_crack.model import QuantRotNetR, RotNetR, WhereIsMyModel
 from rotate_captcha_crack.trainer import Trainer
@@ -90,7 +90,7 @@ if __name__ == "__main__":
             optimizer, max_lr=lr, pct_start=0.1, epochs=epochs, steps_per_epoch=steps
         )
         lr = LRManager(lr, scheduler, optimizer)
-        loss = KLDivLoss()
+        loss = SoftCrossEntropy()
 
         trainer = Trainer(quant_model, train_dataloader, val_dataloader, lr, loss, epochs, steps)
 

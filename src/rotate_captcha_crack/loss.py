@@ -1,5 +1,6 @@
 import torch
-from torch import Tensor
+import torch.nn.functional as F
+from torch import Tensor, nn
 from torch.nn import Module
 
 
@@ -29,4 +30,30 @@ class RotationLoss(Module):
         dist = predict - target
         loss_tensor = (dist * (torch.pi * 2)).cos_().sub_(1.0).mul_(-self.lambda_cos).add_(dist.pow_(self.exponent))
         loss = loss_tensor.mean()
+        return loss
+
+
+class SoftCrossEntropy(nn.Module):
+    """
+    log_softmax + KLDivLoss
+    """
+
+    def __init__(self):
+        super().__init__()
+        self.kl_loss = nn.KLDivLoss(reduction="batchmean")
+
+    def forward(self, predict: Tensor, target: Tensor):
+        """
+        Calculate the loss between `predict` and `target`.
+
+        Args:
+            predict (Tensor): ([N,C]=[batch_size,cls_num], dtype=float32)
+            target (Tensor): ([N,C]=[batch_size,cls_num], dtype=float32, range=[0.0,1.0))
+
+        Returns:
+            Tensor: loss (dtype=float32)
+        """
+
+        log_probs = F.log_softmax(predict, dim=-1)
+        loss = self.kl_loss(log_probs, target)
         return loss

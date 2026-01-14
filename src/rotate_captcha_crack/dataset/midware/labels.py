@@ -58,7 +58,7 @@ class ScalarLabel:
 @dcs.dataclass
 class OnehotLabel:
     """
-    Convert the scalar `angle_factor` label to one-hot label, which is commonly used for KLDivLoss.
+    Convert the scalar `angle_factor` label to one-hot label, which is commonly used for cross-entropy loss.
 
     Args:
         cls_num (int, optional): divide into how many classes. Default to `DEFAULT_CLS_NUM`.
@@ -81,7 +81,7 @@ class OnehotLabel:
 @dcs.dataclass
 class CircularSmoothLabel:
     """
-    Convert the scalar `angle_factor` label to CSL (Circular Smooth Label), which is an optimized label for KLDivLoss.
+    Convert the scalar `angle_factor` label to CSL (Circular Smooth Label), which is an optimized label for cross-entropy loss.
 
     Args:
         cls_num (int, optional): divide into how many classes. Defaults to `DEFAULT_CLS_NUM`.
@@ -94,7 +94,7 @@ class CircularSmoothLabel:
             `ret.label` is the CSL ([C]=[cls_num], dtype=float32, range=[0.0,1.0)).
 
     Reference:
-        KLDivLoss ensures a uniform distance between each labels, e.g. $dist(1°,180°) \\eq dist(1°,3°)$, which solves the circular issue. \\
+        cross-entropy loss ensures a uniform distance between each labels, e.g. $dist(1°,180°) \\eq dist(1°,3°)$, which solves the circular issue. \\
         Based on that, *[Arbitrary-Oriented Object Detection with Circular Smooth Label (ECCV'20)](https://www.researchgate.net/profile/Xue-Yang-69/publication/343636147_Arbitrary-Oriented_Object_Detection_with_Circular_Smooth_Label/links/5f46456b458515b7295797fd/Arbitrary-Oriented-Object-Detection-with-Circular-Smooth-Label.pdf)* introduces a further improvement, by smoothing the one-hot label, e.g. `[0,1,0,0] -> [0.1,0.8,0.1,0]`, CSL provides a loss measurement closer to our intuition, \\
         such that $\\mathrm{dist}(1°,180°) \\gt \\mathrm{dist}(1°,3°)$.
     """
