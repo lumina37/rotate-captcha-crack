@@ -53,6 +53,7 @@ if __name__ == "__main__":
 
     model = RotNetR(cls_num)
     model = model.to(device)
+    model = torch.compile(model)
 
     lr = 0.001
     momentum = 0.9
