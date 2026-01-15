@@ -11,11 +11,8 @@ readme = "README.md"
 server = ["aiohttp"]
 
 [build-system]
-requires = ["uv_build>=0.9.23,<0.10.0"]
+requires = ["uv_build>=0.9.25,<0.10.0"]
 build-backend = "uv_build"
-
-[tool.uv]
-managed = true
 
 [tool.uv.sources]
 torch = [{ index = "pytorch-cu126", marker = "platform_system != 'Darwin'" }]
@@ -29,9 +26,6 @@ explicit = true
 [tool.ruff]
 line-length = 120
 target-version = "py311"
-
-[tool.ruff.format]
-quote-style = "preserve"
 
 [tool.ruff.lint]
 select = [
@@ -59,7 +53,7 @@ select = [
     "PERF",
     "FURB",
 ]
-ignore = ["A005", "E402", "E501", "E266", "COM812"]
+ignore = ["A005", "E402", "E501", "E266"]
 
 [tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["F401"]
