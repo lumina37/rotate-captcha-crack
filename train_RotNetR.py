@@ -16,9 +16,6 @@ from rotate_captcha_crack.trainer import Trainer
 from rotate_captcha_crack.utils import default_num_workers, slice_from_range
 from rotate_captcha_crack.visualizer import visualize_train
 
-# Enable f32 tensor core
-torch.set_float32_matmul_precision("high")
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -56,7 +53,6 @@ if __name__ == "__main__":
 
     model = RotNetR(cls_num)
     model = model.to(device)
-    model = torch.compile(model)
 
     lr = 0.001
     momentum = 0.9
